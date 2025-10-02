@@ -31,7 +31,7 @@ function Hero() {
             enabling 24/7 tradability, compounded returns, and diversification.
           </p>
           <div className="w-full flex flex-col md:flex-row items-center justify-between mt-12 gap-4">
-            <Button className="bg-foreground hover:bg-foreground/80 ease-in transition-all duration-300 h-12 w-full md:w-1/2">
+            <Button className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 w-full md:w-1/2">
               <span className="text-lg font-funnel-display font-semibold text-background">
                 Learn More
               </span>
