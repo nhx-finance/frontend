@@ -87,7 +87,7 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item, idx) => (
           <li
-            className="relative w-[150px] max-w-full shrink-0 rounded-2xl"
+            className="relative w-[400px] max-w-full shrink-0 rounded-2xl border border-zinc-300 dark:border-zinc-700 flex items-center justify-center"
             key={item.title}
           >
             <blockquote>
@@ -95,13 +95,9 @@ export const InfiniteMovingCards = ({
                 aria-hidden="true"
                 className="user-select-none pointer-events-none absolute -top-0.5 -left-0.5 -z-1 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
               ></div>
-              <Image
-                src={item.image}
-                alt={item.title}
-                width={150}
-                height={150}
-                className="rounded-2xl w-full h-full object-cover border border-zinc-200"
-              />
+              <p className="py-2 font-funnel-display font-bold px-4">
+                {item.title}
+              </p>
             </blockquote>
           </li>
         ))}

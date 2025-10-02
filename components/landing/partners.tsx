@@ -6,7 +6,7 @@ import { nse, hashgraph, hedera } from "@/assets";
 export function Partners() {
   return (
     <div className="rounded-md flex flex-col antialiased items-center justify-center relative overflow-hidden">
-      <InfiniteMovingCards items={partners} direction="left" speed="fast" />
+      <InfiniteMovingCards items={partners} direction="left" speed="slow" />
     </div>
   );
 }
