@@ -9,3 +9,14 @@ export const logo = "/nhx-logo.png";
 export const nse = "/nse.png";
 export const hashgraph = "/hashgraphgroup.webp";
 export const hedera = "/hedera.png";
+
+// Stocks
+export const kcb = "/kcb.png";
+export const scom = "/scom.png";
+export const eqty = "/equity.png";
+export const kegn = "/kegn.webp";
+export const hafr = "/hafr.png";
+
+// Tokens
+export const kesy = "/kes.jpg";
+export const nhxmmf = "/nhx-logo.png";
