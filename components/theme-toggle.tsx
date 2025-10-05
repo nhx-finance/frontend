@@ -45,7 +45,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="sm"
       onClick={cycleTheme}
       className="h-10 w-10 p-0"
