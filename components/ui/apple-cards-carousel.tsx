@@ -25,6 +25,7 @@ type Card = {
   src: string;
   title: string;
   category: string;
+  active: boolean;
   content: React.ReactNode;
 };
 
@@ -268,8 +269,8 @@ export const Card = ({
             }}
             disabled={disableModal}
           >
-            <span className="text-sm font-medieval-sharp font-semibold text-white hover:text-white/80 transition-colors">
-              Learn More
+            <span className="text-sm font-funnel-display font-semibold text-white hover:text-white/80 transition-colors">
+              {card.active ? "Learn More" : "Coming Soon"}
             </span>
           </button>
         </div>

@@ -7,6 +7,8 @@ import { ThemeToggle } from "../theme-toggle";
 import { Partners } from "./partners";
 import { Stocks } from "./stocks";
 import { YieldProducts } from "./yield-products";
+import CustomConnectButton from "../ui/connect-button";
+import Link from "next/link";
 
 function Hero() {
   return (
@@ -61,26 +63,25 @@ function Hero() {
           }}
         >
           <div className="hidden md:flex items-center justify-between w-full p-4 gap-2 ">
-            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground p-2 rounded-full">
+            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-4 p-2 rounded-full">
               <h1 className="text-sm font-funnel-display font-bold text-background">
                 Products
               </h1>
             </div>
-            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground p-2 rounded-full">
+            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-4 p-2 rounded-full">
               <h1 className="text-sm font-funnel-display font-bold text-background">
                 Resources
               </h1>
             </div>
-            <div className="flex cursor-pointer hover:bg-background/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-background p-2 rounded-full">
-              <h1 className="text-sm font-funnel-display font-bold text-foreground">
-                Connect
-              </h1>
-            </div>
-            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground p-2 rounded-full">
+            <CustomConnectButton />
+            <Link
+              href="/login"
+              className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-4 p-2 rounded-full"
+            >
               <h1 className="text-sm font-funnel-display font-bold text-background">
                 Launch
               </h1>
-            </div>
+            </Link>
           </div>
           <div className="w-full flex items-center justify-between p-4 gap-2 flex-col xl:flex-row">
             <div className="backdrop-blur-lg flex flex-col justify-between bg-foreground/10 border border-white/20 rounded-3xl p-4 w-full xl:w-1/2">

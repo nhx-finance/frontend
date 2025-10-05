@@ -1,20 +1,21 @@
-import { GalleryVerticalEnd } from "lucide-react";
-
 import { LoginForm } from "@/components/login-form";
-import { fin1, fin2, fin3, fin4 } from "@/assets";
+import { fin1, fin2, fin3, fin4, logo } from "@/assets";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2 font-noto-sans">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-between gap-2">
-          <a href="#" className="flex items-center gap-2 font-medium">
-            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-              <GalleryVerticalEnd className="size-4" />
+          <div className="w-full flex items-center justify-between px-4">
+            <div className="flex items-center justify-center gap-2">
+              <Image src={logo} alt="logo" width={35} height={35} />
+              <h1 className="text-3xl font-medieval-sharp font-bold text-foreground">
+                NHX
+              </h1>
             </div>
-            Acme Inc.
-          </a>
+          </div>
           <ThemeToggle />
         </div>
         <div className="flex flex-1 items-center justify-center">
