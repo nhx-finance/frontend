@@ -30,7 +30,8 @@ function Hero() {
           </h1>
           <p className="text-muted-foreground text-lg font-funnel-display text-balance mt-4 text-center xl:text-left">
             At NHX our mission is lowering entry barriers for retail investors,
-            enabling 24/7 tradability, compounded returns, and diversification.
+            enabling 24/5 with global tradability, compounded returns, and
+            diversification.
           </p>
           <div className="w-full flex flex-col md:flex-row items-center justify-between mt-12 gap-4">
             <Button className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 w-full md:w-1/2">

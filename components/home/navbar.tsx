@@ -189,12 +189,12 @@ function MobileNavbar() {
     <div className="w-full mt-2 md:hidden flex items-center justify-between">
       <div className="flex items-center gap-2">
         <div className="w-full flex items-center justify-between px-4">
-          <div className="flex items-center justify-center">
+          <Link href="/" className="flex items-center justify-center">
             <Image src={logo} alt="logo" width={35} height={35} />
             <h1 className="text-xl font-medieval-sharp font-bold text-foreground">
               NHX
             </h1>
-          </div>
+          </Link>
         </div>
       </div>
       <div className="flex items-center gap-2 px-4">

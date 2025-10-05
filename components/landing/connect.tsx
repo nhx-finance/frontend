@@ -23,8 +23,8 @@ export function Connect() {
           Economic Connectivity
         </p>
         <p className="text-sm md:text-lg font-funnel-display text-neutral-500 max-w-2xl mx-auto py-4">
-          Connecting Africa's Markets to Global Capital Flows through Tokenized
-          NSE Assets for Global Accessibility
+          Connecting Africa's Markets to broader Capital Flows through Tokenized
+          assets for Global Accessibility
         </p>
       </div>
       <WorldAnimation />
