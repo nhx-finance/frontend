@@ -36,7 +36,7 @@ function CustomUserAuthButton() {
       ) : (
         <Button
           variant="ghost"
-          className="text-sm font-funnel-display font-semibold"
+          className="text-sm font-funnel-display font-semibold border border-foreground/20 rounded-full px-12 py-2"
         >
           Sign In
         </Button>
@@ -145,7 +145,7 @@ function DesktopNavbar() {
       </div>
       <div className="flex items-center justify-between gap-2">
         <ThemeToggle />
-        <ConnectButton
+        {/* <ConnectButton
           client={client}
           connectButton={{
             label: "Connect",
@@ -167,7 +167,7 @@ function DesktopNavbar() {
             titleIcon: logo,
             size: "compact",
           }}
-        />
+        /> */}
         <CustomUserAuthButton />
       </div>
     </div>
