@@ -16,6 +16,7 @@ export const scom = "/scom.png";
 export const eqty = "/equity.png";
 export const kegn = "/kegn.webp";
 export const hafr = "/hafr.png";
+export const kq = "/kq.jpg";
 
 // Tokens
 export const kesy = "/kes.jpg";

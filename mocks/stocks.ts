@@ -1,4 +1,4 @@
-import { eqty, hafr, kcb, kegn, scom } from "@/assets";
+import { eqty, hafr, kcb, kegn, scom, kq } from "@/assets";
 
 export interface Stock {
   id: number;
@@ -122,5 +122,25 @@ export const stocks: Stock[] = [
     website: "https://www.homeafrika.co.ke",
     founded: "1906",
     industry: "Real Estate",
+  },
+  {
+    id: 6,
+    ticker: "KQ",
+    name: "Kenya Airways",
+    price: 100,
+    change: 1,
+    changePercentage: 1,
+    volume: 1000000,
+    marketCap: 1000000,
+    sector: "Transportation",
+    country: "Kenya",
+    currency: "KES",
+    exchange: "NSE",
+    type: "Stock",
+    logo: kq,
+    description: "Kenya Airways is a Kenyan airline.",
+    website: "https://www.kenyaairways.com",
+    founded: "1906",
+    industry: "Transportation",
   },
 ];
