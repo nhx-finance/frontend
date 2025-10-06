@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
 import { IconGrid4x4, IconTable } from "@tabler/icons-react";
+import GridView from "./render-grid-assets";
+import TableView from "./table-view-assets";
 
 function Markets() {
   const [view, setView] = useState("grid");
@@ -54,17 +56,17 @@ function Markets() {
                   Explore assets by different categories and filters.
                 </DrawerDescription>
                 <div className="flex flex-col my-8 gap-4 items-start">
-                  <h1 className="text-sm font-funnel-display font-semibold">
+                  <h1 className="text-sm font-funnel-display font-semibold hover:bg-foreground/5 text-start rounded-md px-2 w-full duration-300 py-2 ease-in transition-all">
                     Most Popular
                   </h1>
 
-                  <h1 className="text-sm font-funnel-display font-semibold">
+                  <h1 className="text-sm font-funnel-display font-semibold hover:bg-foreground/5 text-start rounded-md px-2 w-full duration-300 py-2 ease-in transition-all">
                     Volume
                   </h1>
-                  <h1 className="text-sm font-funnel-display font-semibold">
+                  <h1 className="text-sm font-funnel-display font-semibold hover:bg-foreground/5 text-start rounded-md px-2 w-full duration-300 py-2 ease-in transition-all">
                     Market Cap
                   </h1>
-                  <h1 className="text-sm font-funnel-display font-semibold">
+                  <h1 className="text-sm font-funnel-display font-semibold hover:bg-foreground/5 text-start rounded-md px-2 w-full duration-300 py-2 ease-in transition-all">
                     Trending
                   </h1>
                 </div>
@@ -102,6 +104,9 @@ function Markets() {
             </DrawerContent>
           </Drawer>
         </div>
+      </div>
+      <div className="mt-4">
+        {view === "grid" ? <GridView /> : <TableView />}
       </div>
     </div>
   );
