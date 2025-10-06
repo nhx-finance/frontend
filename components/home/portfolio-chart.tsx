@@ -50,15 +50,15 @@ const chartConfig = {
 
 export function PortfolioChart() {
   return (
-    <Card className="flex flex-col bg-transparent border border-foreground/20 rounded-3xl">
+    <Card className="flex flex-col bg-transparent border border-foreground/20 rounded-3xl grow overflow-hidden">
       <CardHeader>
         <CardTitle className="font-funnel-display">Portfolio Balance</CardTitle>
         <CardDescription className="font-funnel-display">
           Historical performance from January 2023 - June 2024
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
-        <ChartContainer config={chartConfig}>
+      <CardContent className="p-0 grow">
+        <ChartContainer config={chartConfig} className="grow h-full">
           <LineChart
             accessibilityLayer
             data={chartData}

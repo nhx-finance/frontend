@@ -45,7 +45,7 @@ export const stocks: Stock[] = [
   {
     id: 2,
     ticker: "SCOM",
-    name: "SCOM",
+    name: "Safaricom PLC",
     price: 24.56,
     change: 1,
     changePercentage: -7.5,
