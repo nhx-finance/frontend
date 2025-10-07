@@ -1,5 +1,5 @@
 import { LoginForm } from "@/components/login-form";
-import { fin1, fin2, fin3, fin4, logo } from "@/assets";
+import { fin3, logo } from "@/assets";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
 
@@ -25,9 +25,11 @@ export default function LoginPage() {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block">
-        <img
+        <Image
           src={fin3}
           alt="Image"
+          width={1920}
+          height={1080}
           className="absolute inset-0 h-full w-full object-cover"
         />
       </div>

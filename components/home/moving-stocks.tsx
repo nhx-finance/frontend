@@ -24,6 +24,7 @@ export const MovingStocks = ({
 
   useEffect(() => {
     addAnimation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [start, setStart] = useState(false);
   function addAnimation() {
@@ -84,7 +85,7 @@ export const MovingStocks = ({
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >
-        {items.map((item, idx) => (
+        {items.map((item) => (
           <li
             className="relative w-[350px] max-w-full shrink-0 rounded-2xl border border-zinc-300 dark:border-zinc-700 flex items-center justify-center"
             key={item.ticker}

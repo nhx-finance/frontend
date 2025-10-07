@@ -1,4 +1,4 @@
-import { ChevronsUp, PieChartIcon } from "lucide-react";
+import { PieChartIcon } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { ChartPieDonut } from "./asset-allocation-chart";

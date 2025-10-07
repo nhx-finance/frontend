@@ -1,5 +1,4 @@
 "use client";
-import { color } from "motion";
 import { PinContainer } from "../ui/3d-pin";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -16,7 +15,7 @@ export function Ecosystem() {
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:gap-2 max-w-7xl mx-auto my-8">
         {ecosystem.map((item) => (
-          <PinContainer title={item.title} href={item.href}>
+          <PinContainer key={item.title} title={item.title} href={item.href}>
             <div className="flex basis-full flex-col p-4 tracking-tight bg-transparent text-slate-100/50 sm:basis-1/2 w-[23rem] h-[20rem] ">
               <h3 className="max-w-xs !pb-2 !m-0 font-bold  text-base text-foreground font-funnel-display">
                 {item.title}

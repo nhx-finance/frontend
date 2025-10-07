@@ -5,6 +5,7 @@ import React, {
   useState,
   createContext,
   useContext,
+  JSX,
 } from "react";
 import {
   IconArrowNarrowLeft,
@@ -13,7 +14,7 @@ import {
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import Image, { ImageProps } from "next/image";
+import { ImageProps } from "next/image";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
 interface CarouselProps {
@@ -122,6 +123,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
                     duration: 0.5,
                     delay: 0.2 * index,
                     ease: "easeOut",
+                    // @ts-expect-error - once is not defined
                     once: true,
                   },
                 }}
@@ -167,7 +169,7 @@ export const Card = ({
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { onCardClose, currentIndex } = useContext(CarouselContext);
+  const { onCardClose } = useContext(CarouselContext);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -184,8 +186,10 @@ export const Card = ({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  // @ts-expect-error - containerRef is might not be defined
   useOutsideClick(containerRef, () => handleClose());
 
   const handleOpen = () => {
@@ -295,6 +299,7 @@ export const BlurImage = ({
 }: ImageProps) => {
   const [isLoading, setLoading] = useState(true);
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       className={cn(
         "h-full w-full transition duration-300",
@@ -303,11 +308,10 @@ export const BlurImage = ({
       )}
       onLoad={() => setLoading(false)}
       src={src as string}
-      width={width}
-      height={height}
+      width={width as number}
+      height={height as number}
       loading="lazy"
       decoding="async"
-      blurDataURL={typeof src === "string" ? src : undefined}
       alt={alt ? alt : "Background of a beautiful view"}
       {...rest}
     />

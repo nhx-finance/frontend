@@ -1,5 +1,4 @@
-import { GalleryVerticalEnd } from "lucide-react";
-import { fin1, fin2, fin3, fin4, logo } from "@/assets";
+import { fin3, logo } from "@/assets";
 import { SignupForm } from "@/components/signup-form";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
@@ -26,10 +25,12 @@ export default function SignupPage() {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block">
-        <img
+        <Image
           src={fin3}
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover"
+          width={1920}
+          height={1080}
         />
       </div>
     </div>

@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 
 export const InfiniteMovingCards = ({
   items,
@@ -25,6 +24,7 @@ export const InfiniteMovingCards = ({
 
   useEffect(() => {
     addAnimation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [start, setStart] = useState(false);
   function addAnimation() {
@@ -85,7 +85,7 @@ export const InfiniteMovingCards = ({
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >
-        {items.map((item, idx) => (
+        {items.map((item) => (
           <li
             className="relative w-[400px] max-w-full shrink-0 rounded-2xl border border-zinc-300 dark:border-zinc-700 flex items-center justify-center"
             key={item.title}

@@ -105,7 +105,7 @@ export const defaultColumns = [
     header: () => (
       <div className="font-funnel-display font-semibold">Historical Data</div>
     ),
-    cell: (props) => (
+    cell: () => (
       <div className="text-left font-funnel-display text-sm overflow-hidden">
         <AssetTableChart />
       </div>

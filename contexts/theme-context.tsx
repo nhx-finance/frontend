@@ -25,14 +25,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return "light";
   };
 
-  const resolveTheme = (currentTheme: Theme): "light" | "dark" => {
-    if (currentTheme === "system") {
-      return getSystemTheme();
-    }
-    return currentTheme;
-  };
-
   useEffect(() => {
+    const resolveTheme = (currentTheme: Theme): "light" | "dark" => {
+      if (currentTheme === "system") {
+        return getSystemTheme();
+      }
+      return currentTheme;
+    };
+
     const resolvedTheme = resolveTheme(theme);
     setActualTheme(resolvedTheme);
 

@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import Link from "next/link";
 import { ThemeToggle } from "../theme-toggle";
-import { useTheme } from "@/contexts/theme-context";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,7 +15,6 @@ import {
 } from "@/components/ui/popover";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -28,7 +26,6 @@ import {
   BookOpenIcon,
   ChartBarIcon,
   ChevronsRight,
-  LayoutPanelLeft,
   MenuIcon,
   Newspaper,
   Wallet2Icon,
@@ -56,7 +53,6 @@ function CustomUserAuthButton() {
 }
 
 function DesktopNavbar() {
-  const { theme } = useTheme();
   return (
     <div className="w-full mt-2 hidden md:flex items-center justify-between">
       <div className="flex items-center gap-2">

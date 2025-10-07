@@ -1,6 +1,6 @@
-import { OTPForm } from "@/components/otp-form"
-import { fin3, logo } from "@/assets"
-import Image from "next/image"
+import { OTPForm } from "@/components/otp-form";
+import { fin3 } from "@/assets";
+import Image from "next/image";
 
 export default function OTPPage() {
   return (
@@ -11,7 +11,7 @@ export default function OTPPage() {
         </div>
       </div>
       <div className="relative hidden w-1/2 lg:block">
-        <img
+        <Image
           alt="Authentication"
           className="absolute inset-0 h-full w-full object-cover"
           height={1080}
@@ -20,5 +20,5 @@ export default function OTPPage() {
         />
       </div>
     </div>
-  )
+  );
 }

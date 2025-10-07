@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Image from "next/image";
 import {
   motion,
   useTransform,
@@ -33,12 +34,13 @@ export const AnimatedTooltip = ({
     springConfig
   );
 
-  const handleMouseMove = (event: any) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLImageElement>) => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
     }
 
     animationFrameRef.current = requestAnimationFrame(() => {
+      // @ts-expect-error - event.target is HTMLElement
       const halfWidth = event.target.offsetWidth / 2;
       x.set(event.nativeEvent.offsetX - halfWidth);
     });
@@ -46,7 +48,7 @@ export const AnimatedTooltip = ({
 
   return (
     <>
-      {items.map((item, idx) => (
+      {items.map((item) => (
         <div
           className="group relative -mr-6"
           key={item.name}
@@ -86,7 +88,7 @@ export const AnimatedTooltip = ({
               </motion.div>
             )}
           </AnimatePresence>
-          <img
+          <Image
             onMouseMove={handleMouseMove}
             height={120}
             width={120}

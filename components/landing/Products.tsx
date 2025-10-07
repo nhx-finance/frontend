@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 
 export function Products() {
@@ -36,11 +37,11 @@ const Content = () => {
               </span>{" "}
               {content[index].description}
             </p>
-            <img
+            <Image
               src={content[index].src}
               alt={content[index].title}
-              height="500"
-              width="500"
+              height={500}
+              width={500}
               className="md:w-1/2 md:h-1/2 h-full w-full mx-auto object-contain"
             />
           </div>

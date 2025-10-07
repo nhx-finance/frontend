@@ -1,22 +1,7 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { Area, AreaChart } from "recharts";
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 export const description = "A simple area chart";
 

@@ -25,7 +25,10 @@ export function YieldProducts() {
   return (
     <div className="flex flex-col items-start justify-between mt-4 w-full gap-2">
       {yieldProducts.map((product) => (
-        <div className="border border-white/20 rounded-3xl px-4 py-2 w-full flex gap-1">
+        <div
+          key={product.id}
+          className="border border-white/20 rounded-3xl px-4 py-2 w-full flex gap-1"
+        >
           <div className="flex flex-col items-center justify-center">
             <Image
               src={product.image}

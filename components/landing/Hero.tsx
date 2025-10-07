@@ -1,5 +1,5 @@
 import React from "react";
-import { fin1, fin2, fin3, fin4, logo } from "@/assets";
+import { fin1, logo } from "@/assets";
 import Image from "next/image";
 import ColourfulText from "../ui/colourful-text";
 import { Button } from "../ui/button";
