@@ -14,7 +14,7 @@ export const hedera = "/hedera.png";
 export const kcb = "/kcb.png";
 export const scom = "/scom.png";
 export const eqty = "/equity.png";
-export const kegn = "/kegn.webp";
+export const kegn = "/kegn.png";
 export const hafr = "/hafr.png";
 export const kq = "/kq.jpg";
 
