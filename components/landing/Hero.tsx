@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { fin1, logo } from "@/assets";
 import Image from "next/image";
@@ -9,8 +10,10 @@ import { Stocks } from "./stocks";
 import { YieldProducts } from "./yield-products";
 import CustomConnectButton from "../ui/connect-button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function Hero() {
+  const router = useRouter();
   return (
     <div className="w-full md:h-[95vh] flex flex-col md:flex-row items-center justify-between p-2">
       <div className="w-full md:w-1/2 h-full flex flex-col justify-between">
@@ -34,7 +37,12 @@ function Hero() {
             diversification.
           </p>
           <div className="w-full flex flex-col md:flex-row items-center justify-between mt-12 gap-4">
-            <Button className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 w-full md:w-1/2">
+            <Button
+              className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 w-full md:w-1/2"
+              onClick={() => {
+                router.push("/login");
+              }}
+            >
               <span className="text-lg font-funnel-display font-semibold text-background">
                 Learn More
               </span>
@@ -42,6 +50,9 @@ function Hero() {
             <Button
               variant="ghost"
               className="bg-transparent ease-in transition-all duration-300 h-12 w-full md:w-1/2"
+              onClick={() => {
+                router.push("/home");
+              }}
             >
               <span className="text-lg font-funnel-display font-semibold text-foreground">
                 Read Whitepaper

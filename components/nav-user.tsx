@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Bell,
   BookOpenIcon,
   ChevronsUpDown,
   LogOut,
