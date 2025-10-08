@@ -20,10 +20,10 @@ function GridAsset({ stock }: { stock: Stock }) {
           </div>
           <div className="">
             <h1 className="text-base font-funnel-display font-bold">
-              {stock.ticker}
               <span className="text-muted-foreground font-medieval-sharp">
-                nx
+                nh
               </span>
+              {stock.ticker}
             </h1>
             <p className="text-xs font-funnel-display text-muted-foreground">
               {stock.name}

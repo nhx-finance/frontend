@@ -48,7 +48,7 @@ const chartConfig = {
 
 export function PortfolioChart() {
   return (
-    <Card className="flex flex-col bg-transparent border border-foreground/20 rounded-3xl grow overflow-hidden">
+    <Card className="flex flex-col shadow-none bg-transparent border border-foreground/20 rounded-3xl grow overflow-hidden">
       <CardHeader>
         <CardTitle className="font-funnel-display">Portfolio Balance</CardTitle>
         <CardDescription className="font-funnel-display">

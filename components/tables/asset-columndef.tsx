@@ -37,6 +37,9 @@ export const defaultColumns = [
         </div>
         <div className="flex flex-col items-start justify-center">
           <p className="text font-funnel-display font-semibold">
+            <span className="text-muted-foreground font-medieval-sharp">
+              nh
+            </span>
             {props.row.original.ticker}
           </p>
           <p className="text-xs font-funnel-display text-muted-foreground">

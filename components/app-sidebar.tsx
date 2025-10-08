@@ -3,8 +3,7 @@
 import * as React from "react";
 import {
   BadgeCheck,
-  BookOpen,
-  Bot,
+  SendIcon,
   Frame,
   CreditCard,
   Wallet,
@@ -14,6 +13,7 @@ import {
   PieChart,
   Send,
   Settings2,
+  Unlock,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -48,13 +48,13 @@ const data = {
     {
       title: "Transactions",
       url: "/dashboard/transactions",
-      icon: Bot,
+      icon: SendIcon,
       items: [],
     },
     {
-      title: "Access",
+      title: "Product Access",
       url: "/dashboard/access",
-      icon: BookOpen,
+      icon: Unlock,
       items: [],
     },
     {
