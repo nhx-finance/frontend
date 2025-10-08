@@ -1,5 +1,9 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import QuickMarketInfo from "@/components/home/quick-market-info";
 import AccountInfo from "@/components/home/account-info";
 
@@ -8,10 +12,11 @@ export default function Page() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="max-w-5xl mx-auto my-0">
+        <div className="md:max-w-5xl w-full mx-auto my-0 overflow-hidden">
           <QuickMarketInfo />
         </div>
-        <div className="mt-4 px-4">
+        <SidebarTrigger className="px-2" />
+        <div className="px-4">
           <AccountInfo />
         </div>
       </SidebarInset>
