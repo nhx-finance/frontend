@@ -97,7 +97,7 @@ export default function Page() {
         <h1 className="text-lg mt-12 px-4 mb-2 font-funnel-display font-semibold">
           Yield Products
         </h1>
-        <div className="px-4 flex flex-col gap-2 md:flex-row">
+        <div className="px-4 flex flex-col gap-2 md:flex-row mb-4 md:mb-0">
           <div className="w-full md:w-1/2 rounded-3xl border border-foreground/20 p-4">
             <div className="flex items-center justify-between pb-2 border-b border-foreground/20">
               <div className="flex items-center gap-2">
