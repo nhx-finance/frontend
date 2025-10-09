@@ -3,6 +3,7 @@ import { MedievalSharp, Funnel_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { ThirdwebProvider } from "thirdweb/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const medievalSharp = MedievalSharp({
   variable: "--font-medieval-sharp",
@@ -32,7 +33,10 @@ export default function RootLayout({
         className={`${medievalSharp.variable} ${funnelDisplay.variable} antialiased`}
       >
         <ThemeProvider>
-          <ThirdwebProvider>{children}</ThirdwebProvider>
+          <ThirdwebProvider>
+            {children}
+            <SpeedInsights />
+          </ThirdwebProvider>
         </ThemeProvider>
       </body>
     </html>
