@@ -57,7 +57,7 @@ function Summary({ title, stocks }: SummaryProps) {
               href="/home"
               key={stock.id}
               className={cn(
-                "flex items-center justify-between borer-t border-b border-foreground/20 py-2 group hover:bg-foreground/5 rounded-t-lg transition-all duration-300",
+                "flex items-center justify-between border-b border-foreground/20 py-2 group hover:bg-foreground/5 transition-all duration-300",
                 "xl:translate-y-0 xl:opacity-100", // Always visible on XL screens
                 showStocks
                   ? "translate-y-0 opacity-100"
