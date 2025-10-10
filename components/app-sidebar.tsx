@@ -28,14 +28,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { logo } from "@/assets";
+import { dummy, logo } from "@/assets";
 import Image from "next/image";
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "sylusabel",
+    email: "sylusabel@gmail.com",
+    avatar: dummy,
   },
   navMain: [
     {

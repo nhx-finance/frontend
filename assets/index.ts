@@ -21,3 +21,6 @@ export const kq = "/kq.jpg";
 // Tokens
 export const kesy = "/kes.jpg";
 export const nhxmmf = "/nhx-logo.png";
+
+// Dummy
+export const dummy = "/dummy-profile.jpg";

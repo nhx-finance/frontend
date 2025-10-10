@@ -32,7 +32,7 @@ export default function Page() {
         <h1 className="text-xl font-funnel-display font-bold px-4 mt-8">
           Payment History
         </h1>
-        <p className="text-sm text-center font-funnel-display mb-4 text-muted-foreground px-4">
+        <p className="text-sm text-center font-funnel-display mt-4 text-muted-foreground px-4">
           No transactions found
         </p>
       </SidebarInset>
