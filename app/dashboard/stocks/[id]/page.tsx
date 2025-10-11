@@ -65,10 +65,10 @@ function Stock() {
                   />
                 </div>
                 <div className="flex items-center gap-2 md:mt-2">
-                  <p className="text-2xl font-funnel-display font-semibold">
+                  <p className="text-lg md:text-2xl font-funnel-display font-semibold">
                     {stock.name}
                   </p>
-                  <p className="text-2xl hidden md:block font-funnel-display text-muted-foreground">
+                  <p className="text-lg md:text-2xl hidden md:block font-funnel-display text-muted-foreground">
                     {stock.ticker}
                   </p>
                 </div>
@@ -133,7 +133,7 @@ function Stock() {
                 </div>
               </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-1 md:mt-3">
               <HistoricalChart data={stock.historicalData} />
             </div>
           </div>

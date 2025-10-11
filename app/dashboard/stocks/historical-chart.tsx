@@ -24,16 +24,16 @@ export const description = "A simple area chart";
 const chartConfig = {
   price: {
     label: "Price",
-    color: "var(--chart-1)",
+    color: "#4970d5",
   },
 } satisfies ChartConfig;
 
 export function HistoricalChart({ data }: { data: HistoricalData[] }) {
   return (
-    <Card className="border-none bg-transparent shadow-none">
-      <CardHeader className="px-0">
+    <Card className="border-none bg-transparent shadow-none p-0">
+      <CardHeader className="px-0 mt-0 ">
         <CardTitle className="px-0">
-          <h1 className="text-3xl text-foreground/90 font-funnel-display font-semibold">
+          <h1 className="text-2xl md:text-3xl text-foreground/80 font-funnel-display font-semibold">
             KES 398.85
           </h1>
         </CardTitle>
@@ -63,6 +63,13 @@ export function HistoricalChart({ data }: { data: HistoricalData[] }) {
               y1={12}
               y2={12}
             />
+            <YAxis
+              orientation="right"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value: number) => `${value.toFixed(2)}`}
+            />
             <XAxis
               dataKey="month"
               tickLine={false}
@@ -72,15 +79,16 @@ export function HistoricalChart({ data }: { data: HistoricalData[] }) {
             />
 
             <ChartTooltip
-              cursor={false}
+              cursor={true}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
               dataKey="price"
               type="natural"
-              fill="var(--color-price)"
+              fill="#4971D58F"
               fillOpacity={0.4}
               stroke="var(--color-price)"
+              strokeWidth={1.2}
             />
           </AreaChart>
         </ChartContainer>
