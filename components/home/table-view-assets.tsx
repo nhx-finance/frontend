@@ -3,17 +3,24 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  Row,
 } from "@tanstack/react-table";
 import { defaultColumns as columns } from "../tables/asset-columndef";
 import React from "react";
-import { stocks as data } from "@/mocks/stocks";
+import { stocks as data, Stock } from "@/mocks/stocks";
+import { useRouter } from "next/navigation";
 
 function TableView() {
+  const router = useRouter();
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const onRowClick = (row: Row<Stock>) => {
+    router.push(`/dashboard/stocks/${row.original.id}`);
+  };
 
   return (
     <div className="w-full overflow-x-auto">
@@ -38,7 +45,8 @@ function TableView() {
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className="border-b hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+              onClick={() => onRowClick(row)}
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="p-4">

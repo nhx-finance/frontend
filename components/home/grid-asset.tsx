@@ -3,10 +3,14 @@ import React from "react";
 import AssetSmallChart from "./asset-chart-small";
 import { Stock } from "@/mocks/stocks";
 import Image from "next/image";
+import Link from "next/link";
 
 function GridAsset({ stock }: { stock: Stock }) {
   return (
-    <div className="rounded-3xl border border-foreground/20 p-4 group cursor-pointer transition-all ease-in-out duration-300">
+    <Link
+      href={`/dashboard/stocks/${stock.id}`}
+      className="rounded-3xl border border-foreground/20 p-4 group cursor-pointer transition-all ease-in-out duration-300"
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-14 h-14 p-1 border-2 border-foreground/20 rounded-lg group-hover:border-blue-500 transition-all duration-300">
@@ -60,7 +64,7 @@ function GridAsset({ stock }: { stock: Stock }) {
       <div className="mt-4 group-[&:hover]:bg-foreground/5 rounded-3xl cursor-pointer transition-all ease-in-out duration-300 group-[&:hover]:border-foreground/20 border border-transparent">
         <AssetSmallChart />
       </div>
-    </div>
+    </Link>
   );
 }
 

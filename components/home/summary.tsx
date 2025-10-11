@@ -47,18 +47,18 @@ function Summary({ title, stocks }: SummaryProps) {
       <div
         className={cn(
           "overflow-hidden transition-all duration-500 ease-in-out",
-          "xl:max-h-96 xl:opacity-100 xl:mt-4", // Always show on XL screens
+          "xl:max-h-96 xl:opacity-100 xl:mt-4",
           showStocks ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"
         )}
       >
         <div className="flex flex-col gap-2">
           {stocks.slice(0, 3).map((stock, index) => (
             <Link
-              href="/home"
+              href={`/dashboard/stocks/${stock.id}`}
               key={stock.id}
               className={cn(
                 "flex items-center justify-between border-b border-foreground/20 py-2 group hover:bg-foreground/5 transition-all duration-300",
-                "xl:translate-y-0 xl:opacity-100", // Always visible on XL screens
+                "xl:translate-y-0 xl:opacity-100",
                 showStocks
                   ? "translate-y-0 opacity-100"
                   : "translate-y-4 opacity-0"
