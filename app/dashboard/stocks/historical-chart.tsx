@@ -17,7 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { HistoricalData } from "@/mocks/stocks";
+import { HistoricalData, Stock } from "@/mocks/stocks";
 
 export const description = "A simple area chart";
 
@@ -28,30 +28,36 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function HistoricalChart({ data }: { data: HistoricalData[] }) {
+export function HistoricalChart({
+  data,
+  stock,
+}: {
+  data: HistoricalData[];
+  stock: Stock;
+}) {
   return (
     <Card className="border-none bg-transparent shadow-none p-0">
       <CardHeader className="px-0 mt-0 ">
         <CardTitle className="px-0">
-          <h1 className="text-2xl md:text-3xl text-foreground/80 font-funnel-display font-semibold">
-            KES 398.85
+          <h1 className="text-2xl md:text-3xl text-foreground font-funnel-display font-semibold">
+            KES {stock.price.toLocaleString()}
           </h1>
         </CardTitle>
         <CardDescription className="flex items-center gap-1">
           <ChevronsUp className="w-4 h-4 text-green-500" />
           <p className="text-sm text-green-500 font-funnel-display font-semibold">
-            6.78%
+            {stock.changePercentage.toFixed(2)}%
           </p>
         </CardDescription>
       </CardHeader>
       <CardContent className="px-0">
-        <ChartContainer config={chartConfig} className="h-full">
+        <ChartContainer config={chartConfig} className="h-full px-0">
           <AreaChart
             accessibilityLayer
             data={data}
             margin={{
-              left: 12,
-              right: 12,
+              left: 0,
+              right: 0,
             }}
           >
             <CartesianGrid
@@ -67,7 +73,7 @@ export function HistoricalChart({ data }: { data: HistoricalData[] }) {
               orientation="right"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              tickMargin={13}
               tickFormatter={(value: number) => `${value.toFixed(2)}`}
             />
             <XAxis
@@ -76,6 +82,7 @@ export function HistoricalChart({ data }: { data: HistoricalData[] }) {
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
+              interval={2}
             />
 
             <ChartTooltip

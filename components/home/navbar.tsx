@@ -182,7 +182,7 @@ function DesktopNavbar() {
 
 function MobileNavbar() {
   return (
-    <div className="w-full mt-2 md:hidden flex items-center justify-between">
+    <div className="w-full mt-2  md:hidden flex items-center justify-between">
       <div className="flex items-center gap-2">
         <div className="w-full flex items-center justify-between px-4">
           <Link href="/" className="flex items-center justify-center">
@@ -314,7 +314,7 @@ function MobileNavbar() {
 
 function Navbar() {
   return (
-    <div className="w-full mt-2">
+    <div className="w-full mt-2 md:mt-4">
       <DesktopNavbar />
       <MobileNavbar />
     </div>

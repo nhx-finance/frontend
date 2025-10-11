@@ -39,15 +39,21 @@ function Stock() {
       <Navbar />
       <div className="px-4 md:px-8">
         <div className="flex items-center my-8">
-          <p className="text-base font-funnel-display font-semibold text-muted-foreground">
-            Explore
-          </p>
+          <Link
+            href="/home"
+            className="text-base font-funnel-display font-semibold text-muted-foreground"
+          >
+            Markets
+          </Link>
           <ChevronRight className="w-4 h-4 text-muted-foreground mt-[2px]" />
           <p className="text-base font-funnel-display font-semibold text-muted-foreground">
             Stocks
           </p>
           <ChevronRight className="w-4 h-4 text-muted-foreground mt-[2px]" />
           <p className="text-base font-funnel-display font-semibold">
+            <span className="text-muted-foreground font-medieval-sharp">
+              nh
+            </span>
             {stock.ticker}
           </p>
         </div>
@@ -134,7 +140,7 @@ function Stock() {
               </div>
             </div>
             <div className="mt-1 md:mt-3">
-              <HistoricalChart data={stock.historicalData} />
+              <HistoricalChart data={stock.historicalData} stock={stock} />
             </div>
           </div>
           <div className="bg-blue-200 w-full md:w-[40%]">
