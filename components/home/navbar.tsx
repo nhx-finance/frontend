@@ -186,14 +186,14 @@ function MobileNavbar() {
       <div className="flex items-center gap-2">
         <div className="w-full flex items-center justify-between px-4">
           <Link href="/" className="flex items-center justify-center">
-            <Image src={logo} alt="logo" width={35} height={35} />
+            <Image src={logo} alt="logo" width={25} height={25} />
             <h1 className="text-xl font-medieval-sharp font-bold text-foreground">
               NHX
             </h1>
           </Link>
         </div>
       </div>
-      <div className="flex items-center gap-2 px-4">
+      <div className="flex items-center gap-2 px-2">
         <ThemeToggle />
         <Drawer>
           <DrawerTrigger>
