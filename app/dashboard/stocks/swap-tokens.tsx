@@ -200,7 +200,10 @@ function SwapTokens({ stock }: { stock: Stock }) {
         </div>
       </div>
       {showTokenSelectModal && (
-        <TokenSelectModal setShowTokenSelectModal={setShowTokenSelectModal} />
+        <TokenSelectModal
+          setShowTokenSelectModal={setShowTokenSelectModal}
+          stockId={stock.id}
+        />
       )}
     </div>
   );

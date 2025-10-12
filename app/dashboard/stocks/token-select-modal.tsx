@@ -7,9 +7,12 @@ import React from "react";
 
 function TokenSelectModal({
   setShowTokenSelectModal,
+  stockId,
 }: {
   setShowTokenSelectModal: (show: boolean) => void;
+  stockId: number;
 }) {
+  const filteredStocks = stocks.filter((stock) => stock.id !== stockId);
   return (
     <div className="w-full h-full fixed top-0 left-0 bg-foreground/5 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="w-[400px] p-4 rounded-3xl bg-background">
@@ -64,7 +67,7 @@ function TokenSelectModal({
             Trending Tokens
           </h1>
           <div className="mt-2 flex flex-col">
-            {stocks.map((stock) => (
+            {filteredStocks.map((stock) => (
               <div
                 key={stock.id}
                 className="flex items-center gap-2 cursor-pointer hover:bg-foreground/5 rounded-xl py-2 ease-in duration-300 transition-all"
