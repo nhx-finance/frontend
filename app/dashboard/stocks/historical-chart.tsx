@@ -104,13 +104,13 @@ export function HistoricalChart({
               strokeDasharray="6 6"
               syncWithTicks
             />
-            <YAxis
+            {/* <YAxis
               orientation="right"
               tickLine={false}
               axisLine={false}
               tickMargin={13}
               tickFormatter={(value: number) => `${value.toFixed(2)}`}
-            />
+            /> */}
             <XAxis
               dataKey="month"
               tickLine={false}

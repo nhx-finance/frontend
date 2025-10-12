@@ -182,7 +182,7 @@ function Stock() {
             <div className="">
               {tradeAction === "swap" && <SwapTokens stock={stock} />}
 
-              <div className="border border-foreground/20 w-full mt-2 rounded-3xl p-4 flex flex-col gap-2">
+              <div className="border border-foreground/20 w-full mt-1 rounded-3xl p-4 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-funnel-display font-light text-muted-foreground">
                     Rate
@@ -245,7 +245,7 @@ function Stock() {
                   </p>
                 </div>
               </div>
-              <button className="border border-foreground/20 w-full mt-2 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
+              <button className=" bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
                 Continue
               </button>
             </div>

@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import { usdcLogo } from "@/assets";
 import Image from "next/image";
 import "./styles.css";
-import { ArrowDown, ChevronDown, ChevronsDown } from "lucide-react";
+import { ChevronDown, ChevronsDown } from "lucide-react";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import { Stock } from "@/mocks/stocks";
+import TokenSelectModal from "./token-select-modal";
 
 export const KES_USDC_EXCHANGE_RATE = 128.71;
 
@@ -31,10 +32,10 @@ const percentages = [
 
 function SwapTokens({ stock }: { stock: Stock }) {
   const [activeInput, setActiveInput] = useState<"sell" | "buy">("sell");
-  const [sellValue, setSellValue] = useState("0"); // USDC amount
-  const [buyValue, setBuyValue] = useState("0"); // Stock amount
+  const [sellValue, setSellValue] = useState("0");
+  const [buyValue, setBuyValue] = useState("0");
+  const [showTokenSelectModal, setShowTokenSelectModal] = useState(false);
 
-  // Separate font size hooks for each input
   const { fontSize: sellFontSize, textRef: sellTextRef } = useDynamicFontSize({
     value: sellValue,
     maxFontSize: 48,
@@ -51,7 +52,6 @@ function SwapTokens({ stock }: { stock: Stock }) {
     const usdcAmount = e.target.value;
     setSellValue(usdcAmount);
 
-    // Convert USDC to Stock: USDC / (Stock Price in KES / KES_USDC_RATE)
     const stockAmount =
       Number(usdcAmount) / (stock.price / KES_USDC_EXCHANGE_RATE);
     setBuyValue(stockAmount.toFixed(6));
@@ -61,7 +61,6 @@ function SwapTokens({ stock }: { stock: Stock }) {
     const stockAmount = e.target.value;
     setBuyValue(stockAmount);
 
-    // Convert Stock to USDC: Stock * (Stock Price in KES / KES_USDC_RATE)
     const usdcAmount =
       Number(stockAmount) * (stock.price / KES_USDC_EXCHANGE_RATE);
     setSellValue(usdcAmount.toFixed(2));
@@ -105,7 +104,7 @@ function SwapTokens({ stock }: { stock: Stock }) {
             style={{ fontSize: `${sellFontSize}px` }}
             placeholder="0"
           />
-          <div className="rounded-3xl border border-foreground/20 p-1 flex items-center gap-2 cursor-pointer">
+          <div className="rounded-3xl border border-foreground/20 p-1 flex items-center gap-2">
             <Image
               src={usdcLogo}
               alt="USDC"
@@ -114,10 +113,9 @@ function SwapTokens({ stock }: { stock: Stock }) {
               className="rounded-full object-cover"
             />
             <div className="flex items-center">
-              <p className="text-sm font-funnel-display font-light text-muted-foreground">
+              <p className="text-sm font-funnel-display font-light text-muted-foreground px-1">
                 USDC
               </p>
-              <ChevronDown className="w-6 h-6 text-muted-foreground" />
             </div>
           </div>
         </div>
@@ -169,7 +167,10 @@ function SwapTokens({ stock }: { stock: Stock }) {
             style={{ fontSize: `${buyFontSize}px` }}
             placeholder="0"
           />
-          <div className="rounded-3xl border border-foreground/20 p-1 flex items-center gap-2 cursor-pointer">
+          <div
+            className="rounded-3xl border border-foreground/20 p-1 flex items-center gap-2 cursor-pointer"
+            onClick={() => setShowTokenSelectModal(true)}
+          >
             <Image
               src={stock.logo}
               alt={stock.name}
@@ -198,6 +199,9 @@ function SwapTokens({ stock }: { stock: Stock }) {
           </p>
         </div>
       </div>
+      {showTokenSelectModal && (
+        <TokenSelectModal setShowTokenSelectModal={setShowTokenSelectModal} />
+      )}
     </div>
   );
 }
