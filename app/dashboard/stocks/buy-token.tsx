@@ -1,13 +1,20 @@
 "use client";
 import { Stock } from "@/mocks/stocks";
-import { ChevronRight } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import "./styles.css";
+import { ChevronDown } from "lucide-react";
+import { KES_USDC_EXCHANGE_RATE } from "./swap-tokens";
 
 function BuyToken({ stock }: { stock: Stock }) {
   const [buyValue, setBuyValue] = useState("0");
+  const [payWith, setPayWith] = useState("KES");
 
   const { fontSize, textRef } = useDynamicFontSize({
     value: buyValue,
@@ -27,16 +34,37 @@ function BuyToken({ stock }: { stock: Stock }) {
             You are Buying
           </p>
           <div className="flex items-center gap-1">
-            <Image
-              src={stock.logo}
-              alt={stock.name}
-              width={24}
-              height={24}
-              className="rounded-lg object-cover"
-            />
-            <p className="text-sm font-funnel-display font-light text-muted-foreground">
-              {stock.ticker}
-            </p>
+            <Popover>
+              <PopoverTrigger className="cursor-pointe border border-foreground/20 rounded-3xl px-2 py-1 flex items-center gap-1">
+                <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                  {payWith}
+                </p>
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+              </PopoverTrigger>
+              <PopoverContent className="flex flex-col w-[200px] shadow-none">
+                <h1 className="text-xs font-funnel-display font-light text-muted-foreground">
+                  Pay With
+                </h1>
+                <div
+                  onClick={() => setPayWith("USD")}
+                  className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
+                >
+                  <span>🇺🇸</span>
+                  <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                    USD
+                  </p>
+                </div>
+                <div
+                  onClick={() => setPayWith("KES")}
+                  className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
+                >
+                  <span>🇰🇪</span>
+                  <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                    KES
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
         <div className="flex items-center justify-center">
@@ -53,26 +81,26 @@ function BuyToken({ stock }: { stock: Stock }) {
         <div className="flex items-center justify-center gap-2">
           <div
             onClick={() => setBuyValue("100")}
-            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/10 ease-in duration-300 transition-all"
+            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
-              KES 100
+              {payWith === "KES" ? "KES" : "$"} 100
             </p>
           </div>
           <div
             onClick={() => setBuyValue("500")}
-            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/10 ease-in duration-300 transition-all"
+            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
-              KES 500
+              {payWith === "KES" ? "KES" : "$"} 500
             </p>
           </div>
           <div
             onClick={() => setBuyValue("1000")}
-            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/10 ease-in duration-300 transition-all"
+            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
-              KES 1,000
+              {payWith === "KES" ? "KES" : "$"} 1,000
             </p>
           </div>
         </div>
@@ -80,10 +108,18 @@ function BuyToken({ stock }: { stock: Stock }) {
       <div className="bg-foreground/5 rounded-3xl h-[80px] hover:bg-foreground/10 ease-in duration-300 transition-all my-2 flex items-center justify-between p-4 cursor-pointer">
         <div className="flex items-center gap-1">
           <p className="text-sm font-funnel-display font-light text-muted-foreground">
-            {(Number(buyValue) / stock.price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}{" "}
+            {payWith === "KES"
+              ? (Number(buyValue) / stock.price).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              : (
+                  (Number(buyValue) * KES_USDC_EXCHANGE_RATE) /
+                  stock.price
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
             {stock.ticker}
           </p>
         </div>

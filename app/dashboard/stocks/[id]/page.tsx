@@ -206,7 +206,7 @@ function Stock() {
                         maximumFractionDigits: 2,
                       }
                     )}{" "}
-                    KES
+                    USDC
                   </p>
                 </div>
                 <div className="flex items-center justify-between">
