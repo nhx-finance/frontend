@@ -23,6 +23,7 @@ import { HistoricalChart } from "../historical-chart";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 import SwapTokens, { KES_USDC_EXCHANGE_RATE } from "../swap-tokens";
+import BuyToken from "../buy-token";
 
 function Stock() {
   const { id } = useParams();
@@ -181,6 +182,7 @@ function Stock() {
             </div>
             <div className="">
               {tradeAction === "swap" && <SwapTokens stock={stock} />}
+              {tradeAction === "buy" && <BuyToken stock={stock} />}
 
               <div className="border border-foreground/20 w-full mt-1 rounded-3xl p-4 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
