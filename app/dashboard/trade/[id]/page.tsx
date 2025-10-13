@@ -9,10 +9,11 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@radix-ui/react-popover";
-import { InfoIcon, Link } from "lucide-react";
+import { InfoIcon } from "lucide-react";
 import BuyToken from "../../stocks/buy-token";
 import SellToken from "../../stocks/sell-token";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 function Trade() {
   const { id } = useParams();
@@ -106,7 +107,7 @@ function Trade() {
                     <InfoIcon className="w-4 h-4 text-muted-foreground" />
                   </span>
                 </PopoverTrigger>
-                <PopoverContent className="text-[10px] font-funnel-display leading-relaxed shadow-none">
+                <PopoverContent className="text-[10px] bg-background p-4 border border-foreground/20 max-w-[350px] rounded-3xl mx-2 font-funnel-display leading-relaxed shadow-none">
                   <p>
                     Each NHX token captures the full economic performance of the
                     linked NSE stock, incorporating price changes, reinvested
