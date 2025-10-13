@@ -69,7 +69,7 @@ function SellToken({ stock }: { stock: Stock }) {
             </Popover>
           </div>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
           <input
             ref={textRef}
             type="number"
@@ -77,8 +77,23 @@ function SellToken({ stock }: { stock: Stock }) {
             onChange={handleBuyInput}
             className="w-full h-full text-center bg-transparent placeholder:text-muted-foreground focus:outline-none font-funnel-display no-spinners-input"
             style={{ fontSize: `${fontSize}px` }}
-            placeholder="KES 0.00"
+            placeholder={`0.00 ${stock.ticker}`}
           />
+          <p className="text-sm mt-4 font-funnel-display font-semibold text-muted-foreground">
+            {sellTo === "KES"
+              ? (Number(sellValue) * stock.price).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              : (
+                  (Number(sellValue) / KES_USDC_EXCHANGE_RATE) *
+                  stock.price
+                ).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+            {sellTo === "KES" ? "KES" : "USDC"}
+          </p>
         </div>
         <div className="flex items-center justify-center gap-2">
           <div
@@ -123,21 +138,6 @@ function SellToken({ stock }: { stock: Stock }) {
               maximumFractionDigits: 2,
             })}{" "}
             {stock.ticker}
-          </p>
-          <p className="text-sm font-funnel-display font-semibold">
-            {sellTo === "KES"
-              ? (Number(sellValue) * stock.price).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-              : (
-                  (Number(sellValue) / KES_USDC_EXCHANGE_RATE) *
-                  stock.price
-                ).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
-            {sellTo === "KES" ? "KES" : "USDC"}
           </p>
         </div>
 
