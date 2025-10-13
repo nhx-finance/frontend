@@ -5,7 +5,9 @@ import Navbar from "@/components/home/navbar";
 import { stocks } from "@/mocks/stocks";
 import {
   Building2Icon,
+  CheckCircle2,
   ChevronRight,
+  CopyIcon,
   ExternalLink,
   Globe2Icon,
   GripHorizontal,
@@ -25,6 +27,8 @@ import { cn } from "@/lib/utils";
 import SwapTokens, { KES_USDC_EXCHANGE_RATE } from "../swap-tokens";
 import BuyToken from "../buy-token";
 import SellToken from "../sell-token";
+import { hederaLogo } from "@/assets";
+import { toast } from "sonner";
 
 function Stock() {
   const { id } = useParams();
@@ -38,8 +42,13 @@ function Stock() {
     return <div>Stock not found</div>;
   }
 
+  const handleCopy = (item: string) => {
+    navigator.clipboard.writeText(item);
+    toast.success("Copied to clipboard");
+  };
+
   return (
-    <div className="max-w-[1140px] mx-auto my-0 ">
+    <div className="max-w-[1240px] mx-auto my-0 ">
       <Navbar />
       <div className="px-4 md:px-8">
         <div className="flex items-center my-8">
@@ -61,8 +70,8 @@ function Stock() {
             {stock.ticker}
           </p>
         </div>
-        <div className="flex items-start justify-between flex-col md:flex-row gap-4">
-          <div className="w-full md:w-[60%]">
+        <div className="flex items-start justify-between flex-col md:flex-row gap-4 mb-0 md:mb-4">
+          <div className="w-full md:w-[60%] mb-18 md:mb-0">
             <div className="flex items-center justify-between">
               <div className="flex flex-col md:flex-row items-start justify-baseline gap-2">
                 <div className="w-14 h-14 md:w-10 md:h-10 p-1 border-2 border-foreground/20 rounded-lg group-hover:border-blue-500 transition-all duration-300">
@@ -146,7 +155,33 @@ function Stock() {
             <div className="mt-1 md:mt-3">
               <HistoricalChart data={stock.historicalData} stock={stock} />
             </div>
-            <div className="mt-4">
+            <div className="mt-6 flex items-center justify-between flex-wrap">
+              <div className="flex flex-col">
+                <p className="text-sm font-funnel-display font-light text-muted-foreground">
+                  Market Cap
+                </p>
+                <h1 className="text-lg font-funnel-display font-semibold">
+                  KES 78B
+                </h1>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-sm font-funnel-display font-light text-muted-foreground">
+                  24h Volume
+                </p>
+                <h1 className="text-lg font-funnel-display font-semibold">
+                  KES 100M
+                </h1>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-sm font-funnel-display font-light text-muted-foreground">
+                  Avg Volume
+                </p>
+                <h1 className="text-lg font-funnel-display font-semibold">
+                  KES 77M
+                </h1>
+              </div>
+            </div>
+            <div className="mt-4 block md:hidden ">
               <h1 className="font-semibold text-xl font-funnel-display">
                 About
               </h1>
@@ -170,6 +205,236 @@ function Stock() {
                   </button>
                 )}
               </p>
+            </div>
+            <div className="mt-4 ">
+              <h1 className="font-semibold text-xl font-funnel-display mb-2">
+                Info
+              </h1>
+              <div className="flex flex-col md:flex-row gap-3 md:justify-between ">
+                <div className="flex flex-col gap-2 w-full md:w-1/2">
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Underlying Asset
+                    </p>
+                    <p className="text-xs font-funnel-display">{stock.name}</p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Underlying Ticker
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      {stock.ticker}
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Shares per token
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      1 nh{stock.ticker} = 1 {stock.ticker}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 w-full md:w-1/2">
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Network
+                    </p>
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src={hederaLogo}
+                        alt="ETH"
+                        width={16}
+                        height={16}
+                        className="object-contain rounded-full"
+                      />
+                      <p className="text-xs font-funnel-display">Hedera</p>
+                    </div>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Category
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      {stock.sector}
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Token Address
+                    </p>
+                    <div className="flex items-center gap-1">
+                      <p className="text-xs font-funnel-display">0.0.64579</p>
+                      <CopyIcon
+                        className="w-4 h-4 text-muted-foreground cursor-pointer hover:text-blue-500 ease-in duration-300 transition-all"
+                        onClick={() => handleCopy("0.0.64579")}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 ">
+              <h1 className="font-semibold text-xl font-funnel-display mb-2">
+                Stats
+              </h1>
+              <div className="flex flex-col md:flex-row gap-3 md:justify-between ">
+                <div className="flex flex-col gap-2 w-full md:w-1/2">
+                  <h1 className="text-base font-funnel-display font-semibold">
+                    Onchain Token
+                  </h1>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Open
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      KES{" "}
+                      {(stock.price * 0.8).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      High
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      KES{" "}
+                      {(stock.price * 1.2).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Low
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      KES{" "}
+                      {(stock.price * 0.6).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 w-full md:w-1/2">
+                  <h1 className="text-base font-funnel-display font-semibold">
+                    Underlying Asset
+                  </h1>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Open
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      KES{" "}
+                      {(stock.price * 0.85).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      High
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      KES{" "}
+                      {(stock.price * 1.25).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Low
+                    </p>
+                    <p className="text-xs font-funnel-display">
+                      KES{" "}
+                      {(stock.price * 0.65).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 ">
+              <h1 className="font-semibold text-xl font-funnel-display mb-2">
+                Compliance Reports
+              </h1>
+              <div className="flex flex-col md:flex-row gap-3 md:justify-between ">
+                <div className="flex flex-col gap-2 w-full md:w-1/2">
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                        Security in Collateral
+                      </p>
+                      <Popover>
+                        <PopoverTrigger>
+                          <span className="cursor-pointer">
+                            <InfoIcon className="w-3 h-3 text-muted-foreground" />
+                          </span>
+                        </PopoverTrigger>
+                        <PopoverContent className="text-[10px] font-funnel-display leading-relaxed shadow-none">
+                          <p>
+                            The security {stock.ticker} is held by an
+                            independent third-party collateral agent who can
+                            seize and liquidate the collateral to pay token
+                            holders of nh{stock.ticker} should the need arise.
+                          </p>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <p className="text-xs font-funnel-display">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                    </p>
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                        Segregated Accounts
+                      </p>
+                      <Popover>
+                        <PopoverTrigger>
+                          <span className="cursor-pointer">
+                            <InfoIcon className="w-3 h-3 text-muted-foreground" />
+                          </span>
+                        </PopoverTrigger>
+                        <PopoverContent className="text-[10px] font-funnel-display leading-relaxed shadow-none">
+                          <p>
+                            The assets backing nh{stock.ticker} tokens are held
+                            in a bankruptcy-remote entity with distinct assets,
+                            liabilities and governance from all other entities,
+                            including NHX Finance Ltd
+                          </p>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <p className="text-xs font-funnel-display">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2 w-full md:w-1/2">
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Daily Reports
+                    </p>
+                    <ExternalLink className="w-4 h-4 cursor-pointer" />
+                  </div>
+                  <div className="border-b border-foreground/20 pb-2 flex items-center justify-between">
+                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                      Monthly Reports
+                    </p>
+                    <ExternalLink className="w-4 h-4 cursor-pointer" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="hidden md:block w-full md:w-[40%] h-full grow p-2">

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { ThirdwebProvider } from "thirdweb/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Toaster } from "@/components/ui/sonner";
 
 const medievalSharp = MedievalSharp({
   variable: "--font-medieval-sharp",
@@ -38,6 +39,7 @@ export default function RootLayout({
             <SpeedInsights />
           </ThirdwebProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

@@ -81,7 +81,7 @@ function BuyToken({ stock }: { stock: Stock }) {
         <div className="flex items-center justify-center gap-2">
           <div
             onClick={() => setBuyValue("100")}
-            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
+            className="flex items-center justify-center px-1 py-2 rounded-3xl w-1/3 border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
               {payWith === "KES" ? "KES" : "$"} 100
@@ -89,7 +89,7 @@ function BuyToken({ stock }: { stock: Stock }) {
           </div>
           <div
             onClick={() => setBuyValue("500")}
-            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
+            className="flex items-center justify-center px-1 py-2 rounded-3xl w-1/3 border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
               {payWith === "KES" ? "KES" : "$"} 500
@@ -97,7 +97,7 @@ function BuyToken({ stock }: { stock: Stock }) {
           </div>
           <div
             onClick={() => setBuyValue("1000")}
-            className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
+            className="flex items-center justify-center px-1 py-2 rounded-3xl w-1/3 border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
               {payWith === "KES" ? "KES" : "$"} 1,000
