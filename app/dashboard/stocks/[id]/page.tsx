@@ -20,27 +20,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { IconBrandTwitter } from "@tabler/icons-react";
 import { HistoricalChart } from "../historical-chart";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 import SwapTokens, { KES_USDC_EXCHANGE_RATE } from "../swap-tokens";
 import BuyToken from "../buy-token";
 import SellToken from "../sell-token";
-import { Button } from "@/components/ui/button";
 
 function Stock() {
   const { id } = useParams();
   const [tradeAction, setTradeAction] = useState<"buy" | "sell" | "swap">(
     "buy"
   );
+  const [cutOff, setCutOff] = useState(200);
   const stock = stocks.find((stock) => stock.id === parseInt(id as string));
 
   if (!stock) {
@@ -155,6 +146,31 @@ function Stock() {
             <div className="mt-1 md:mt-3">
               <HistoricalChart data={stock.historicalData} stock={stock} />
             </div>
+            <div className="mt-4">
+              <h1 className="font-semibold text-xl font-funnel-display">
+                About
+              </h1>
+              <p className="leading-relaxed text-sm font-funnel-display text-muted-foreground">
+                {stock.description.slice(0, cutOff)}
+                {stock.description.length > cutOff ? "..." : ""}
+
+                {cutOff >= stock.description.length ? (
+                  <button
+                    className="text-blue-500 ml-1"
+                    onClick={() => setCutOff(300)}
+                  >
+                    Read Less
+                  </button>
+                ) : (
+                  <button
+                    className="text-blue-500 ml-1"
+                    onClick={() => setCutOff(stock.description.length)}
+                  >
+                    Read More
+                  </button>
+                )}
+              </p>
+            </div>
           </div>
           <div className="hidden md:block w-full md:w-[40%] h-full grow p-2">
             <div className="w-full flex items-center justify-between mb-1.5">
@@ -262,6 +278,31 @@ function Stock() {
               <button className=" bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
                 Continue
               </button>
+            </div>
+            <div className="mt-4">
+              <h1 className="font-semibold text-xl font-funnel-display">
+                About
+              </h1>
+              <p className="leading-relaxed text-sm font-funnel-display text-muted-foreground">
+                {stock.description.slice(0, cutOff)}
+                {stock.description.length > cutOff ? "..." : ""}
+
+                {cutOff >= stock.description.length ? (
+                  <button
+                    className="text-blue-500 ml-1"
+                    onClick={() => setCutOff(300)}
+                  >
+                    Read Less
+                  </button>
+                ) : (
+                  <button
+                    className="text-blue-500 ml-1"
+                    onClick={() => setCutOff(stock.description.length)}
+                  >
+                    Read More
+                  </button>
+                )}
+              </p>
             </div>
           </div>
         </div>

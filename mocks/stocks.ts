@@ -1,4 +1,16 @@
 import { eqty, hafr, kcb, kegn, scom, kq } from "@/assets";
+const scomDescription =
+  "Safaricom PLC is a purpose-led technology company providing a wide range of services and solutions, including mobile voice, messaging, data, financial and converged services, and digital services that enable commercial and personal platforms as well as ecosystem partnerships. Safaricom is one of a small group of about 400 companies across Africa whose annual revenues are more than USD1 billion. Many of these companies are pan-African in their operations and are active in increasingly diverse sectors. We invest in a unique way of doing business through our purpose of transforming lives, and seek to create opportunities for Kenyans to be a part of our growth story by empowering them with the right tools for economic growth. We have 42 million customers on our network and over 30 million using our M-PESA service. We also have over 6,100 towers connecting Kenyans across the country.";
+const kcbDescription =
+  "KCB Bank Kenya Limited is a financial services provider headquartered in Nairobi, Kenya. It is licensed as a commercial bank, by the Central Bank of Kenya, the national banking regulator. The bank has also been running Agency banking model. We are proud of our history and heritage which is rooted as far back as the nineteenth century. Take a look at how far we have come since our inception, back in 1896. The group offers a wide range of financial services, including commercial and corporate banking, asset management, and investment banking, and is committed to sustainability and digital innovation. KCB Bank Kenya Limited is a 100 percent subsidiary of KCB Group. Shares of KCB Group are listed on the Nairobi Stock Exchange (NSE), under the symbol (KCB). The group's stock is also cross listed on the Uganda Securities Exchange (USE), the Rwanda Stock Exchange (RSE) and the Dar es Salaam Stock Exchange (DSE).";
+const hafrDescription =
+  "Home Afrika is a leading real estate company based in Nairobi, Kenya. Its name is abbreviated to HAFR. Home Afrika is listed on the Nairobi Stock Exchange (NSE) under the 'Growth Enterprise Market Segment' (GEMS). Home Afrika engages in the development and sale of real estate properties. Home Afrika started as an investment club in July 2008 before steadily growing to become a public company worth well over US$100 million as of 15 July 2013 when it listed on the NSE. The company was the first to list in the GEMS section of the NSE. The company's developments include Morningside Office Park in Nairobi; Migaa, a live-in-golf community in Kiambu County; Lakeview Heights in Kisumu County; Llango in Kwale County; and Kikwetu in Machakos County. Home Afrika with its subsidiaries, which it owns, either wholly or partially, form the Home Afrika Group. The stock of the group is traded on the Nairobi Stock Exchange (NSE), under the symbol: HAFR.";
+const eqtyDescription =
+  "Equity Bank Kenya Limited is a Kenyan bank and financial services provider headquartered in Nairobi providing retail banking and commercial banking services. The bank is licensed as a commercial bank by the Central Bank of Kenya, which is the national banking regulator of Kenya. In 2010 the bank introduced the Agency banking model, which has proved a success and is regulated by Central Bank of Kenya Prudential guidelines. Equity Bank Kenya Limited was incorporated in 2014, as a result of the corporate restructure of its parent company Equity Group Holdings Limited.[8] Prior to November 2014, Equity Group Holdings Limited operated both as a licensed bank and a holding company for its subsidiaries. The Equity Bank Kenya Limited is wholly owned by the Equity Group Holdings, which has a customer base in excess of 14 million in six East African countries, making it one of the largest commercial banks on the African continent by number of customers.";
+const kegnDescription =
+  "Kenya Electricity Generating Company PLC (KenGen) is the leading electric power generating company in East Africa. KenGen was incorporated in 1954 under the Kenyan Companies Act as Kenya Power Company (KPC) with the mandate to generate electricity through the development, management and operation of power plants. The shareholders of the Company later contracted East Africa Power & Lighting Company (EAP&L) to manage KPC. In 1983, EAP&L changed to Kenya Power & Lighting Company. In 2006, KenGen was listed on the Nairobi Securities Exchange after the Government of Kenya sold 30 percent of its stake in the company through a successful initial public offering that received over 280,000 applications. KenGen currently has 6,594,522,339 shares. The shares of Kenya Electricity Generating Company are publicly listed on the NSE, where it trades under the symbol: KEGN.";
+const kqDescription =
+  "Kenya Airways, a member of the Sky Team Alliance, is a leading African airline flying to 42 destinations worldwide, 35 of which are in Africa and carries over four million passengers annually. In 2020 KQ was named Africa’s Leading Airline by the World Travel Awards. The airline was owned by the Government of Kenya until April 1995, and was privatised in 1996, becoming the first African flag carrier to successfully do so. Kenya Airways is currently a public-private partnership. The largest shareholder is the Government of Kenya (48.9%), with 38.1% being owned by KQ Lenders Company 2017 Ltd (in turn owned by a consortium of banks), followed by KLM, which has a 7.8% stake in the company. Private owners hold the rest of the shares; shares are traded on the Nairobi Stock Exchange, the Dar es Salaam Stock Exchange, and the Uganda Securities Exchange.";
 
 export interface Stock {
   id: number;
@@ -43,7 +55,7 @@ export const stocks: Stock[] = [
     exchange: "NSE",
     type: "Stock",
     logo: kcb,
-    description: "KCB Group is a Kenyan bank.",
+    description: kcbDescription,
     website: "https://www.kcb.co.ke",
     founded: "1906",
     industry: "Banking",
@@ -99,7 +111,7 @@ export const stocks: Stock[] = [
     exchange: "NSE",
     type: "Stock",
     logo: scom,
-    description: "SCOM is a Kenyan telecommunications company.",
+    description: scomDescription,
     website: "https://www.scom.co.ke",
     founded: "1906",
     industry: "Telecommunications",
@@ -155,7 +167,7 @@ export const stocks: Stock[] = [
     exchange: "NSE",
     type: "Stock",
     logo: eqty,
-    description: "Equity Group Holdings is a Kenyan insurance company.",
+    description: eqtyDescription,
     website: "https://www.equity.co.ke",
     founded: "1906",
     industry: "Insurance",
@@ -211,8 +223,7 @@ export const stocks: Stock[] = [
     exchange: "NSE",
     type: "Stock",
     logo: kegn,
-    description:
-      "Kenya Electricity Generating Company is a Kenyan energy company.",
+    description: kegnDescription,
     website: "https://www.kegn.co.ke",
     founded: "1906",
     industry: "Energy",
@@ -268,7 +279,7 @@ export const stocks: Stock[] = [
     exchange: "NSE",
     type: "Stock",
     logo: hafr,
-    description: "Home Afrika is a Kenyan real estate company.",
+    description: hafrDescription,
     website: "https://www.homeafrika.co.ke",
     founded: "1906",
     industry: "Real Estate",
@@ -324,7 +335,7 @@ export const stocks: Stock[] = [
     exchange: "NSE",
     type: "Stock",
     logo: kq,
-    description: "Kenya Airways is a Kenyan airline.",
+    description: kqDescription,
     website: "https://www.kenyaairways.com",
     founded: "1906",
     industry: "Transportation",

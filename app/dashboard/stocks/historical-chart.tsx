@@ -74,7 +74,7 @@ export function HistoricalChart({
   }>(timePeriods[0]);
   const [chartType, setChartType] = useState<"line" | "candle">("line");
   return (
-    <Card className="border-none bg-transparent shadow-none p-0">
+    <Card className="border-none bg-transparent shadow-none grow p-0">
       <CardHeader className="px-0 mt-0 ">
         <CardTitle className="px-0">
           <h1 className="text-2xl md:text-3xl text-foreground font-funnel-display font-semibold">
@@ -143,7 +143,8 @@ export function HistoricalChart({
                 key={period.label}
                 className={cn(
                   "flex items-center gap-2",
-                  timePeriod.label === period.label && "bg-foreground/20 ",
+                  timePeriod.label === period.label &&
+                    "bg-foreground/5 border border-foreground/30 ",
                   "cursor-pointer w-1/4 rounded-3xl h-full flex items-center justify-center py-[5px] ease-in-out duration-300 transition-all"
                 )}
                 onClick={() => setTimePeriod(period)}
@@ -157,7 +158,8 @@ export function HistoricalChart({
               <div
                 className={cn(
                   "w-1/2 md:w-1/2 flex items-center justify-center py-[5px] h-full rounded-3xl ease-in-out duration-300 transition-all",
-                  chartType === "line" && "bg-foreground/20"
+                  chartType === "line" &&
+                    "bg-foreground/5 border border-foreground/30"
                 )}
                 onClick={() => setChartType("line")}
               >
@@ -166,7 +168,8 @@ export function HistoricalChart({
               <div
                 className={cn(
                   "w-1/2 md:w-1/2 flex items-center justify-center py-[5px] h-full rounded-3xl ease-in-out duration-300 transition-all",
-                  chartType === "candle" && "bg-foreground/20"
+                  chartType === "candle" &&
+                    "bg-foreground/5 border border-foreground/30"
                 )}
                 onClick={() => setChartType("candle")}
               >
