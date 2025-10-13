@@ -38,7 +38,7 @@ const chartConfig = {
 
 export function ChartPieDonut() {
   return (
-    <Card className="flex flex-col bg-transparent border-none mt-0">
+    <Card className="flex flex-col bg-transparent shadow-none border-none mt-0">
       <CardContent className="flex-1 pb-0 flex-col gap-4 xl:flex-row xl:justify-between">
         <ChartContainer
           config={chartConfig}
