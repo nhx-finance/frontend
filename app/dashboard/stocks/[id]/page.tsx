@@ -314,7 +314,7 @@ function Stock() {
                 tradeAction: "buy",
               },
             }}
-            className="w-full h-full grow border border-foreground/20 rounded-3xl bg-foreground"
+            className="w-1/2 h-full grow border border-foreground/20 rounded-3xl bg-foreground"
           >
             <h1 className="text-xl text-center py-2 font-funnel-display font-semibold text-background">
               Buy
@@ -327,7 +327,7 @@ function Stock() {
                 tradeAction: "sell",
               },
             }}
-            className="w-full h-full grow border border-foreground/20 rounded-3xl backdrop-blur-xl bg-foreground/5"
+            className="w-1/2 h-full grow border border-foreground/20 rounded-3xl backdrop-blur-xl bg-foreground/5"
           >
             <h1 className="text-xl text-center py-2 font-funnel-display font-semibold text-foreground ">
               Sell
