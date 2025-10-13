@@ -307,242 +307,32 @@ function Stock() {
           </div>
         </div>
         <div className="fixed bottom-2 left-0 right-0 md:hidden flex items-center justify-between gap-4 mx-2">
-          <Drawer>
-            <DrawerTrigger
-              onClick={() => setTradeAction("buy")}
-              className="w-full h-full grow border border-foreground/20 rounded-3xl bg-foreground"
-            >
-              <h1 className="text-xl text-center py-2 font-funnel-display font-semibold text-background">
-                Buy
-              </h1>
-            </DrawerTrigger>
-            <DrawerContent>
-              <div className="mb-4 mt-4 px-2">
-                <div className="w-full flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <p
-                      className={cn(
-                        "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
-                        tradeAction === "swap" &&
-                          "bg-foreground/10 border border-foreground/20"
-                      )}
-                      onClick={() => setTradeAction("swap")}
-                    >
-                      Swap
-                    </p>
-                    <p
-                      className={cn(
-                        "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
-                        tradeAction === "buy" &&
-                          "bg-foreground/10 border border-foreground/20"
-                      )}
-                      onClick={() => setTradeAction("buy")}
-                    >
-                      Buy
-                    </p>
-                    <p
-                      className={cn(
-                        "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
-                        tradeAction === "sell" &&
-                          "bg-foreground/10 border border-foreground/20"
-                      )}
-                      onClick={() => setTradeAction("sell")}
-                    >
-                      Sell
-                    </p>
-                  </div>
-                </div>
-                {tradeAction === "swap" && <SwapTokens stock={stock} />}
-                {tradeAction === "buy" && <BuyToken stock={stock} />}
-                {tradeAction === "sell" && <SellToken stock={stock} />}
-
-                <div className="border border-foreground/20 w-full mt-1 rounded-3xl p-4 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                      Rate
-                    </p>
-                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                      1 nh{stock.ticker} = {stock.price} KES
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                      USDC Rate
-                    </p>
-                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                      1 nh{stock.ticker} ={" "}
-                      {(stock.price / KES_USDC_EXCHANGE_RATE).toLocaleString(
-                        undefined,
-                        {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }
-                      )}{" "}
-                      USDC
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-funnel-display font-light text-muted-foreground flex items-center gap-1">
-                      Per token
-                      <Popover>
-                        <PopoverTrigger>
-                          <span className="cursor-pointer">
-                            <InfoIcon className="w-4 h-4 text-muted-foreground" />
-                          </span>
-                        </PopoverTrigger>
-                        <PopoverContent className="text-[10px] font-funnel-display leading-relaxed shadow-none">
-                          <p>
-                            Each NHX token captures the full economic
-                            performance of the linked NSE stock, incorporating
-                            price changes, reinvested dividends (after
-                            applicable taxes), and events like splits.
-                          </p>
-                          <p>
-                            Rather than distributing cash or additional units,
-                            these gains are automatically rolled back into
-                            acquiring more underlying shares, building value
-                            over time—which may gradually increase the effective
-                            share exposure per token.
-                          </p>
-                          <p>
-                            This Shares Per Token figure illustrates your
-                            compounded position.
-                            <Link href="/" className="text-blue-500 ml-1">
-                              Learn More
-                            </Link>
-                          </p>
-                        </PopoverContent>
-                      </Popover>
-                    </p>
-                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                      1 nh{stock.ticker} = 1 {stock.ticker}
-                    </p>
-                  </div>
-                </div>
-                <button className="text-center bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
-                  Continue
-                </button>
-              </div>
-            </DrawerContent>
-          </Drawer>
-          <Drawer>
-            <DrawerTrigger
-              onClick={() => setTradeAction("sell")}
-              className="w-full h-full grow border border-foreground/20 rounded-3xl backdrop-blur-xl bg-foreground/5"
-            >
-              <h1 className="text-xl text-center py-2 font-funnel-display font-semibold text-foreground ">
-                Sell
-              </h1>
-            </DrawerTrigger>
-            <DrawerContent>
-              <div className="mb-4 mt-4 px-2">
-                <div className="w-full flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <p
-                      className={cn(
-                        "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
-                        tradeAction === "swap" &&
-                          "bg-foreground/10 border border-foreground/20"
-                      )}
-                      onClick={() => setTradeAction("swap")}
-                    >
-                      Swap
-                    </p>
-                    <p
-                      className={cn(
-                        "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
-                        tradeAction === "buy" &&
-                          "bg-foreground/10 border border-foreground/20"
-                      )}
-                      onClick={() => setTradeAction("buy")}
-                    >
-                      Buy
-                    </p>
-                    <p
-                      className={cn(
-                        "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
-                        tradeAction === "sell" &&
-                          "bg-foreground/10 border border-foreground/20"
-                      )}
-                      onClick={() => setTradeAction("sell")}
-                    >
-                      Sell
-                    </p>
-                  </div>
-                </div>
-                {tradeAction === "swap" && <SwapTokens stock={stock} />}
-                {tradeAction === "buy" && <BuyToken stock={stock} />}
-                {tradeAction === "sell" && <SellToken stock={stock} />}
-
-                <div className="border border-foreground/20 w-full mt-1 rounded-3xl p-4 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                      Rate
-                    </p>
-                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                      1 nh{stock.ticker} = {stock.price} KES
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                      USDC Rate
-                    </p>
-                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                      1 nh{stock.ticker} ={" "}
-                      {(stock.price / KES_USDC_EXCHANGE_RATE).toLocaleString(
-                        undefined,
-                        {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }
-                      )}{" "}
-                      USDC
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-funnel-display font-light text-muted-foreground flex items-center gap-1">
-                      Per token
-                      <Popover>
-                        <PopoverTrigger>
-                          <span className="cursor-pointer">
-                            <InfoIcon className="w-4 h-4 text-muted-foreground" />
-                          </span>
-                        </PopoverTrigger>
-                        <PopoverContent className="text-[10px] font-funnel-display leading-relaxed shadow-none">
-                          <p>
-                            Each NHX token captures the full economic
-                            performance of the linked NSE stock, incorporating
-                            price changes, reinvested dividends (after
-                            applicable taxes), and events like splits.
-                          </p>
-                          <p>
-                            Rather than distributing cash or additional units,
-                            these gains are automatically rolled back into
-                            acquiring more underlying shares, building value
-                            over time—which may gradually increase the effective
-                            share exposure per token.
-                          </p>
-                          <p>
-                            This Shares Per Token figure illustrates your
-                            compounded position.
-                            <Link href="/" className="text-blue-500 ml-1">
-                              Learn More
-                            </Link>
-                          </p>
-                        </PopoverContent>
-                      </Popover>
-                    </p>
-                    <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                      1 nh{stock.ticker} = 1 {stock.ticker}
-                    </p>
-                  </div>
-                </div>
-                <button className=" bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
-                  Continue
-                </button>
-              </div>
-            </DrawerContent>
-          </Drawer>
+          <Link
+            href={{
+              pathname: `/dashboard/trade/${id}`,
+              query: {
+                tradeAction: "buy",
+              },
+            }}
+            className="w-full h-full grow border border-foreground/20 rounded-3xl bg-foreground"
+          >
+            <h1 className="text-xl text-center py-2 font-funnel-display font-semibold text-background">
+              Buy
+            </h1>
+          </Link>
+          <Link
+            href={{
+              pathname: `/dashboard/trade/${id}`,
+              query: {
+                tradeAction: "sell",
+              },
+            }}
+            className="w-full h-full grow border border-foreground/20 rounded-3xl backdrop-blur-xl bg-foreground/5"
+          >
+            <h1 className="text-xl text-center py-2 font-funnel-display font-semibold text-foreground ">
+              Sell
+            </h1>
+          </Link>
         </div>
       </div>
     </div>
