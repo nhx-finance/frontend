@@ -105,7 +105,7 @@ function BuyToken({ stock }: { stock: Stock }) {
           </div>
         </div>
       </div>
-      <div className="bg-foreground/5 rounded-3xl h-[80px] hover:bg-foreground/10 ease-in duration-300 transition-all my-2 flex items-center justify-between p-4 cursor-pointer">
+      <div className="bg-foreground/5 border border-foreground/10 rounded-3xl h-[80px] hover:bg-foreground/10 ease-in duration-300 transition-all my-2 flex items-center justify-between p-4 cursor-pointer">
         <div className="flex items-center gap-1">
           <p className="text-sm font-funnel-display font-semibold">
             {payWith === "KES"

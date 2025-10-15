@@ -540,7 +540,7 @@ function Stock() {
                   </p>
                 </div>
               </div>
-              <button className=" bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
+              <button className="border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
                 Continue
               </button>
             </div>
