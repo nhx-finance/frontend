@@ -47,6 +47,22 @@ function Stock() {
     toast.success("Copied to clipboard");
   };
 
+  const handleContinue = () => {
+    switch (tradeAction) {
+      case "swap":
+        console.log("Swapping USDC for nh token");
+        break;
+      case "buy":
+        // navigate to checkout
+        break;
+      case "sell":
+        console.log("Burining nh tokens and transferring fiat");
+      default:
+        console.log("Invalid op");
+        break;
+    }
+  };
+
   return (
     <div className="max-w-[1240px] mx-auto my-0 ">
       <Navbar />
@@ -540,7 +556,10 @@ function Stock() {
                   </p>
                 </div>
               </div>
-              <button className="border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
+              <button
+                onClick={handleContinue}
+                className="border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold"
+              >
                 Continue
               </button>
             </div>

@@ -4,7 +4,9 @@ import "./globals.css";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { ThirdwebProvider } from "thirdweb/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import QueryProvider from "./QueryProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/context/AuthContext";
 
 const medievalSharp = MedievalSharp({
   variable: "--font-medieval-sharp",
@@ -34,10 +36,12 @@ export default function RootLayout({
         className={`${medievalSharp.variable} ${funnelDisplay.variable} antialiased`}
       >
         <ThemeProvider>
-          <ThirdwebProvider>
-            {children}
-            <SpeedInsights />
-          </ThirdwebProvider>
+          <QueryProvider>
+            <ThirdwebProvider>
+              <AuthProvider>{children}</AuthProvider>
+              <SpeedInsights />
+            </ThirdwebProvider>
+          </QueryProvider>
         </ThemeProvider>
         <Toaster />
       </body>

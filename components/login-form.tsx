@@ -3,13 +3,29 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import { AuthData, useLogin } from "@/hooks/use-login";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const router = useRouter();
+  const { mutate: loginMutation, isPending } = useLogin();
+  const [formData, setFormData] = useState<AuthData>({
+    username: "",
+    password: "",
+  });
+  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (formData.username === "" || formData.password === "") {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    console.log(formData);
+    loginMutation(formData);
+  };
   return (
     <form
       className={cn("flex flex-col gap-6 font-funnel-display", className)}
@@ -24,7 +40,16 @@ export function LoginForm({
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            value={formData.username}
+            onChange={(e) =>
+              setFormData({ ...formData, username: e.target.value })
+            }
+          />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
@@ -36,14 +61,23 @@ export function LoginForm({
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            type="password"
+            required
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+          />
         </div>
         <Button
           type="submit"
           className="w-full"
-          onClick={() => router.push("/home")}
+          disabled={isPending}
+          onClick={(e) => handleSubmit(e as React.FormEvent<HTMLButtonElement>)}
         >
-          Login
+          {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Login"}
         </Button>
       </div>
       <div className="text-center text-sm">

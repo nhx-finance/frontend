@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,11 +8,36 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { useState } from "react";
+import { AuthData } from "@/hooks/use-login";
+import { useRegister } from "@/hooks/use-register";
+import { Loader2 } from "lucide-react";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const { mutate: registerMutation, isPending } = useRegister();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState<AuthData>({
+    username: "",
+    password: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (formData.username === "" || formData.password === "") {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (formData.password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    console.log(formData);
+    registerMutation(formData);
+  };
   return (
     <form
       className={cn("flex flex-col gap-6 font-funnel-display", className)}
@@ -25,12 +51,17 @@ export function SignupForm({
           </p>
         </div>
         <Field>
-          <FieldLabel htmlFor="name">Full Name</FieldLabel>
-          <Input id="name" type="text" placeholder="John Doe" required />
-        </Field>
-        <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            value={formData.username}
+            onChange={(e) =>
+              setFormData({ ...formData, username: e.target.value })
+            }
+          />
           <FieldDescription>
             We&apos;ll use this to contact you. We will not share your email
             with anyone else.
@@ -38,18 +69,44 @@ export function SignupForm({
         </Field>
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            type="password"
+            required
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+          />
           <FieldDescription>
             Must be at least 8 characters long.
           </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-          <Input id="confirm-password" type="password" required />
+          <Input
+            id="confirm-password"
+            type="password"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
           <FieldDescription>Please confirm your password.</FieldDescription>
         </Field>
         <Field>
-          <Button type="submit">Create Account</Button>
+          <Button
+            type="submit"
+            disabled={isPending}
+            onClick={(e) =>
+              handleSubmit(e as React.FormEvent<HTMLButtonElement>)
+            }
+          >
+            {isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Create Account"
+            )}
+          </Button>
         </Field>
         <Field>
           <FieldDescription className="px-6 text-center">
