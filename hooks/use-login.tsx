@@ -24,11 +24,13 @@ export interface LoginResponse {
 }
 
 export interface LoginErrorResponse {
-  timestamp: string;
-  status: string;
-  error: string;
-  message: string;
-  path: string;
+  error: {
+    code: string;
+    message: string;
+    details: {
+      path: string;
+    };
+  };
 }
 
 export const isLoginError = (
@@ -65,7 +67,7 @@ export const useLogin = () => {
       }
     },
     onError: (error: AxiosError) => {
-      toast.error((error.response?.data as LoginErrorResponse).message);
+      toast.error((error.response?.data as LoginErrorResponse).error.message);
       console.error(error);
     },
   });

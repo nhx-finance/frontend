@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { AuthData } from "./use-login";
+import { AuthData, LoginErrorResponse } from "./use-login";
 
 const registerUser = async (data: AuthData) => {
   const registerData = {
@@ -23,11 +23,19 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
-      toast.success("Account created successfully");
+      toast.success("Account created successfully", {
+        description: "Please check your email for the verification link",
+      });
       router.push("/login");
     },
     onError: (error: AxiosError) => {
-      toast.error((error.response?.data as any).message);
+      toast.error((error.response?.data as LoginErrorResponse).error.message, {
+        description: "Please log in to your account",
+        action: {
+          label: "Login",
+          onClick: () => router.push("/login"),
+        },
+      });
       console.error(error);
     },
   });
