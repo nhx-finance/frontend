@@ -11,10 +11,12 @@ import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import "./styles.css";
 import { ChevronDown } from "lucide-react";
 import { KES_USDC_EXCHANGE_RATE } from "./swap-tokens";
+import { usdcLogo } from "@/assets";
+import { toast } from "sonner";
 
 function BuyToken({ stock }: { stock: Stock }) {
   const [buyValue, setBuyValue] = useState("0");
-  const [payWith, setPayWith] = useState("KES");
+  const [payWith, setPayWith] = useState("USDC");
 
   const { fontSize, textRef } = useDynamicFontSize({
     value: buyValue,
@@ -36,7 +38,18 @@ function BuyToken({ stock }: { stock: Stock }) {
           <div className="flex items-center gap-1">
             <Popover>
               <PopoverTrigger className="cursor-pointe border border-foreground/20 rounded-3xl px-2 py-1 flex items-center gap-1">
-                <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                <p className="text-xs font-funnel-display flex items-center gap-1 py-1 font-light text-muted-foreground">
+                  {payWith === "USDC" ? (
+                    <Image
+                      src={usdcLogo}
+                      alt="USDC"
+                      width={18}
+                      height={18}
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    "🇰🇪"
+                  )}
                   {payWith}
                 </p>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
@@ -46,17 +59,29 @@ function BuyToken({ stock }: { stock: Stock }) {
                   Pay With
                 </h1>
                 <div
-                  onClick={() => setPayWith("USD")}
+                  onClick={() => setPayWith("USDC")}
                   className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
                 >
-                  <span>🇺🇸</span>
+                  <span>
+                    <Image
+                      src={usdcLogo}
+                      alt="USDC"
+                      width={16}
+                      height={16}
+                      className="rounded-full object-cover"
+                    />
+                  </span>
                   <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                    USD
+                    USDC
                   </p>
                 </div>
                 <div
-                  onClick={() => setPayWith("KES")}
-                  className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
+                  onClick={() => {
+                    toast.error("Coming soon", {
+                      description: "Purchases with KES aren't available yet.",
+                    });
+                  }}
+                  className="flex opacity-50 items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
                 >
                   <span>🇰🇪</span>
                   <p className="text-xs font-funnel-display font-light text-muted-foreground">
@@ -83,24 +108,24 @@ function BuyToken({ stock }: { stock: Stock }) {
             onClick={() => setBuyValue("100")}
             className="flex items-center justify-center px-1 py-2 rounded-3xl w-1/3 border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
-            <p className="text-xs font-funnel-display font-light text-muted-foreground">
-              {payWith === "KES" ? "KES" : "$"} 100
+            <p className="text-[10px] font-funnel-display font-light text-muted-foreground">
+              10 {payWith === "KES" ? "KES" : "USDC"}
             </p>
           </div>
           <div
             onClick={() => setBuyValue("500")}
             className="flex items-center justify-center px-1 py-2 rounded-3xl w-1/3 border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
-            <p className="text-xs font-funnel-display font-light text-muted-foreground">
-              {payWith === "KES" ? "KES" : "$"} 500
+            <p className="text-[10px] font-funnel-display font-light text-muted-foreground">
+              500 {payWith === "KES" ? "KES" : "USDC"}
             </p>
           </div>
           <div
             onClick={() => setBuyValue("1000")}
             className="flex items-center justify-center px-1 py-2 rounded-3xl w-1/3 border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
-            <p className="text-xs font-funnel-display font-light text-muted-foreground">
-              {payWith === "KES" ? "KES" : "$"} 1,000
+            <p className="text-[10px] font-funnel-display flex items-center gap-1 font-light text-muted-foreground">
+              1,000 {payWith === "KES" ? "KES" : "USDC"}{" "}
             </p>
           </div>
         </div>

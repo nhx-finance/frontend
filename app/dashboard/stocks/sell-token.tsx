@@ -11,12 +11,14 @@ import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import "./styles.css";
 import { ChevronDown } from "lucide-react";
 import { KES_USDC_EXCHANGE_RATE } from "./swap-tokens";
+import { toast } from "sonner";
+import { usdcLogo } from "@/assets";
 
 const tokenBalance = 7.42;
 
 function SellToken({ stock }: { stock: Stock }) {
   const [sellValue, setSellValue] = useState("0");
-  const [sellTo, setSellTo] = useState("KES");
+  const [sellTo, setSellTo] = useState("USDC");
 
   const { fontSize, textRef } = useDynamicFontSize({
     value: sellValue,
@@ -38,7 +40,18 @@ function SellToken({ stock }: { stock: Stock }) {
           <div className="flex items-center gap-1">
             <Popover>
               <PopoverTrigger className="cursor-pointe border border-foreground/20 rounded-3xl px-2 py-1 flex items-center gap-1">
-                <p className="text-xs font-funnel-display font-light text-muted-foreground">
+                <p className="text-xs font-funnel-display flex items-center gap-1 py-1 font-light text-muted-foreground">
+                  {sellTo === "USDC" ? (
+                    <Image
+                      src={usdcLogo}
+                      alt="USDC"
+                      width={18}
+                      height={18}
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    "🇰🇪"
+                  )}
                   {sellTo}
                 </p>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
@@ -48,17 +61,29 @@ function SellToken({ stock }: { stock: Stock }) {
                   Receive
                 </h1>
                 <div
-                  onClick={() => setSellTo("USD")}
+                  onClick={() => setSellTo("USDC")}
                   className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
                 >
-                  <span>🇺🇸</span>
+                  <span>
+                    <Image
+                      src={usdcLogo}
+                      alt="USDC"
+                      width={16}
+                      height={16}
+                      className="rounded-full object-cover"
+                    />
+                  </span>
                   <p className="text-xs font-funnel-display font-light text-muted-foreground">
-                    USD
+                    USDC
                   </p>
                 </div>
                 <div
-                  onClick={() => setSellTo("KES")}
-                  className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
+                  onClick={() => {
+                    toast.error("Coming soon", {
+                      description: "Sales with KES aren't available yet.",
+                    });
+                  }}
+                  className="flex opacity-50 items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
                 >
                   <span>🇰🇪</span>
                   <p className="text-xs font-funnel-display font-light text-muted-foreground">
