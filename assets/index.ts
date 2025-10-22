@@ -4,6 +4,9 @@ export const fin2 = "/fin2.avif";
 export const fin3 = "/fin3.avif";
 export const fin4 = "/fin4.avif";
 export const logo = "/nhx-logo.png";
+export const kesyHero = "/top.jpg";
+export const kesyReports = "/backed1.png";
+export const kesyYield = "/backed.png";
 
 // Partners
 export const nse = "/nse.png";

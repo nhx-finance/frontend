@@ -24,6 +24,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "./theme-toggle";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function NavUser({
   user,
@@ -35,7 +36,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-
+  const { logout } = useAuth();
   return (
     <SidebarMenu className="font-funnel-display">
       <SidebarMenuItem>
@@ -93,7 +94,12 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="font-funnel-display">
+            <DropdownMenuItem
+              className="font-funnel-display"
+              onClick={() => {
+                logout();
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

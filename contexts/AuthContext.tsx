@@ -2,6 +2,7 @@
 
 import { LoginResponse } from "@/hooks/use-login";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   error: string | null;
@@ -29,7 +30,7 @@ function checkExpiry(expiry: number): boolean {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<LoginResponse | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = localStorage.getItem("user");
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
+      router.push("/login");
     }
   };
 

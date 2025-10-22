@@ -13,12 +13,6 @@ function PortfolioCard() {
             Portfolio Balance
           </h1>
         </div>
-        <Link href="/dashboard" className="flex items-center gap-1">
-          <p className="text-xs font-funnel-display text-muted-foreground mt-.5">
-            View Account
-          </p>
-          <ExternalLink className="w-3 h-3 text-muted-foreground" />
-        </Link>
       </div>
       <div className="mt-4">
         <h1 className="text-3xl font-funnel-display font-bold">KES 10,000</h1>
