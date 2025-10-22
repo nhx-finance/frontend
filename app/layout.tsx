@@ -6,7 +6,7 @@ import { ThirdwebProvider } from "thirdweb/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import QueryProvider from "./QueryProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const medievalSharp = MedievalSharp({
   variable: "--font-medieval-sharp",

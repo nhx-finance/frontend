@@ -3,7 +3,7 @@
 import axios from "axios";
 import { API_URL } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";

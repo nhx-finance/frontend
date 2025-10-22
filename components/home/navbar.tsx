@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { logo } from "@/assets";
+import { logo, nhxmmf } from "@/assets";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import Link from "next/link";
@@ -22,14 +22,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  BookOpenIcon,
-  ChartBarIcon,
-  ChevronsRight,
-  MenuIcon,
-  Newspaper,
-  Wallet2Icon,
-} from "lucide-react";
+import { BookOpenIcon, ChevronsRight, MenuIcon, Newspaper } from "lucide-react";
+import { kesy } from "@/assets";
+import CustomConnectButton from "../ui/connect-button";
 
 function CustomUserAuthButton() {
   const { isAuthenticated } = useAuth();
@@ -60,10 +55,6 @@ function DesktopNavbar() {
           <div className="flex items-center justify-center gap-2">
             <Image src={logo} alt="logo" width={55} height={55} />
           </div>
-          <Input
-            placeholder="Find an asset"
-            className="border-foreground/30 text-sm bg-foreground/5 font-funnel-display rounded-3xl"
-          />
         </div>
       </div>
       <div className="flex items-center justify-between gap-4">
@@ -83,27 +74,40 @@ function DesktopNavbar() {
                 href="/home"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
-                <Wallet2Icon className="w-6 h-6" />
+                <Image
+                  src={nhxmmf}
+                  alt="NHX Wallet"
+                  width={36}
+                  height={36}
+                  className="rounded-lg object-cover border border-foreground/20"
+                />
                 <div className="">
                   <p className="text-sm font-funnel-display font-semibold">
                     NHX Wallet
                   </p>
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
-                    Dedicated onramp and off-ramp RWA solution on Hedera
+                    Dedicated onramp and off-ramp stablecoin solution on Hedera
                   </p>
                 </div>
               </Link>
               <Link
-                href="/home"
+                href="/kesy"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
-                <ChartBarIcon className="w-6 h-6" />
+                <Image
+                  src={kesy}
+                  alt="KESY"
+                  width={36}
+                  height={36}
+                  className="rounded-lg object-cover border border-foreground/20"
+                />
                 <div className="">
                   <p className="text-sm font-funnel-display font-semibold">
-                    Nairobi Securities Exchange
+                    KESY
                   </p>
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
-                    The leading stock exchange in East Africa
+                    Fully backed yield-bearing Kenyan Shilling Stablecoin backed
+                    by Kenyan Treasury Securities
                   </p>
                 </div>
               </Link>
@@ -151,29 +155,7 @@ function DesktopNavbar() {
       </div>
       <div className="flex items-center justify-between gap-2">
         <ThemeToggle />
-        {/* <ConnectButton
-          client={client}
-          connectButton={{
-            label: "Connect",
-            className: "rounded-full",
-            style: {
-              backgroundColor:
-                theme === "dark" ? "var(--background)" : "var(--foreground)",
-              color:
-                theme === "dark" ? "var(--foreground)" : "var(--background)",
-              borderRadius: "9999px",
-              fontSize: "14px",
-              height: "38px",
-              fontWeight: "bold",
-              fontFamily: "var(--font-funnel-display)",
-            },
-          }}
-          connectModal={{
-            title: "Connect your wallet",
-            titleIcon: logo,
-            size: "compact",
-          }}
-        /> */}
+        <CustomConnectButton />
         <CustomUserAuthButton />
       </div>
     </div>
@@ -235,27 +217,41 @@ function MobileNavbar() {
                       href="/home"
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
                     >
-                      <Wallet2Icon className="w-6 h-6" />
+                      <Image
+                        src={nhxmmf}
+                        alt="NHX Wallet"
+                        width={36}
+                        height={36}
+                        className="rounded-lg object-cover border border-foreground/20"
+                      />
                       <div className="">
                         <p className="text-sm text-start text-foreground/80 font-funnel-display font-semibold">
                           NHX Wallet
                         </p>
                         <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
-                          Dedicated onramp and off-ramp RWA solution on Hedera
+                          Dedicated onramp and off-ramp stablecoin solution on
+                          Hedera
                         </p>
                       </div>
                     </Link>
                     <Link
-                      href="/home"
+                      href="/kesy"
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
                     >
-                      <ChartBarIcon className="w-6 h-6" />
+                      <Image
+                        src={kesy}
+                        alt="KESY"
+                        width={36}
+                        height={36}
+                        className="rounded-lg object-cover border border-foreground/20"
+                      />
                       <div className="">
                         <p className="text-sm text-start text-foreground/80 font-funnel-display font-semibold">
-                          Nairobi Securities Exchange
+                          KESY
                         </p>
                         <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
-                          The leading stock exchange in East Africa
+                          Fully backed yield-bearing Kenyan Shilling Stablecoin
+                          backed by Kenyan Treasury Securities
                         </p>
                       </div>
                     </Link>

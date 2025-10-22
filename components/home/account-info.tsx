@@ -3,13 +3,13 @@ import React from "react";
 import PortfolioCard from "./portfolio-card";
 import AssetAllocation from "./asset-allocation";
 import { PortfolioChart } from "./portfolio-chart";
-import { useAuth } from "@/hooks/use-auth";
 import CustomConnectButton from "../ui/connect-button";
+import { useActiveWalletConnectionStatus } from "thirdweb/react";
 
 function AccountInfo() {
-  const { walletConnected } = useAuth();
+  const status = useActiveWalletConnectionStatus();
 
-  if (!walletConnected) {
+  if (status !== "connected") {
     return (
       <div className="mt-4 mx-2 px-2 flex flex-col items-center justify-center h-[200px] border border-foreground/20 rounded-3xl">
         <h1 className="text-base font-funnel-display mb-4">
