@@ -6,6 +6,7 @@ import { nhxmmf } from "@/assets";
 import { shortenAddress } from "thirdweb/utils";
 import { useActiveWallet } from "thirdweb/react";
 import { Button } from "./button";
+import Image from "next/image";
 
 function CustomConnectButton() {
   const { theme } = useTheme();
@@ -40,9 +41,11 @@ function CustomConnectButton() {
             variant="ghost"
             className="flex items-center gap-2 border border-foreground/20 rounded-full py-1 px-2 cursor-pointer"
           >
-            <img
-              src={walletImage.data}
+            <Image
+              src={walletImage?.data || ""}
               alt="wallet image"
+              width={24}
+              height={24}
               className="w-6 h-6"
             />
             <AccountAddress
