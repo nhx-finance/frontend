@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ThemeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Popover,
   PopoverContent,

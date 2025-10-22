@@ -1,5 +1,4 @@
 "use client";
-import Navbar from "@/components/home/navbar";
 import React from "react";
 import { kesyHero, kesy, kesyReports, kesyYield } from "@/assets";
 import Image from "next/image";
@@ -15,8 +14,9 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { StatsCard } from "@/components/kesy/stats";
+import Navbar from "@/components/home/navbar";
 
-function page() {
+function KesyPage() {
   const router = useRouter();
   return (
     <div className="">
@@ -32,6 +32,7 @@ function page() {
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4">
+          <Navbar />
           <div className="w-full flex items-center justify-center h-full">
             <div className="w-full md:max-w-3xl flex items-center flex-col justify-center">
               <h1 className="text-4xl text-center xl:text-left xl:text-6xl font-funnel-display font-bold text-[#F5F5F5]">
@@ -200,4 +201,4 @@ function page() {
   );
 }
 
-export default page;
+export default KesyPage;

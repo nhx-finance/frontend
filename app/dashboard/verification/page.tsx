@@ -4,15 +4,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  Building2Icon,
-  CandlestickChart,
-  PercentIcon,
-  LockIcon,
-  ScanFace,
-  ClockIcon,
-  BanIcon,
-} from "lucide-react";
+import { ScanFace, ClockIcon, BanIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NoVerification from "./no-verification";
 

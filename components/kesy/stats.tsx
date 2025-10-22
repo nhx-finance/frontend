@@ -4,7 +4,7 @@ import { SparklesCore } from "../ui/sparkles";
 
 export function StatsCard() {
   return (
-    <div className="h-[35rem] w-full bg-black border border-background/20 flex flex-col justify-between items-center overflow-hidden rounded-3xl">
+    <div className="h-[35rem] w-full bg-black border border-background/20 flex flex-col justify-between items-center overflow-hidden rounded-4xl">
       <div className="w-full flex flex-col items-center justify-center my-8">
         <h1 className="text-2xl font-funnel-display font-bold text-center text-white relative z-20">
           Empowering Businesses with Stability and Transparency
