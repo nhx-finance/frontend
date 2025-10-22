@@ -193,7 +193,7 @@ function KesyPage() {
             </div>
           </div>
         </div>
-        <div className="w-full mt-12 mb-10">
+        <div className="w-full mt-20 mb-10">
           <StatsCard />
         </div>
       </div>
