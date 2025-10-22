@@ -2,11 +2,9 @@
 import React from "react";
 import { logo, nhxmmf } from "@/assets";
 import Image from "next/image";
-import { Input } from "../ui/input";
 import Link from "next/link";
 import { ThemeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
-import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
@@ -25,20 +23,32 @@ import {
 import { BookOpenIcon, ChevronsRight, MenuIcon, Newspaper } from "lucide-react";
 import { kesy } from "@/assets";
 import CustomConnectButton from "../ui/connect-button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 function CustomUserAuthButton() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const router = useRouter();
   return (
     <>
       {isAuthenticated ? (
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+        <Avatar
+          onClick={() => {
+            router.push("/dashboard");
+          }}
+          className="cursor-pointer w-9 border border-foreground/20 rounded-full flex items-center justify-center h-9"
+        >
+          <AvatarFallback className="text-xl font-semibold font-medieval-sharp uppercase mt-1 bg-transparent">
+            {user?.email.charAt(0)}
+          </AvatarFallback>
         </Avatar>
       ) : (
         <Button
           variant="ghost"
           className="text-sm font-funnel-display font-semibold border border-foreground/20 rounded-full px-12 py-2"
+          onClick={() => {
+            router.push("/login");
+          }}
         >
           Sign In
         </Button>

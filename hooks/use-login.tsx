@@ -63,7 +63,7 @@ export const useLogin = () => {
       if (!isLoginError(data)) {
         login(data);
         toast.success(data.message);
-        router.push("/login");
+        router.push("/home");
       }
     },
     onError: (error: AxiosError) => {

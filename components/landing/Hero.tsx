@@ -44,7 +44,7 @@ function Hero() {
               }}
             >
               <span className="text-lg font-funnel-display font-semibold text-background">
-                Learn More
+                Get Started
               </span>
             </Button>
             <Button
@@ -55,7 +55,7 @@ function Hero() {
               }}
             >
               <span className="text-lg font-funnel-display font-semibold text-foreground">
-                Read Whitepaper
+                Learn More
               </span>
             </Button>
           </div>
@@ -75,12 +75,12 @@ function Hero() {
           }}
         >
           <div className="hidden md:flex items-center justify-between w-full p-4 gap-2 ">
-            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-4 p-2 rounded-full">
+            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-2 p-2 rounded-full">
               <h1 className="text-sm font-funnel-display font-bold text-background">
                 Products
               </h1>
             </div>
-            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-4 p-2 rounded-full">
+            <div className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-2 p-2 rounded-full">
               <h1 className="text-sm font-funnel-display font-bold text-background">
                 Resources
               </h1>
@@ -88,7 +88,7 @@ function Hero() {
             <CustomConnectButton />
             <Link
               href="/login"
-              className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-4 p-2 rounded-full"
+              className="flex cursor-pointer hover:bg-foreground/80 ease-in transition-all duration-300 w-[25%] items-center justify-center bg-foreground py-2 p-2 rounded-full"
             >
               <h1 className="text-sm font-funnel-display font-bold text-background">
                 Launch
