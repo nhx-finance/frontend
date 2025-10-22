@@ -14,6 +14,7 @@ import {
   IconArrowRight,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { StatsCard } from "@/components/kesy/stats";
 
 function page() {
   const router = useRouter();
@@ -31,7 +32,6 @@ function page() {
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4">
-          <Navbar />
           <div className="w-full flex items-center justify-center h-full">
             <div className="w-full md:max-w-3xl flex items-center flex-col justify-center">
               <h1 className="text-4xl text-center xl:text-left xl:text-6xl font-funnel-display font-bold text-[#F5F5F5]">
@@ -191,6 +191,9 @@ function page() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="w-full mt-12 mb-10">
+          <StatsCard />
         </div>
       </div>
     </div>
