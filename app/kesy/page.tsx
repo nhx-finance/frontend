@@ -15,6 +15,8 @@ import {
 import Link from "next/link";
 import { StatsCard } from "@/components/kesy/stats";
 import Navbar from "@/components/home/navbar";
+import { CreditCardIcon, DollarSignIcon, Wallet2Icon } from "lucide-react";
+import { Partners } from "@/components/landing/partners";
 
 function KesyPage() {
   const router = useRouter();
@@ -195,6 +197,72 @@ function KesyPage() {
         </div>
         <div className="w-full mt-20 mb-10">
           <StatsCard />
+        </div>
+        <div className="w-full mt-20 mb-10">
+          <div className="w-full flex flex-col items-center justify-center">
+            <h2 className="text-3xl font-funnel-display font-bold text-center max-w-3xl">
+              Start Minting KESY{" "}
+              <span className="text-orange-500 font-medieval-sharp">Today</span>
+            </h2>
+            <p className="text-muted-foreground text-sm font-funnel-display text-center max-w-3xl mt-4">
+              Acquiring, using and earning from KESY is a simple 3 step process.
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 my-10">
+            <div className="w-full mt-0 md:mt-12 flex flex-col items-start justify-start bg-foreground/5 border border-foreground/20 rounded-3xl p-4 gap-2 h-[270px]">
+              <div className="flex items-start w-full justify-between">
+                <Wallet2Icon size={24} className="text-foreground" />
+                <h3 className="text-9xl opacity-50 font-medieval-sharp text-muted-foreground font-bold text-center max-w-3xl">
+                  01
+                </h3>
+              </div>
+              <div className="">
+                <h1 className="text-lg font-funnel-display font-bold max-w-3xl">
+                  Mint KESY
+                </h1>
+                <p className="text-sm font-funnel-display leading-relaxed">
+                  Deposit KES into one of of bank accounts and mint KESY tokens
+                  to a whitelisted wallet after KYC and AML checks.
+                </p>
+              </div>
+            </div>
+            <div className="w-full flex flex-col items-start justify-start bg-foreground/10 border border-foreground/20 rounded-3xl p-4 gap-2 h-[270px]">
+              <div className="flex items-start w-full justify-between">
+                <DollarSignIcon size={24} className="text-foreground" />
+                <h3 className="text-9xl opacity-50 font-medieval-sharp text-muted-foreground font-bold max-w-3xl">
+                  02
+                </h3>
+              </div>
+              <div className="">
+                <h1 className="text-lg font-funnel-display font-bold max-w-3xl">
+                  Use KESY
+                </h1>
+                <p className="text-sm font-funnel-display leading-relaxed">
+                  Purchase goods and services from merchants who accept KESY. Or
+                  pay employees in KESY.
+                </p>
+              </div>
+            </div>
+            <div className="w-full mt-0 md:mt-12 flex flex-col items-start justify-start bg-foreground/5 border border-foreground/20 rounded-3xl p-4 gap-2 h-[270px]">
+              <div className="flex items-start w-full justify-between">
+                <CreditCardIcon size={24} className="text-foreground" />
+                <h3 className="text-9xl opacity-50 font-medieval-sharp text-muted-foreground font-bold text-center max-w-3xl">
+                  03
+                </h3>
+              </div>
+              <div className="">
+                <h1 className="text-lg font-funnel-display font-bold max-w-3xl">
+                  Stake & Redeem KESY
+                </h1>
+                <p className="text-sm font-funnel-display leading-relaxed">
+                  Stake KESY tokens to earn yield from Kenyan Treasury
+                  Securities. Or redeem KESY tokens for KES straight to your
+                  bank account.
+                </p>
+              </div>
+            </div>
+          </div>
+          <Partners />
         </div>
       </div>
     </div>
