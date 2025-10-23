@@ -13,7 +13,7 @@ import { useState } from "react";
 import { AuthData } from "@/hooks/use-login";
 import { useRegister } from "@/hooks/use-register";
 import { Loader2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function SignupForm({
   className,
@@ -21,6 +21,7 @@ export function SignupForm({
 }: React.ComponentProps<"form">) {
   const { mutate: registerMutation, isPending } = useRegister();
   const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
   const [formData, setFormData] = useState<AuthData>({
     username: "",
     password: "",
@@ -40,6 +41,7 @@ export function SignupForm({
     }
     if (isKesy) {
       toast.info("KESY registration is coming soon");
+      router.push("/kesy/details");
       return;
     }
     registerMutation(formData);

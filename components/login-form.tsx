@@ -8,12 +8,14 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const { mutate: loginMutation, isPending } = useLogin();
+  const router = useRouter();
   const [formData, setFormData] = useState<AuthData>({
     username: "",
     password: "",
@@ -28,6 +30,7 @@ export function LoginForm({
     }
     if (isKesy) {
       toast.info("KESY login is coming soon");
+      router.push("/kesy/dashboard");
       return;
     }
     loginMutation(formData);
