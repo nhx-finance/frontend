@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { transactions } from "@/mocks/transactions";
+import { kesyTransactions } from "@/mocks/transactions";
 import {
   flexRender,
   getCoreRowModel,
@@ -11,10 +11,10 @@ import { defaultColumns } from "@/components/tables/transactions-columndef";
 function TransactionTable() {
   const table = useReactTable({
     columns: defaultColumns,
-    data: transactions,
+    data: kesyTransactions,
     getCoreRowModel: getCoreRowModel(),
   });
-  if (transactions.length === 0) {
+  if (kesyTransactions.length === 0) {
     return (
       <div className="px-4 mt-4">
         <h1 className="">No transactions found</h1>

@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import { institutionsUseCase, investorsUseCase } from "@/assets";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 function Footer() {
   return (
@@ -16,14 +18,17 @@ function Footer() {
         />
         <div className="flex flex-col justify-between">
           <div className="">
-            <h1 className="text-2xl font-bold">Sandbox API</h1>
-            <p className="text-sm text-muted-foreground mt-2">
+            <h1 className="text-2xl font-bold font-funnel-display">
+              Sandbox API
+            </h1>
+            <p className="text-sm text-muted-foreground mt-2 font-funnel-display">
               Use the sandbox API to test your integration on our sample app
               before going live.
             </p>
           </div>
           <Button
             variant="outline"
+            onClick={() => toast.info("Stay tuned, Sandbox coming soon")}
             className="rounded-3xl bg-background border border-foreground/20 text-foreground shadow-none text-sm w-full font-funnel-display"
           >
             Get API Key
@@ -40,8 +45,10 @@ function Footer() {
         />
         <div className="flex flex-col justify-between">
           <div className="">
-            <h1 className="text-2xl font-bold">Documentation</h1>
-            <p className="text-sm text-muted-foreground mt-2">
+            <h1 className="text-2xl font-bold font-funnel-display">
+              Documentation
+            </h1>
+            <p className="text-sm text-muted-foreground mt-2 font-funnel-display">
               Understand how to KESY and other NHX Finance products by following
               our comprehensive documentation.
             </p>

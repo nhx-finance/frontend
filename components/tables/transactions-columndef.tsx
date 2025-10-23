@@ -3,6 +3,17 @@ import { Transaction } from "@/mocks/transactions";
 import Image from "next/image";
 
 const columnHelper = createColumnHelper<Transaction>();
+const formatAmount = (balance: number) => {
+  const stringBalance = balance.toString();
+  const [whole, decimal] = stringBalance.split(".");
+  if (whole.length > 6) {
+    return `${whole.charAt(0)}.${whole.slice(1, 2)}M`;
+  }
+  if (whole.length > 3) {
+    return `${whole.charAt(0)}.${whole.slice(1, 2)}K`;
+  }
+  return `${balance}`;
+};
 
 export const defaultColumns = [
   columnHelper.accessor("asset", {
@@ -42,7 +53,7 @@ export const defaultColumns = [
     ),
     cell: (props) => (
       <div className="text-left font-funnel-display text-sm">
-        {props.row.original.amount} {props.row.original.asset.currency}
+        {formatAmount(props.row.original.amount)}
       </div>
     ),
   }),
@@ -53,7 +64,7 @@ export const defaultColumns = [
     ),
     cell: (props) => (
       <div className="text-left font-funnel-display text-sm">
-        {(props.row.original.asset.price / props.row.original.amount).toFixed(
+        {(props.row.original.amount / props.row.original.asset.price).toFixed(
           2
         )}
       </div>
