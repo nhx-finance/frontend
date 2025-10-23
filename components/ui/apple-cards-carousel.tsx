@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { ImageProps } from "next/image";
 import { useOutsideClick } from "@/hooks/use-outside-click";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface CarouselProps {
   items: JSX.Element[];
@@ -24,6 +26,7 @@ interface CarouselProps {
 
 type Card = {
   src: string;
+  href: string;
   title: string;
   category: string;
   active: boolean;
@@ -170,7 +173,7 @@ export const Card = ({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { onCardClose } = useContext(CarouselContext);
-
+  const router = useRouter();
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -265,18 +268,14 @@ export const Card = ({
               {card.title}
             </motion.p>
           </div>
-          <button
+          <Link
+            href={card.href}
             className="mt-auto text-center border border-white/50 bg-white/10 w-full md:w-1/2 md:py-1 backdrop-blur-sm rounded-lg hover:bg-transparent hover:backdrop-blur-none ease-in transition-all duration-300 cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!disableModal) handleOpen();
-            }}
-            disabled={disableModal}
           >
             <span className="text-sm font-funnel-display font-semibold text-white hover:text-white/80 transition-colors">
               {card.active ? "Learn More" : "Coming Soon"}
             </span>
-          </button>
+          </Link>
         </div>
         <BlurImage
           src={card.src}

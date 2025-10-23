@@ -42,7 +42,7 @@ function FAQ() {
       {kesyFAQs.map((faq, index) => (
         <details
           key={index}
-          className="group [&_summary::-webkit-details-marker]:hidden"
+          className="group [&_summary::-webkit-details-marker]:hidden border-b border-foreground/20"
           open={index === 0}
         >
           <summary className="flex items-center justify-between gap-1.5 cursor-pointer p-4">
@@ -66,7 +66,7 @@ function FAQ() {
             </svg>
           </summary>
 
-          <p className="px-4 pt-4 text-sm font-funnel-display leading-relaxed text-foreground/80">
+          <p className="px-4 pt-4 text-sm font-funnel-display leading-relaxed text-foreground/80 pb-4">
             {faq.answer}
           </p>
         </details>

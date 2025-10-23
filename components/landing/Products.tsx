@@ -54,13 +54,15 @@ const Content = () => {
 const data = [
   {
     category: "KESY",
+    href: "/kesy",
     title: "Kenyan Shilling Stablecoin Yield",
-    active: false,
+    active: true,
     src: "https://images.unsplash.com/photo-1665986127581-f82c5d326521?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     content: <Content />,
   },
   {
     category: "NHX-MMF",
+    href: "/",
     title: "NHX Money Market Fund Yield",
     active: false,
     src: "https://plus.unsplash.com/premium_photo-1697730213640-7c518bd42713?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -68,6 +70,7 @@ const data = [
   },
   {
     category: "t-STOCKS",
+    href: "/home",
     title: "Tokenized Securities on NSE",
     active: true,
     src: "https://images.unsplash.com/photo-1690831195945-31fd13dda712?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -76,6 +79,7 @@ const data = [
 
   {
     category: "NHX Wallet",
+    href: "/",
     title: "Onramp & Offramp for Stablecoins",
     active: false,
     src: "https://images.unsplash.com/photo-1665986132478-32e60ca34296?q=80&w=641&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",

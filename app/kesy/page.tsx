@@ -19,6 +19,9 @@ import UseCase from "@/components/kesy/usecase";
 import { CreditCardIcon, DollarSignIcon, Wallet2Icon } from "lucide-react";
 import { Partners } from "@/components/landing/partners";
 import FAQ from "@/components/kesy/faq";
+import Blogs from "@/components/kesy/blogs";
+import { CTA } from "@/components/kesy/cta";
+import Footer from "@/components/landing/footer";
 
 function KesyPage() {
   const router = useRouter();
@@ -268,6 +271,11 @@ function KesyPage() {
         </div>
         <UseCase />
         <FAQ />
+        <Blogs />
+        <CTA />
+        <div className="mt-20">
+          <Footer />
+        </div>
       </div>
     </div>
   );
