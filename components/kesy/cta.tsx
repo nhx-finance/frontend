@@ -42,8 +42,8 @@ export function CTA() {
           Get Started with KESY
         </div>
         <p className="text-base font-funnel-display text-muted-foreground leading-relaxed">
-          Join the waitlist and be the first to know when KESY is live and start
-          earning from your stablecoins.
+          Join the wait list and be the first to know when KESY is live and
+          start earning from your stablecoins.
         </p>
         <div className="flex flex-col items-center w-full md:flex-row gap-4">
           <Input
@@ -56,7 +56,7 @@ export function CTA() {
         </div>
 
         <div className="font-funnel-display font-semibold text-sm dark:text-neutral-200 py-4">
-          Africa's Inclusive Finance Bridge
+          Africa{`'`}s Inclusive Finance Bridge
         </div>
         <div className="flex items-center justify-between w-full md:w-1/2 h-12 gap-2 bg-foreground/80 rounded-3xl p-4 cursor-not-allowed">
           <p className="text-base font-semibold uppercase font-medieval-sharp text-background">

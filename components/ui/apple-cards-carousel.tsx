@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { ImageProps } from "next/image";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface CarouselProps {
@@ -173,7 +172,6 @@ export const Card = ({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { onCardClose } = useContext(CarouselContext);
-  const router = useRouter();
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
