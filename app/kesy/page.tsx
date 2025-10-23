@@ -14,9 +14,11 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { StatsCard } from "@/components/kesy/stats";
-import Navbar from "@/components/home/navbar";
+import Navbar from "@/components/kesy/navbar";
+import UseCase from "@/components/kesy/usecase";
 import { CreditCardIcon, DollarSignIcon, Wallet2Icon } from "lucide-react";
 import { Partners } from "@/components/landing/partners";
+import FAQ from "@/components/kesy/faq";
 
 function KesyPage() {
   const router = useRouter();
@@ -264,6 +266,8 @@ function KesyPage() {
           </div>
           <Partners />
         </div>
+        <UseCase />
+        <FAQ />
       </div>
     </div>
   );

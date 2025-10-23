@@ -7,6 +7,9 @@ export const logo = "/nhx-logo.png";
 export const kesyHero = "/top.jpg";
 export const kesyReports = "/backed1.png";
 export const kesyYield = "/backed.png";
+export const investorsUseCase = "/individual.png";
+export const institutionsUseCase = "/business.png";
+export const secondaryMarketUseCase = "/services.png";
 
 // Partners
 export const nse = "/nse.png";
