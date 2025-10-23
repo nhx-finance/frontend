@@ -54,7 +54,7 @@ function KesyPage() {
                 <Button
                   className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 w-full md:w-1/2"
                   onClick={() => {
-                    router.push("/login");
+                    router.push("/kesy/signup");
                   }}
                 >
                   <span className="text-lg font-funnel-display font-semibold text-background">

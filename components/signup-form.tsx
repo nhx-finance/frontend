@@ -13,6 +13,7 @@ import { useState } from "react";
 import { AuthData } from "@/hooks/use-login";
 import { useRegister } from "@/hooks/use-register";
 import { Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function SignupForm({
   className,
@@ -24,6 +25,8 @@ export function SignupForm({
     username: "",
     password: "",
   });
+  const pathname = usePathname();
+  const isKesy = pathname.includes("/kesy");
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -35,7 +38,10 @@ export function SignupForm({
       toast.error("Passwords do not match");
       return;
     }
-    console.log(formData);
+    if (isKesy) {
+      toast.info("KESY registration is coming soon");
+      return;
+    }
     registerMutation(formData);
   };
   return (
@@ -110,7 +116,8 @@ export function SignupForm({
         </Field>
         <Field>
           <FieldDescription className="px-6 text-center">
-            Already have an account? <a href="/login">Sign in</a>
+            Already have an account?{" "}
+            <a href={isKesy ? "/kesy/login" : "/login"}>Sign in</a>
           </FieldDescription>
         </Field>
       </FieldGroup>

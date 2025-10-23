@@ -7,6 +7,7 @@ import { AuthData, useLogin } from "@/hooks/use-login";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -17,13 +18,18 @@ export function LoginForm({
     username: "",
     password: "",
   });
+  const pathname = usePathname();
+  const isKesy = pathname.includes("/kesy");
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (formData.username === "" || formData.password === "") {
       toast.error("Please fill in all fields");
       return;
     }
-    console.log(formData);
+    if (isKesy) {
+      toast.info("KESY login is coming soon");
+      return;
+    }
     loginMutation(formData);
   };
   return (
@@ -82,7 +88,10 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="/signup" className="underline underline-offset-4">
+        <a
+          href={isKesy ? "/kesy/signup" : "/signup"}
+          className="underline underline-offset-4"
+        >
           Sign up
         </a>
       </div>

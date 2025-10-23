@@ -32,7 +32,7 @@ function CustomUserAuthButton() {
       {isAuthenticated ? (
         <Avatar
           onClick={() => {
-            router.push("/dashboard");
+            router.push("/kesy/dashboard");
           }}
           className="cursor-pointer w-9 border border-foreground/20 rounded-full flex items-center justify-center h-9"
         >
@@ -45,7 +45,7 @@ function CustomUserAuthButton() {
           variant="ghost"
           className="text-sm font-funnel-display text-white font-semibold border border-white/20 rounded-full px-12 py-2"
           onClick={() => {
-            router.push("/login");
+            router.push("/kesy/login");
           }}
         >
           Sign In
