@@ -119,17 +119,7 @@ function SwapTokens({ stock }: { stock: Stock }) {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-funnel-display font-light text-muted-foreground">
-            KES{" "}
-            {(Number(sellValue) * KES_USDC_EXCHANGE_RATE).toLocaleString(
-              undefined,
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }
-            )}
-          </p>
+        <div className="flex items-center justify-end">
           <p className="text-sm font-funnel-display font-light text-muted-foreground">
             0 USDC
           </p>

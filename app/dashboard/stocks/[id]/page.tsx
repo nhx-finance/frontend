@@ -259,7 +259,7 @@ function Stock() {
                     <div className="flex items-center gap-1">
                       <Image
                         src={hederaLogo}
-                        alt="ETH"
+                        alt="Hedera"
                         width={16}
                         height={16}
                         className="object-contain rounded-full"
@@ -460,7 +460,7 @@ function Stock() {
                   className={cn(
                     "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
                     tradeAction === "swap" &&
-                      "bg-foreground/10 border border-foreground/20"
+                    "bg-foreground/10 border border-foreground/20"
                   )}
                   onClick={() => setTradeAction("swap")}
                 >
@@ -470,7 +470,7 @@ function Stock() {
                   className={cn(
                     "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
                     tradeAction === "buy" &&
-                      "bg-foreground/10 border border-foreground/20"
+                    "bg-foreground/10 border border-foreground/20"
                   )}
                   onClick={() => setTradeAction("buy")}
                 >
@@ -480,7 +480,7 @@ function Stock() {
                   className={cn(
                     "text-sm text-muted-foreground font-funnel-display font-semibold py-[2px] rounded-xl px-6 cursor-pointer ease-in duration-300 transition-all",
                     tradeAction === "sell" &&
-                      "bg-foreground/10 border border-foreground/20"
+                    "bg-foreground/10 border border-foreground/20"
                   )}
                   onClick={() => setTradeAction("sell")}
                 >
@@ -558,7 +558,8 @@ function Stock() {
               </div>
               <button
                 onClick={handleContinue}
-                className="border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold"
+                className="border disabled:cursor-not-allowed border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold"
+                disabled={tradeAction === "buy"}
               >
                 Continue
               </button>
