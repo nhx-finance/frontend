@@ -15,7 +15,6 @@ interface TokenBalance {
 
 export const useTokenBalance = (tokenId: string) => {
   const { data: accountId } = useAccountId();
-  console.log("useTokenBalance", tokenId, accountId);
   const { data, isLoading, error } = useQuery({
     queryKey: ["token-balance", tokenId, accountId],
     queryFn: async () => {
@@ -55,6 +54,5 @@ async function fetchAllUserBalances(
   const url = `https://testnet.mirrornode.hedera.com/api/v1/accounts/${accountId}/tokens`;
   const response = await fetch(url);
   const data = (await response.json()) as TokensResponse;
-  console.log("fetchAllUserBalances", data);
   return data.tokens || [];
 }

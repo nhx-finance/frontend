@@ -13,7 +13,12 @@ import {
   Stock,
 } from "@/mocks/stocks";
 import TokenSelectModal from "./token-select-modal";
-import { useSwapQuote } from "@/hooks/use-swap";
+import {
+  useApproveUSDC,
+  useAssociateMutation,
+  useSwapExactTokensForTokens,
+  useSwapQuote,
+} from "@/hooks/use-swap";
 import Link from "next/link";
 import {
   Popover,
@@ -44,7 +49,7 @@ const percentages = [
   },
 ];
 
-function formatSellValue(value: string) {
+function formatValue(value: string) {
   const numberValue = Number(value);
   return (numberValue * 1000000).toString();
 }
@@ -68,7 +73,7 @@ function SwapTokens({
     mockUSDCAddress,
     mockNHSCOMAddress,
     activeInput === "sell" && sellValue !== "0" && sellValue !== ""
-      ? formatSellValue(sellValue)
+      ? formatValue(sellValue)
       : "0"
   );
   const {
@@ -79,7 +84,7 @@ function SwapTokens({
     mockNHSCOMAddress,
     mockUSDCAddress,
     activeInput === "buy" && buyValue !== "0" && buyValue !== ""
-      ? formatSellValue(buyValue)
+      ? formatValue(buyValue)
       : "0"
   );
   const { data: tokenBalance, isLoading: isTokenBalanceLoading } =
@@ -91,6 +96,10 @@ function SwapTokens({
     maxFontSize: 48,
     minFontSize: 24,
   });
+  const {
+    swapExactTokensForTokensMutation,
+    isSwapExactTokensForTokensPending,
+  } = useSwapExactTokensForTokens();
 
   const { fontSize: buyFontSize, textRef: buyTextRef } = useDynamicFontSize({
     value: buyValue,
@@ -146,7 +155,11 @@ function SwapTokens({
   const handleContinue = () => {
     switch (tradeAction) {
       case "swap":
-        console.log("Swapping USDC for nh token");
+        swapExactTokensForTokensMutation(
+          BigInt(formatValue(sellValue)),
+          BigInt(formatValue(buyValue)),
+          [mockUSDCAddress, mockNHSCOMAddress]
+        );
         break;
       case "buy":
         // navigate to checkout
@@ -360,9 +373,15 @@ function SwapTokens({
       <button
         onClick={handleContinue}
         className="border disabled:cursor-not-allowed flex items-center justify-center border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 gap-2 font-semibold"
-        disabled={tradeAction === "buy"}
+        disabled={
+          tradeAction === "buy" ||
+          isSwapQuoteLoading ||
+          isReverseSwapQuoteLoading
+        }
       >
-        {isSwapQuoteLoading || isReverseSwapQuoteLoading ? (
+        {isSwapQuoteLoading ||
+        isReverseSwapQuoteLoading ||
+        isSwapExactTokensForTokensPending ? (
           <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
         ) : (
           "Continue"
