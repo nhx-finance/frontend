@@ -1,11 +1,12 @@
 "use client";
-import { client } from "@/lib/client";
+import { client, hederaTestnet } from "@/lib/client";
 import { AccountAddress, ConnectButton, useWalletImage } from "thirdweb/react";
 import { useTheme } from "@/contexts/theme-context";
 import { nhxmmf } from "@/assets";
 import { shortenAddress } from "thirdweb/utils";
 import { useActiveWallet } from "thirdweb/react";
 import { Button } from "./button";
+
 import Image from "next/image";
 
 function CustomConnectButton() {
@@ -16,6 +17,7 @@ function CustomConnectButton() {
   return (
     <ConnectButton
       client={client}
+      chain={hederaTestnet}
       connectButton={{
         label: "Connect",
         className: "rounded-full",

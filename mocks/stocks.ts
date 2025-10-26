@@ -14,6 +14,7 @@ const kqDescription =
 
 export interface Stock {
   id: number;
+  hederaId: string;
   ticker: string;
   name: string;
   price: number;
@@ -42,6 +43,7 @@ export interface HistoricalData {
 export const stocks: Stock[] = [
   {
     id: 1,
+    hederaId: "0.0.7135370",
     ticker: "KCB",
     name: "KCB Group",
     price: 145.85,
@@ -99,8 +101,9 @@ export const stocks: Stock[] = [
   {
     id: 2,
     ticker: "SCOM",
+    hederaId: "0.0.7135370",
     name: "Safaricom PLC",
-    price: 24.56,
+    price: 25.0,
     change: 0.85,
     changePercentage: -7.5,
     volume: 1000000,
@@ -155,6 +158,7 @@ export const stocks: Stock[] = [
   {
     id: 3,
     ticker: "EQTY",
+    hederaId: "0.0.7135370",
     name: "Equity Group Holdings",
     price: 79.76,
     change: 11.23,
@@ -211,6 +215,7 @@ export const stocks: Stock[] = [
   {
     id: 4,
     ticker: "KEGN",
+    hederaId: "0.0.7135370",
     name: "Kenya Electricity Company",
     price: 126.32,
     change: 20.87,
@@ -267,6 +272,7 @@ export const stocks: Stock[] = [
   {
     id: 5,
     ticker: "HAFR",
+    hederaId: "0.0.7135370",
     name: "Home Afrika",
     price: 11.23,
     change: -0.56,
@@ -323,6 +329,7 @@ export const stocks: Stock[] = [
   {
     id: 6,
     ticker: "KQ",
+    hederaId: "0.0.7135370",
     name: "Kenya Airways",
     price: 100,
     change: 1,
@@ -381,6 +388,7 @@ export const stocks: Stock[] = [
 export const kesyAsset: Stock = {
   id: 7,
   ticker: "KESY",
+  hederaId: "0.0.6883537",
   name: "Kenyan Shilling Stablecoin Yield",
   price: 1,
   change: 1,
@@ -434,3 +442,7 @@ export const kesyAsset: Stock = {
     { month: "Oct", price: 1.0 },
   ],
 };
+
+export const mockUSDCAddress = "0x00000000000000000000000000000000006ce07e";
+export const mockNHSCOMAddress = "0x00000000000000000000000000000000006ce08a";
+export const mockUSDCId = "0.0.7135358";

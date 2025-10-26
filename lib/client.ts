@@ -1,4 +1,4 @@
-import { createThirdwebClient } from "thirdweb";
+import { createThirdwebClient, defineChain } from "thirdweb";
 
 const clientId =
   process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID ||
@@ -18,4 +18,27 @@ if (!clientId) {
 export const client = createThirdwebClient({
   clientId,
   secretKey,
+});
+
+export const hederaTestnet = defineChain({
+  id: 296,
+  name: "Hedera Testnet",
+  rpc: `https://296.rpc.thirdweb.com/${secretKey}`,
+  nativeCurrency: {
+    name: "hbar",
+    symbol: "HBAR",
+    decimals: 8,
+  },
+  rpcUrls: {
+    default: { http: [`https://296.rpc.thirdweb.com/${secretKey}`] },
+  },
+  blockExplorers: {
+    default: {
+      name: "Hashscan",
+      url: "https://hashscan.io/testnet",
+    },
+  },
+  testnet: true,
+  chainId: 296,
+  networkId: 296,
 });
