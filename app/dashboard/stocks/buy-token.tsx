@@ -9,10 +9,11 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import "./styles.css";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, InfoIcon } from "lucide-react";
 import { KES_USDC_EXCHANGE_RATE } from "./swap-tokens";
 import { usdcLogo } from "@/assets";
 import { toast } from "sonner";
+import Link from "next/link";
 
 function BuyToken({ stock }: { stock: Stock }) {
   const [buyValue, setBuyValue] = useState("0");
@@ -167,6 +168,67 @@ function BuyToken({ stock }: { stock: Stock }) {
           </div>
         </div>
       </div>
+      <div className="border border-foreground/20 w-full mt-1 rounded-3xl p-4 flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display font-light text-muted-foreground">
+            Rate
+          </p>
+          <p className="text-xs font-funnel-display font-light text-muted-foreground">
+            1 nh{stock.ticker} = {stock.price} KES
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display font-light text-muted-foreground">
+            USDC Rate
+          </p>
+          <p className="text-xs font-funnel-display font-light text-muted-foreground">
+            1 nh{stock.ticker} ={" "}
+            {(stock.price / KES_USDC_EXCHANGE_RATE).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{" "}
+            USDC
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display font-light text-muted-foreground flex items-center gap-1">
+            Per token
+            <Popover>
+              <PopoverTrigger>
+                <span className="cursor-pointer">
+                  <InfoIcon className="w-4 h-4 text-muted-foreground" />
+                </span>
+              </PopoverTrigger>
+              <PopoverContent className="text-[10px] bg-background p-4 border border-foreground/20 max-w-[350px] rounded-3xl mx-2 font-funnel-display leading-relaxed shadow-none">
+                <p>
+                  Each NHX token captures the full economic performance of the
+                  linked NSE stock, incorporating price changes, reinvested
+                  dividends (after applicable taxes), and events like splits.
+                </p>
+                <p>
+                  Rather than distributing cash or additional units, these gains
+                  are automatically rolled back into acquiring more underlying
+                  shares, building value over time—which may gradually increase
+                  the effective share exposure per token.
+                </p>
+                <p>
+                  This Shares Per Token figure illustrates your compounded
+                  position.
+                  <Link href="/" className="text-blue-500 ml-1">
+                    Learn More
+                  </Link>
+                </p>
+              </PopoverContent>
+            </Popover>
+          </p>
+          <p className="text-xs font-funnel-display font-light text-muted-foreground">
+            1 nh{stock.ticker} = 1 {stock.ticker}
+          </p>
+        </div>
+      </div>
+      <button className=" bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
+        Continue
+      </button>
     </>
   );
 }
