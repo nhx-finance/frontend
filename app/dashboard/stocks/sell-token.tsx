@@ -1,25 +1,38 @@
 "use client";
-import { Stock } from "@/mocks/stocks";
+import { getTokenAddress, Stock } from "@/mocks/stocks";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import "./styles.css";
-import { ChevronDown, InfoIcon } from "lucide-react";
+import { ChevronDown, InfoIcon, Loader2 } from "lucide-react";
 import { KES_USDC_EXCHANGE_RATE } from "./swap-tokens";
 import { toast } from "sonner";
 import { usdcLogo } from "@/assets";
 import Link from "next/link";
+import { useTokenBalance } from "@/hooks/use-stocks-balances";
+import { useSellTokens } from "@/hooks/use-sell-tokens";
+import { useApproveToken } from "@/hooks/use-swap";
 
-const tokenBalance = 7.42;
+function formatValue(value: string) {
+  const numberValue = Number(value);
+  return (numberValue * 1000000).toString();
+}
 
 function SellToken({ stock }: { stock: Stock }) {
   const [sellValue, setSellValue] = useState("0");
   const [sellTo, setSellTo] = useState("USDC");
+  const [isApproved, setIsApproved] = useState(false);
+  const { data: tokenBalance, isLoading: isTokenBalanceLoading } =
+    useTokenBalance(stock.hederaId);
+  const { sellTokensMutation, isError, isPending, isSuccess, error } =
+    useSellTokens();
+  const { approveTokenMutation, isApproveTokenPending, isApproveTokenSuccess } =
+    useApproveToken(getTokenAddress(stock.ticker));
 
   const { fontSize, textRef } = useDynamicFontSize({
     value: sellValue,
@@ -29,6 +42,43 @@ function SellToken({ stock }: { stock: Stock }) {
 
   const handleBuyInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSellValue(e.target.value);
+  };
+
+  useEffect(() => {
+    if (isApproveTokenSuccess) {
+      setIsApproved(true);
+      toast.success(
+        "Token approved! Now click Continue to complete the transaction."
+      );
+    } else if (error) {
+      toast.error(error.message);
+    }
+  }, [isApproveTokenSuccess, error, sellValue]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Transaction completed!");
+    } else if (isError) {
+      toast.error(error?.message);
+    } else if (isPending) {
+      toast.loading("Transaction pending...");
+    }
+  }, [isSuccess, isError, isPending, error]);
+
+  const handleContinue = async () => {
+    if (!isApproved) {
+      approveTokenMutation(BigInt(formatValue(sellValue)));
+      setIsApproved(true);
+    } else {
+      sellTokensMutation(
+        BigInt(formatValue(sellValue)),
+        getTokenAddress(stock.ticker)
+      );
+      toast.success(
+        "Transaction initiated! Please wait for the transaction to complete."
+      );
+      setIsApproved(false);
+    }
   };
 
   return (
@@ -79,12 +129,8 @@ function SellToken({ stock }: { stock: Stock }) {
                   </p>
                 </div>
                 <div
-                  onClick={() => {
-                    toast.error("Coming soon", {
-                      description: "Sales with KES aren't available yet.",
-                    });
-                  }}
-                  className="flex opacity-50 items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
+                  onClick={() => setSellTo("KES")}
+                  className="flex items-center gap-1 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all p-2 rounded-xl"
                 >
                   <span>🇰🇪</span>
                   <p className="text-xs font-funnel-display font-light text-muted-foreground">
@@ -123,7 +169,9 @@ function SellToken({ stock }: { stock: Stock }) {
         </div>
         <div className="flex items-center justify-center gap-2">
           <div
-            onClick={() => setSellValue((tokenBalance * 0.25).toFixed(2))}
+            onClick={() =>
+              setSellValue(((tokenBalance ?? 0) * 0.25).toFixed(2))
+            }
             className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
@@ -131,7 +179,7 @@ function SellToken({ stock }: { stock: Stock }) {
             </p>
           </div>
           <div
-            onClick={() => setSellValue((tokenBalance * 0.5).toFixed(2))}
+            onClick={() => setSellValue(((tokenBalance ?? 0) * 0.5).toFixed(2))}
             className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
@@ -139,7 +187,9 @@ function SellToken({ stock }: { stock: Stock }) {
             </p>
           </div>
           <div
-            onClick={() => setSellValue((tokenBalance * 0.75).toFixed(2))}
+            onClick={() =>
+              setSellValue(((tokenBalance ?? 0) * 0.75).toFixed(2))
+            }
             className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
@@ -147,7 +197,7 @@ function SellToken({ stock }: { stock: Stock }) {
             </p>
           </div>
           <div
-            onClick={() => setSellValue(tokenBalance.toFixed(2))}
+            onClick={() => setSellValue((tokenBalance ?? 0).toFixed(2))}
             className="flex items-center justify-center px-4 py-2 rounded-3xl border border-foreground/20 cursor-pointer hover:bg-foreground/5 ease-in duration-300 transition-all"
           >
             <p className="text-xs font-funnel-display font-light text-muted-foreground">
@@ -159,7 +209,7 @@ function SellToken({ stock }: { stock: Stock }) {
       <div className="bg-foreground/5 border border-foreground/10 rounded-3xl h-[80px] hover:bg-foreground/10 ease-in duration-300 transition-all my-2 flex items-center justify-between p-4 cursor-pointer">
         <div className="flex items-start gap-1 flex-col ">
           <p className="text-sm font-funnel-display font-light text-muted-foreground">
-            {tokenBalance.toLocaleString(undefined, {
+            {(tokenBalance ?? 0).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}{" "}
@@ -243,8 +293,18 @@ function SellToken({ stock }: { stock: Stock }) {
           </p>
         </div>
       </div>
-      <button className=" bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold">
-        Continue
+      <button
+        onClick={handleContinue}
+        disabled={isPending || isApproveTokenPending}
+        className=" bg-foreground/5 hover:bg-foreground/10 items-center justify-center ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 flex flex-col gap-2 font-semibold"
+      >
+        {isPending || isApproveTokenPending ? (
+          <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
+        ) : isApproved ? (
+          "Continue"
+        ) : (
+          "Approve"
+        )}
       </button>
     </>
   );

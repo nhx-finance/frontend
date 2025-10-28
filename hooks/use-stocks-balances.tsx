@@ -1,7 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAccountId } from "./use-account-id";
 
-const availableTokens = ["0.0.7135370", "0.0.7135358"];
+const availableTokens = [
+  "0.0.7135370",
+  "0.0.7135358",
+  "0.0.7142699",
+  "0.0.7142958",
+  "0.0.7142885",
+  "0.0.7142913",
+  "0.0.7142834",
+];
 
 interface TokenBalance {
   automatic_association: boolean;

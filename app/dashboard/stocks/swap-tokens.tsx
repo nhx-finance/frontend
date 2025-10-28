@@ -191,27 +191,15 @@ function SwapTokens({
   }, [isSwapExactTokensForTokensSuccess]);
 
   const handleContinue = () => {
-    switch (tradeAction) {
-      case "swap":
-        if (!isApproved) {
-          approveTokenMutation(BigInt(formatValue(sellValue)));
-        } else {
-          swapExactTokensForTokensMutation(
-            BigInt(formatValue(sellValue)),
-            BigInt(formatValue(buyValue)),
-            [inputTokenAddress, outputTokenAddress]
-          );
-          setIsApproved(false);
-        }
-        break;
-      case "buy":
-        // navigate to checkout
-        break;
-      case "sell":
-        console.log("Burining nh tokens and transferring fiat");
-      default:
-        console.log("Invalid op");
-        break;
+    if (!isApproved) {
+      approveTokenMutation(BigInt(formatValue(sellValue)));
+    } else {
+      swapExactTokensForTokensMutation(
+        BigInt(formatValue(sellValue)),
+        BigInt(formatValue(buyValue)),
+        [inputTokenAddress, outputTokenAddress]
+      );
+      setIsApproved(false);
     }
   };
 
