@@ -7,7 +7,7 @@ import {
   Wallet2Icon,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,10 +26,12 @@ import {
 import { ThemeToggle } from "./theme-toggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoginResponse } from "@/hooks/use-login";
+import { useRouter } from "next/navigation";
 
 export function NavUser({ user }: { user: LoginResponse }) {
   const { isMobile } = useSidebar();
   const { logout } = useAuth();
+  const router = useRouter();
   return (
     <SidebarMenu className="font-funnel-display">
       <SidebarMenuItem>
@@ -83,9 +85,14 @@ export function NavUser({ user }: { user: LoginResponse }) {
                 <BookOpenIcon />
                 Documentation
               </DropdownMenuItem>
-              <DropdownMenuItem className="font-funnel-display">
+              <DropdownMenuItem
+                className="font-funnel-display"
+                onClick={() => {
+                  router.push("/home");
+                }}
+              >
                 <Wallet2Icon />
-                NHX Wallet
+                Buy nhStocks
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
