@@ -3,7 +3,6 @@ import * as ethers from "ethers";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import { getContract, prepareContractCall } from "thirdweb";
 import { client, hederaTestnet } from "@/lib/client";
-import { mockNHSCOMAddress, mockUSDCAddress } from "@/mocks/stocks";
 
 const hederaJsonRelayUrl = "https://testnet.hashio.io/api";
 const provider = new ethers.JsonRpcProvider(hederaJsonRelayUrl, "", {
