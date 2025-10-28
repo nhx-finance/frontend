@@ -1,3 +1,4 @@
+"use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   SidebarInset,
@@ -5,8 +6,20 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import NoMethod from "./no-method";
-
+import { useState } from "react";
+import AddPaymentModal from "./add-payment-moal";
+import { Loader2 } from "lucide-react";
 export default function Page() {
+  const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleAddPayment = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setShowAddPaymentModal(true);
+    }, 1000);
+  };
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -24,8 +37,15 @@ export default function Page() {
             <p className="text-sm font-funnel-display text-muted-foreground">
               No payment methods found
             </p>
-            <button className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1">
-              Add Payment Method
+            <button
+              onClick={handleAddPayment}
+              className="rounded-3xl bg-background flex items-center justify-center gap-2 text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                "Add Payment Method"
+              )}
             </button>
           </div>
         </div>
@@ -36,6 +56,9 @@ export default function Page() {
           No transactions found
         </p>
       </SidebarInset>
+      {showAddPaymentModal && (
+        <AddPaymentModal setShowAddPaymentModal={setShowAddPaymentModal} />
+      )}
     </SidebarProvider>
   );
 }

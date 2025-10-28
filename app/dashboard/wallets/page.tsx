@@ -1,3 +1,4 @@
+"use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   SidebarInset,
@@ -5,8 +6,21 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import NoWallet from "./no-wallet";
+import { useState } from "react";
+import AddWalletModal from "./add-wallet-modal";
+import { Loader2 } from "lucide-react";
 
 export default function Page() {
+  const [showAddWalletModal, setShowAddWalletModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleAddWallet = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setShowAddWalletModal(true);
+    }, 1000);
+  };
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -22,12 +36,22 @@ export default function Page() {
             <p className="text-sm font-funnel-display text-muted-foreground">
               No wallets found
             </p>
-            <button className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1">
-              Add Wallet
+            <button
+              onClick={handleAddWallet}
+              className="rounded-3xl bg-background flex items-center justify-center gap-2 text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                "Add Wallet"
+              )}
             </button>
           </div>
         </div>
       </SidebarInset>
+      {showAddWalletModal && (
+        <AddWalletModal setShowAddWalletModal={setShowAddWalletModal} />
+      )}
     </SidebarProvider>
   );
 }
