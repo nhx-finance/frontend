@@ -16,10 +16,10 @@ export const description = "Asset allocation donut chart";
 
 const chartColors = [
   "var(--chart-1)",
-  "var(--chart-2)",
-  "var(--chart-3)",
-  "var(--chart-4)",
   "var(--chart-5)",
+  "var(--chart-3)",
+  "var(--chart-2)",
+  "var(--chart-4)",
 ];
 
 export function ChartPieDonut() {
@@ -135,7 +135,7 @@ export function ChartPieDonut() {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}{" "}
-              USDC
+              KES
             </p>
           </div>
         </div>
