@@ -1,3 +1,4 @@
+"use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   SidebarInset,
@@ -7,8 +8,11 @@ import {
 import { ScanFace, ClockIcon, BanIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NoVerification from "./no-verification";
+import { useState } from "react";
+import VerificationModal from "./verification-modal";
 
 export default function Page() {
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -29,7 +33,10 @@ export default function Page() {
           <p className="text-sm font-funnel-display text-muted-foreground">
             No verification completed
           </p>
-          <button className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1">
+          <button
+            onClick={() => setShowVerificationModal(true)}
+            className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
+          >
             Start Verification
           </button>
         </div>
@@ -143,6 +150,11 @@ export default function Page() {
           </div>
         </div>
       </SidebarInset>
+      {showVerificationModal && (
+        <VerificationModal
+          setShowVerificationModal={setShowVerificationModal}
+        />
+      )}
     </SidebarProvider>
   );
 }

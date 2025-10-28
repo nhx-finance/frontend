@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/sidebar";
 import { dummy, logo } from "@/assets";
 import Image from "next/image";
+import { useAuth } from "@/contexts/AuthContext";
 
 const data = {
   user: {
@@ -114,6 +115,9 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth();
+
+  if (!user) return null;
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -144,7 +148,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter className="font-funnel-display">
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );
