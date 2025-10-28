@@ -7,6 +7,7 @@ import "./styles.css";
 import { ChevronDown, ChevronsDown, InfoIcon, Loader2 } from "lucide-react";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import {
+  getTokenAddress,
   mockNHSCOMAddress,
   mockUSDCAddress,
   mockUSDCId,
@@ -14,7 +15,7 @@ import {
 } from "@/mocks/stocks";
 import TokenSelectModal from "./token-select-modal";
 import {
-  useApproveUSDC,
+  useApproveToken,
   useAssociateMutation,
   useSwapExactTokensForTokens,
   useSwapQuote,
@@ -27,6 +28,7 @@ import {
 } from "@/components/ui/popover";
 import { useTokenBalance } from "@/hooks/use-stocks-balances";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 export const KES_USDC_EXCHANGE_RATE = 129.15;
 
@@ -64,14 +66,24 @@ function SwapTokens({
   const [activeInput, setActiveInput] = useState<"sell" | "buy">("sell");
   const [sellValue, setSellValue] = useState("1");
   const [buyValue, setBuyValue] = useState("1");
+  const [isApproved, setIsApproved] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [showTokenSelectModal, setShowTokenSelectModal] = useState(false);
+
+  const inputTokenAddress = isFlipped
+    ? getTokenAddress(stock.ticker)
+    : mockUSDCAddress;
+  const outputTokenAddress = isFlipped
+    ? mockUSDCAddress
+    : getTokenAddress(stock.ticker);
+
   const {
     data: swapQuoteData,
     isLoading: isSwapQuoteLoading,
     error: swapQuoteError,
   } = useSwapQuote(
-    mockUSDCAddress,
-    mockNHSCOMAddress,
+    inputTokenAddress,
+    outputTokenAddress,
     activeInput === "sell" && sellValue !== "0" && sellValue !== ""
       ? formatValue(sellValue)
       : "0"
@@ -81,8 +93,8 @@ function SwapTokens({
     isLoading: isReverseSwapQuoteLoading,
     error: reverseSwapQuoteError,
   } = useSwapQuote(
-    mockNHSCOMAddress,
-    mockUSDCAddress,
+    outputTokenAddress,
+    inputTokenAddress,
     activeInput === "buy" && buyValue !== "0" && buyValue !== ""
       ? formatValue(buyValue)
       : "0"
@@ -99,7 +111,11 @@ function SwapTokens({
   const {
     swapExactTokensForTokensMutation,
     isSwapExactTokensForTokensPending,
+    isSwapExactTokensForTokensSuccess,
   } = useSwapExactTokensForTokens();
+
+  const { approveTokenMutation, isApproveTokenPending, isApproveTokenSuccess } =
+    useApproveToken(inputTokenAddress);
 
   const { fontSize: buyFontSize, textRef: buyTextRef } = useDynamicFontSize({
     value: buyValue,
@@ -133,7 +149,6 @@ function SwapTokens({
     const stockAmount = e.target.value;
     setBuyValue(stockAmount);
 
-    // If we have reverse swap quote data, use it; otherwise clear
     if (reverseSwapQuoteData && stockAmount !== "0" && stockAmount !== "") {
       setSellValue(reverseSwapQuoteData.toFixed(2));
     } else {
@@ -152,14 +167,42 @@ function SwapTokens({
     }
   }, [reverseSwapQuoteData, buyValue, activeInput]);
 
+  useEffect(() => {
+    if (isApproveTokenSuccess) {
+      setIsApproved(true);
+      toast.success(
+        `${
+          isFlipped ? stock.ticker : "USDC"
+        } approved! Now click Swap to complete the transaction.`
+      );
+    }
+  }, [isApproveTokenSuccess, isFlipped, stock.ticker]);
+
+  useEffect(() => {
+    setIsApproved(false);
+  }, [sellValue, buyValue, isFlipped]);
+
+  useEffect(() => {
+    if (isSwapExactTokensForTokensSuccess) {
+      toast.success(
+        "Swap initiated! Please wait for the transaction to complete."
+      );
+    }
+  }, [isSwapExactTokensForTokensSuccess]);
+
   const handleContinue = () => {
     switch (tradeAction) {
       case "swap":
-        swapExactTokensForTokensMutation(
-          BigInt(formatValue(sellValue)),
-          BigInt(formatValue(buyValue)),
-          [mockUSDCAddress, mockNHSCOMAddress]
-        );
+        if (!isApproved) {
+          approveTokenMutation(BigInt(formatValue(sellValue)));
+        } else {
+          swapExactTokensForTokensMutation(
+            BigInt(formatValue(sellValue)),
+            BigInt(formatValue(buyValue)),
+            [inputTokenAddress, outputTokenAddress]
+          );
+          setIsApproved(false);
+        }
         break;
       case "buy":
         // navigate to checkout
@@ -213,21 +256,33 @@ function SwapTokens({
             />
             <div className="rounded-3xl border border-foreground/20 p-1 flex items-center gap-2">
               <Image
-                src={usdcLogo}
-                alt="USDC"
+                src={isFlipped ? stock.logo : usdcLogo}
+                alt={isFlipped ? stock.name : "USDC"}
                 width={24}
                 height={24}
                 className="rounded-full object-cover"
               />
               <div className="flex items-center">
                 <p className="text-sm font-funnel-display font-light text-muted-foreground px-1">
-                  USDC
+                  {isFlipped ? stock.ticker : "USDC"}
                 </p>
               </div>
             </div>
           </div>
           <div className="flex items-center justify-end">
-            {isUsdcBalanceLoading ? (
+            {isFlipped ? (
+              isTokenBalanceLoading ? (
+                <Skeleton className="w-16 h-6" />
+              ) : (
+                <p className="text-sm font-funnel-display font-light text-muted-foreground">
+                  {(tokenBalance ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
+                  {stock.ticker}
+                </p>
+              )
+            ) : isUsdcBalanceLoading ? (
               <Skeleton className="w-16 h-6" />
             ) : (
               <p className="text-sm font-funnel-display font-light text-muted-foreground">
@@ -243,7 +298,17 @@ function SwapTokens({
 
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
           <div className="rounded-lg p-[3px] bg-background flex items-center justify-center">
-            <div className="bg-foreground/5 rounded-lg h-12 w-12 flex items-center justify-center cursor-pointer transition-colors duration-200">
+            <div
+              className="bg-foreground/5 rounded-lg h-12 w-12 flex items-center justify-center cursor-pointer transition-colors duration-200"
+              onClick={() => {
+                setIsFlipped(!isFlipped);
+                // Swap the values when flipping
+                const tempValue = sellValue;
+                setSellValue(buyValue);
+                setBuyValue(tempValue);
+                setIsApproved(false);
+              }}
+            >
               <ChevronsDown className="w-6 h-6 text-foreground" />
             </div>
           </div>
@@ -274,43 +339,62 @@ function SwapTokens({
             />
             <div
               className="rounded-3xl border border-foreground/20 p-1 flex items-center gap-2 cursor-pointer"
-              onClick={() => setShowTokenSelectModal(true)}
+              onClick={() => !isFlipped && setShowTokenSelectModal(true)}
             >
               <Image
-                src={stock.logo}
-                alt={stock.name}
+                src={isFlipped ? usdcLogo : stock.logo}
+                alt={isFlipped ? "USDC" : stock.name}
                 width={24}
                 height={24}
                 className="rounded-full object-cover"
               />
               <div className="flex items-center">
                 <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                  {stock.ticker}
+                  {isFlipped ? "USDC" : stock.ticker}
                 </p>
-                <ChevronDown className="w-6 h-6 text-muted-foreground" />
+                {!isFlipped && (
+                  <ChevronDown className="w-6 h-6 text-muted-foreground" />
+                )}
               </div>
             </div>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm font-funnel-display font-light text-muted-foreground">
               KES{" "}
-              {(Number(sellValue) * KES_USDC_EXCHANGE_RATE).toLocaleString(
-                undefined,
-                {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }
-              )}
+              {isFlipped
+                ? (Number(buyValue) * stock.price).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : (Number(sellValue) * KES_USDC_EXCHANGE_RATE).toLocaleString(
+                    undefined,
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}
             </p>
-            {isTokenBalanceLoading ? (
+            {!isFlipped ? (
+              isTokenBalanceLoading ? (
+                <Skeleton className="w-16 h-6" />
+              ) : (
+                <p className="text-sm font-funnel-display font-light text-muted-foreground">
+                  {(tokenBalance ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
+                  {stock.ticker}
+                </p>
+              )
+            ) : isUsdcBalanceLoading ? (
               <Skeleton className="w-16 h-6" />
             ) : (
               <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                {(tokenBalance ?? 0).toLocaleString(undefined, {
+                {(usdcBalance ?? 0).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}{" "}
-                {stock.ticker}
+                USDC
               </p>
             )}
           </div>
@@ -376,15 +460,20 @@ function SwapTokens({
         disabled={
           tradeAction === "buy" ||
           isSwapQuoteLoading ||
-          isReverseSwapQuoteLoading
+          isReverseSwapQuoteLoading ||
+          isApproveTokenPending ||
+          isSwapExactTokensForTokensPending
         }
       >
         {isSwapQuoteLoading ||
         isReverseSwapQuoteLoading ||
+        isApproveTokenPending ||
         isSwapExactTokensForTokensPending ? (
           <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
+        ) : isApproved ? (
+          "Swap"
         ) : (
-          "Continue"
+          `Approve ${isFlipped ? "nh" + stock.ticker : "USDC"}`
         )}
       </button>
       {showTokenSelectModal && (

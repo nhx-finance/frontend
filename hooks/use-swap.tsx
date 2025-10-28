@@ -66,21 +66,31 @@ async function fetchSwapQuote(
   return Number(finalOutputAmount) / DECIMALS;
 }
 
-export const useApproveUSDC = () => {
+export const useApproveToken = (tokenAddress: string) => {
+  const activeAccount = useActiveAccount();
+  if (!activeAccount) {
+    return {
+      approveTokenMutation: () => {},
+      isApproveTokenPending: false,
+      isApproveTokenSuccess: false,
+      isApproveTokenError: false,
+    };
+  }
+
   const tokenContract = getContract({
-    address: mockUSDCAddress,
+    address: tokenAddress,
     chain: hederaTestnet,
     client,
   });
 
   const {
     mutate: sendTx,
-    isPending: isApproveUSDCPending,
-    isSuccess: isApproveUSDCSuccess,
-    isError: isApproveUSDCError,
+    isPending: isApproveTokenPending,
+    isSuccess: isApproveTokenSuccess,
+    isError: isApproveTokenError,
   } = useSendTransaction();
 
-  const approveUSDCMutation = (amount: bigint) => {
+  const approveTokenMutation = (amount: bigint) => {
     const transaction = prepareContractCall({
       contract: tokenContract,
       method:
@@ -91,14 +101,25 @@ export const useApproveUSDC = () => {
   };
 
   return {
-    approveUSDCMutation,
-    isApproveUSDCPending,
-    isApproveUSDCSuccess,
-    isApproveUSDCError,
+    approveTokenMutation,
+    isApproveTokenPending,
+    isApproveTokenSuccess,
+    isApproveTokenError,
   };
 };
 
 export const useAssociateMutation = (address: string) => {
+  const activeAccount = useActiveAccount();
+  if (!activeAccount) {
+    return {
+      associateTokenMutation: () => {},
+      isAssociatePending: false,
+      isAssociateSuccess: false,
+      isAssociateError: false,
+      associateError: null,
+    };
+  }
+
   const {
     mutate: sendTx,
     isPending: isAssociatePending,
@@ -106,10 +127,6 @@ export const useAssociateMutation = (address: string) => {
     isError: isAssociateError,
     error: associateError,
   } = useSendTransaction();
-  const activeAccount = useActiveAccount();
-  if (!activeAccount) {
-    throw new Error("No active account found");
-  }
 
   const systemContract = getContract({
     address: "0x0000000000000000000000000000000000000167",
@@ -138,7 +155,13 @@ export const useAssociateMutation = (address: string) => {
 export const useSwapExactTokensForTokens = () => {
   const activeAccount = useActiveAccount();
   if (!activeAccount) {
-    throw new Error("No active account found");
+    return {
+      swapExactTokensForTokensMutation: () => {},
+      isSwapExactTokensForTokensPending: false,
+      isSwapExactTokensForTokensSuccess: false,
+      isSwapExactTokensForTokensError: false,
+      swapExactTokensForTokensError: null,
+    };
   }
   const {
     mutate: sendTx,

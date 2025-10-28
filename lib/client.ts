@@ -23,14 +23,14 @@ export const client = createThirdwebClient({
 export const hederaTestnet = defineChain({
   id: 296,
   name: "Hedera Testnet",
-  rpc: `https://296.rpc.thirdweb.com/${secretKey}`,
+  rpc: `https://testnet.hashio.io/api`,
   nativeCurrency: {
     name: "hbar",
     symbol: "HBAR",
     decimals: 8,
   },
   rpcUrls: {
-    default: { http: [`https://296.rpc.thirdweb.com/${secretKey}`] },
+    default: { http: [`https://testnet.hashio.io/api`] },
   },
   blockExplorers: {
     default: {

@@ -43,7 +43,7 @@ export interface HistoricalData {
 export const stocks: Stock[] = [
   {
     id: 1,
-    hederaId: "0.0.7135370",
+    hederaId: "0.0.7142699",
     ticker: "KCB",
     name: "KCB Group",
     price: 145.85,
@@ -158,7 +158,7 @@ export const stocks: Stock[] = [
   {
     id: 3,
     ticker: "EQTY",
-    hederaId: "0.0.7135370",
+    hederaId: "0.0.7142958",
     name: "Equity Group Holdings",
     price: 79.76,
     change: 11.23,
@@ -215,7 +215,7 @@ export const stocks: Stock[] = [
   {
     id: 4,
     ticker: "KEGN",
-    hederaId: "0.0.7135370",
+    hederaId: "0.0.7142885",
     name: "Kenya Electricity Company",
     price: 126.32,
     change: 20.87,
@@ -272,7 +272,7 @@ export const stocks: Stock[] = [
   {
     id: 5,
     ticker: "HAFR",
-    hederaId: "0.0.7135370",
+    hederaId: "0.0.7142913",
     name: "Home Afrika",
     price: 11.23,
     change: -0.56,
@@ -329,7 +329,7 @@ export const stocks: Stock[] = [
   {
     id: 6,
     ticker: "KQ",
-    hederaId: "0.0.7135370",
+    hederaId: "0.0.7142834",
     name: "Kenya Airways",
     price: 100,
     change: 1,
@@ -445,4 +445,24 @@ export const kesyAsset: Stock = {
 
 export const mockUSDCAddress = "0x00000000000000000000000000000000006ce07e";
 export const mockNHSCOMAddress = "0x00000000000000000000000000000000006ce08a";
+export const mockNHKCBAddress = "0x00000000000000000000000000000000006cfd2b";
+export const mockNHKQAddress = "0x00000000000000000000000000000000006cfdb2";
+export const mockNHKEGNAddress = "0x00000000000000000000000000000000006cfde5";
+export const mockNHHAFRAddress = "0x00000000000000000000000000000000006cfe01";
+export const mockNHEQTYAddress = "0x00000000000000000000000000000000006cfe2e";
 export const mockUSDCId = "0.0.7135358";
+
+export const tokenToAddressMap: Map<string, string> = new Map([
+  ["USDC", mockUSDCAddress],
+  ["nhSCOM", mockNHSCOMAddress],
+  ["nhKCB", mockNHKCBAddress],
+  ["nhKQ", mockNHKQAddress],
+  ["nhKEGN", mockNHKEGNAddress],
+  ["nhHAFR", mockNHHAFRAddress],
+  ["nhEQTY", mockNHEQTYAddress],
+]);
+
+export function getTokenAddress(token: string): string {
+  const key = `nh${token}`;
+  return tokenToAddressMap.get(key) || mockUSDCAddress;
+}
