@@ -308,8 +308,9 @@ function MobileNavbar() {
                 </div>
               </DrawerDescription>
             </DrawerHeader>
-            <DrawerFooter>
+            <DrawerFooter className="flex items-center justify-between flex-row">
               <CustomUserAuthButton />
+              <CustomConnectButton />
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

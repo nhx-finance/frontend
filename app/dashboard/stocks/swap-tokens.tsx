@@ -8,7 +8,6 @@ import { ChevronDown, ChevronsDown, InfoIcon, Loader2 } from "lucide-react";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
 import {
   getTokenAddress,
-  mockNHSCOMAddress,
   mockUSDCAddress,
   mockUSDCId,
   Stock,
@@ -16,7 +15,6 @@ import {
 import TokenSelectModal from "./token-select-modal";
 import {
   useApproveToken,
-  useAssociateMutation,
   useSwapExactTokensForTokens,
   useSwapQuote,
 } from "@/hooks/use-swap";
@@ -29,6 +27,10 @@ import {
 import { useTokenBalance } from "@/hooks/use-stocks-balances";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useActiveWalletConnectionStatus } from "thirdweb/react";
+import CustomConnectButton from "@/components/ui/connect-button";
+import { useRouter } from "next/navigation";
 
 export const KES_USDC_EXCHANGE_RATE = 129.15;
 
@@ -69,6 +71,10 @@ function SwapTokens({
   const [isApproved, setIsApproved] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showTokenSelectModal, setShowTokenSelectModal] = useState(false);
+  const router = useRouter();
+
+  const { isAuthenticated } = useAuth();
+  const status = useActiveWalletConnectionStatus();
 
   const inputTokenAddress = isFlipped
     ? getTokenAddress(stock.ticker)
@@ -442,28 +448,47 @@ function SwapTokens({
           </p>
         </div>
       </div>
-      <button
-        onClick={handleContinue}
-        className="border disabled:cursor-not-allowed flex items-center justify-center border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 gap-2 font-semibold"
-        disabled={
-          tradeAction === "buy" ||
-          isSwapQuoteLoading ||
+      {!isAuthenticated && (
+        <button
+          onClick={() => {
+            router.push("/login");
+          }}
+          className="border disabled:cursor-not-allowed flex items-center justify-center border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 gap-2 font-semibold"
+        >
+          Sign In
+        </button>
+      )}
+      {isAuthenticated && status === "connected" && (
+        <button
+          onClick={handleContinue}
+          className="border disabled:cursor-not-allowed flex items-center justify-center border-foreground/10 bg-foreground/5 hover:bg-foreground/10 ease-in duration-300 transition-all font-funnel-display w-full mt-1 rounded-3xl p-4 gap-2 font-semibold"
+          disabled={
+            tradeAction === "buy" ||
+            isSwapQuoteLoading ||
+            isReverseSwapQuoteLoading ||
+            isApproveTokenPending ||
+            isSwapExactTokensForTokensPending
+          }
+        >
+          {isSwapQuoteLoading ||
           isReverseSwapQuoteLoading ||
           isApproveTokenPending ||
-          isSwapExactTokensForTokensPending
-        }
-      >
-        {isSwapQuoteLoading ||
-        isReverseSwapQuoteLoading ||
-        isApproveTokenPending ||
-        isSwapExactTokensForTokensPending ? (
-          <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
-        ) : isApproved ? (
-          "Swap"
-        ) : (
-          `Approve ${isFlipped ? "nh" + stock.ticker : "USDC"}`
-        )}
-      </button>
+          isSwapExactTokensForTokensPending ? (
+            <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
+          ) : isApproved ? (
+            "Swap"
+          ) : (
+            `Approve ${isFlipped ? "nh" + stock.ticker : "USDC"}`
+          )}
+        </button>
+      )}
+      {status !== "connected" && (
+        <div className="w-full mt-4 flex items-center justify-center">
+          <p className="text-sm font-funnel-display text-muted-foreground">
+            Please connect your wallet to continue.
+          </p>
+        </div>
+      )}
       {showTokenSelectModal && (
         <TokenSelectModal
           setShowTokenSelectModal={setShowTokenSelectModal}

@@ -46,7 +46,7 @@ export const stocks: Stock[] = [
     hederaId: "0.0.7142699",
     ticker: "KCB",
     name: "KCB Group",
-    price: 145.85,
+    price: 58.0,
     change: 1.64,
     changePercentage: 1.6,
     volume: 1000000,
@@ -160,7 +160,7 @@ export const stocks: Stock[] = [
     ticker: "EQTY",
     hederaId: "0.0.7142958",
     name: "Equity Group Holdings",
-    price: 79.76,
+    price: 59.75,
     change: 11.23,
     changePercentage: 12.8,
     volume: 1000000,
@@ -217,7 +217,7 @@ export const stocks: Stock[] = [
     ticker: "KEGN",
     hederaId: "0.0.7142885",
     name: "Kenya Electricity Company",
-    price: 126.32,
+    price: 9.96,
     change: 20.87,
     changePercentage: -0.96,
     volume: 1000000,
@@ -274,7 +274,7 @@ export const stocks: Stock[] = [
     ticker: "HAFR",
     hederaId: "0.0.7142913",
     name: "Home Afrika",
-    price: 11.23,
+    price: 1.16,
     change: -0.56,
     changePercentage: 15.44,
     volume: 1000000,
@@ -331,8 +331,8 @@ export const stocks: Stock[] = [
     ticker: "KQ",
     hederaId: "0.0.7142834",
     name: "Kenya Airways",
-    price: 100,
-    change: 1,
+    price: 3.77,
+    change: 3.77,
     changePercentage: 1,
     volume: 1000000,
     marketCap: 1000000,
@@ -461,6 +461,30 @@ export const tokenToAddressMap: Map<string, string> = new Map([
   ["nhHAFR", mockNHHAFRAddress],
   ["nhEQTY", mockNHEQTYAddress],
 ]);
+
+export const tokenIdToPriceMap: Map<string, number> = new Map([
+  [mockUSDCId, 1],
+  ["0.0.7135370", 25.0],
+  ["0.0.7142699", 58.0],
+  ["0.0.7142958", 59.75],
+  ["0.0.7142885", 9.96],
+  ["0.0.7142913", 1.16],
+  ["0.0.7142834", 3.77],
+]);
+
+export const tokenIdToTickerMap: Map<string, string> = new Map([
+  [mockUSDCId, "USDC"],
+  ["0.0.7135370", "SCOM"],
+  ["0.0.7142699", "KCB"],
+  ["0.0.7142958", "KQ"],
+  ["0.0.7142885", "KEGN"],
+  ["0.0.7142913", "HAFR"],
+  ["0.0.7142834", "EQTY"],
+]);
+
+export function getTokenTicker(tokenId: string): string {
+  return tokenIdToTickerMap.get(tokenId) || "USDC";
+}
 
 export function getTokenAddress(token: string): string {
   const key = `nh${token}`;

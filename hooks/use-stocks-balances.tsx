@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAccountId } from "./use-account-id";
 
-const availableTokens = [
+export const availableTokens = [
   "0.0.7135370",
   "0.0.7135358",
   "0.0.7142699",
@@ -52,7 +52,7 @@ interface TokensResponse {
   };
 }
 
-async function fetchAllUserBalances(
+export async function fetchAllUserBalances(
   accountId: string | undefined
 ): Promise<TokenBalance[]> {
   if (!accountId) {
