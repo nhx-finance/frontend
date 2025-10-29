@@ -19,15 +19,18 @@ interface PortfolioAllocation {
 }
 
 export const usePortfolioAllocation = (topCount: number = 4) => {
-  const { data: accountId } = useAccountId();
+  const { data: accountId, isLoading: isAccountIdLoading } = useAccountId();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["portfolio-allocation", accountId, topCount],
     queryFn: async () => {
+      if (!accountId) {
+        throw new Error("Account ID is required");
+      }
       const balances = await fetchAllUserBalances(accountId);
       return calculatePortfolioAllocation(balances, topCount);
     },
-    enabled: !!accountId,
+    enabled: !!accountId && !isAccountIdLoading,
   });
 
   return { data, isLoading, error };

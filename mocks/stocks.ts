@@ -1,4 +1,14 @@
-import { eqty, hafr, kcb, kegn, scom, kq, kesy } from "@/assets";
+import {
+  eqty,
+  hafr,
+  kcb,
+  kegn,
+  scom,
+  kq,
+  kesy,
+  usdcLogo,
+  nhxmmf,
+} from "@/assets";
 const scomDescription =
   "Safaricom PLC is a purpose-led technology company providing a wide range of services and solutions, including mobile voice, messaging, data, financial and converged services, and digital services that enable commercial and personal platforms as well as ecosystem partnerships. Safaricom is one of a small group of about 400 companies across Africa whose annual revenues are more than USD1 billion. Many of these companies are pan-African in their operations and are active in increasingly diverse sectors. We invest in a unique way of doing business through our purpose of transforming lives, and seek to create opportunities for Kenyans to be a part of our growth story by empowering them with the right tools for economic growth. We have 42 million customers on our network and over 30 million using our M-PESA service. We also have over 6,100 towers connecting Kenyans across the country.";
 const kcbDescription =
@@ -482,11 +492,25 @@ export const tokenIdToTickerMap: Map<string, string> = new Map([
   ["0.0.7142834", "EQTY"],
 ]);
 
+export const tokenIdToImageMap: Map<string, string> = new Map([
+  [mockUSDCId, usdcLogo],
+  ["0.0.7135370", scom],
+  ["0.0.7142699", kcb],
+  ["0.0.7142958", kq],
+  ["0.0.7142885", kegn],
+  ["0.0.7142913", hafr],
+  ["0.0.7142834", eqty],
+]);
+
 export function getTokenTicker(tokenId: string): string {
-  return tokenIdToTickerMap.get(tokenId) || "USDC";
+  return tokenIdToTickerMap.get(tokenId) || "Unknown Token";
 }
 
 export function getTokenAddress(token: string): string {
   const key = `nh${token}`;
   return tokenToAddressMap.get(key) || mockUSDCAddress;
+}
+
+export function getTokenImage(tokenId: string): string {
+  return tokenIdToImageMap.get(tokenId) || nhxmmf;
 }
