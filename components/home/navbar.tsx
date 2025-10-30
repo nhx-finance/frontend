@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 function CustomUserAuthButton() {
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
+  console.log(user);
   return (
     <>
       {isAuthenticated ? (
@@ -39,7 +40,7 @@ function CustomUserAuthButton() {
           className="cursor-pointer w-9 border border-foreground/20 rounded-full flex items-center justify-center h-9"
         >
           <AvatarFallback className="text-xl font-semibold font-medieval-sharp uppercase mt-1 bg-transparent">
-            {user?.email.charAt(0)}
+            {user?.userEmail?.charAt(0) || "N"}
           </AvatarFallback>
         </Avatar>
       ) : (

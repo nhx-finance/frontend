@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IconUpload } from "@tabler/icons-react";
+import { useCompleteKYC } from "@/hooks/use-verification";
 
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "Full name is required" }),
@@ -269,6 +270,7 @@ const Step3 = ({
 }) => {
   const frontFileRef = React.useRef<HTMLInputElement>(null);
   const backFileRef = React.useRef<HTMLInputElement>(null);
+  const mutation = useCompleteKYC();
 
   const documentFront = form.watch("documentFront");
   const documentBack = form.watch("documentBack");
@@ -276,6 +278,7 @@ const Step3 = ({
   const handleSubmit = async () => {
     const formData = form.getValues();
     console.log(formData);
+    mutation?.completeKYCMutation();
   };
 
   const handleDocumentFrontUpload = () => {
@@ -428,11 +431,20 @@ const Step3 = ({
           onClick={onBack}
           className="w-1/2 mt-2 shadow-none"
           variant="outline"
+          disabled={mutation?.isPending}
         >
           Back
         </Button>
-        <Button onClick={handleSubmit} className="w-1/2 mt-2 shadow-none">
-          Submit
+        <Button
+          onClick={handleSubmit}
+          className="w-1/2 mt-2 shadow-none"
+          disabled={mutation?.isPending}
+        >
+          {mutation?.isPending ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            "Submit"
+          )}
         </Button>
       </div>
     </div>

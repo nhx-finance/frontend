@@ -15,12 +15,13 @@ export interface AuthData {
 
 export interface LoginResponse {
   message: string;
-  email: string;
+  userEmail: string;
   jwtToken: string;
   refreshToken: string;
   expiresIn: number;
   refreshExpiresIn: number;
   roles: string[];
+  userId: number;
 }
 
 export interface LoginErrorResponse {

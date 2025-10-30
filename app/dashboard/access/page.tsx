@@ -1,3 +1,4 @@
+"use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,12 +11,15 @@ import {
   LockIcon,
   PercentIcon,
   Building2Icon,
+  CheckIcon,
 } from "lucide-react";
 import Image from "next/image";
 import kesy from "@/public/kes.jpg";
 import { nhxmmf } from "@/assets";
+import { useGetKYCStatus } from "@/hooks/use-verification";
 
 export default function Page() {
+  const { data: kycStatus } = useGetKYCStatus();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -45,8 +49,11 @@ export default function Page() {
               <Button
                 variant="outline"
                 className="rounded-3xl bg-[#000] text-white font-funnel-display"
+                disabled={kycStatus?.kycStatus === "COMPLETED"}
               >
-                Get Access
+                {kycStatus?.kycStatus === "COMPLETED"
+                  ? "Unlocked"
+                  : "Get Access"}
               </Button>
             </div>
             <div className="mt-4 flex flex-col gap-2">
@@ -54,10 +61,21 @@ export default function Page() {
                 <p className="text-sm font-funnel-display text-muted-foreground font-semibold">
                   Access
                 </p>
-                <p className="text-sm font-funnel-display flex items-center gap-1">
-                  <LockIcon className="w-4 h-4" />
-                  Locked
-                </p>
+                {kycStatus?.kycStatus === "COMPLETED" ? (
+                  <div>
+                    <p className="text-sm font-funnel-display flex items-center gap-1">
+                      <CheckIcon className="w-4 h-4" />
+                      Unlocked
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm font-funnel-display flex items-center gap-1">
+                      <LockIcon className="w-4 h-4" />
+                      Locked
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="mt-4 flex flex-col gap-2">

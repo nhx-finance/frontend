@@ -5,5 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const API_URL =
-  "https://nhxwebserver-hzbrdehsdffqhugw.southafricanorth-01.azurewebsites.net/api/v1";
+export const API_URL = "https://nhx-server.orcus-finance.space/api/v1";

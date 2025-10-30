@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,16 +8,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X } from "lucide-react";
-import React from "react";
+import { useAddPaymentMethod } from "@/hooks/use-payments";
+import { Loader2, X } from "lucide-react";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 function AddPaymentModal({
   setShowAddPaymentModal,
 }: {
   setShowAddPaymentModal: (show: boolean) => void;
 }) {
+  const [paymentMethod, setPaymentMethod] = useState("mpesa");
+  const [accountNumber, setAccountNumber] = useState("");
+  const { addPaymentMethodMutation, isPending, isSuccess, isError, error } =
+    useAddPaymentMethod();
+
   const handleSubmit = () => {
-    console.log("Submit");
+    if (accountNumber === "" || paymentMethod === "") {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    addPaymentMethodMutation({ paymentMethod, accountNumber });
   };
   return (
     <div className="fixed inset-0 px-2 w-screen z-50 bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
@@ -39,14 +51,14 @@ function AddPaymentModal({
             <h1 className="text-sm font-funnel-display font-bold text-muted-foreground">
               Payment Provider
             </h1>
-            <Select>
+            <Select value={paymentMethod} onValueChange={setPaymentMethod}>
               <SelectTrigger className="rounded-3xl font-funnel-display shadow-none w-full">
                 <SelectValue placeholder="Select payment provider" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="stripe">Mpesa</SelectItem>
-                <SelectItem value="paypal">KCB Bank</SelectItem>
-                <SelectItem value="razorpay">Stripe</SelectItem>
+                <SelectItem value="mpesa">Mpesa</SelectItem>
+                <SelectItem value="kcb">KCB Bank</SelectItem>
+                <SelectItem value="stripe">Stripe</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -57,11 +69,21 @@ function AddPaymentModal({
             <Input
               placeholder="254712345678"
               className="rounded-3xl font-funnel-display shadow-none"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
             />
           </div>
         </div>
-        <Button onClick={handleSubmit} className="w-full mt-4 shadow-none">
-          Add Payment Method
+        <Button
+          onClick={handleSubmit}
+          className="w-full mt-4 shadow-none"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            "Add Payment Method"
+          )}
         </Button>
       </div>
     </div>

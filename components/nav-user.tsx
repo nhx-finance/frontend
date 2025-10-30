@@ -43,13 +43,13 @@ export function NavUser({ user }: { user: LoginResponse }) {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarFallback className="rounded-lg">
-                  {user.email.charAt(0)}
+                  {user.userEmail.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.email}</span>
+                <span className="truncate font-medium">{user.userEmail}</span>
                 <span className="truncate text-xs">
-                  {user.email.slice(0, 2)}****{user.email.slice(-10)}
+                  {user.userEmail.slice(0, 2)}****{user.userEmail.slice(-10)}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -65,14 +65,14 @@ export function NavUser({ user }: { user: LoginResponse }) {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarFallback className="rounded-lg">
-                    {user.email.charAt(0)}
+                    {user.userEmail.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.email}</span>
+                  <span className="truncate font-medium">{user.userEmail}</span>
                   <span className="truncate text-xs">
                     {" "}
-                    {user.email.slice(0, 2)}****{user.email.slice(-10)}
+                    {user.userEmail.slice(0, 2)}****{user.userEmail.slice(-10)}
                   </span>
                 </div>
               </div>

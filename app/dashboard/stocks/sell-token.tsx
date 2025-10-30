@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { usdcLogo } from "@/assets";
 import Link from "next/link";
 import { useTokenBalance } from "@/hooks/use-stocks-balances";
-import { useSellTokens } from "@/hooks/use-sell-tokens";
+import { useBurnTokens, useSellTokens } from "@/hooks/use-sell-tokens";
 import { useApproveToken } from "@/hooks/use-swap";
 
 function formatValue(value: string) {
@@ -33,6 +33,8 @@ function SellToken({ stock }: { stock: Stock }) {
     useSellTokens();
   const { approveTokenMutation, isApproveTokenPending, isApproveTokenSuccess } =
     useApproveToken(getTokenAddress(stock.ticker));
+  const { sendBurnRequestMutation, error: burnRequestError } = useBurnTokens();
+  console.log(burnRequestError);
 
   const { fontSize, textRef } = useDynamicFontSize({
     value: sellValue,
@@ -58,10 +60,15 @@ function SellToken({ stock }: { stock: Stock }) {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Transaction completed!");
+      sendBurnRequestMutation({
+        usdcAmount: Number(
+          (Number(sellValue) / KES_USDC_EXCHANGE_RATE) * stock.price * 1000000
+        ),
+        nhTokenAmount: Number(formatValue(sellValue)),
+        nhTokenName: stock.ticker,
+      });
     } else if (isError) {
       toast.error(error?.message);
-    } else if (isPending) {
-      toast.loading("Transaction pending...");
     }
   }, [isSuccess, isError, isPending, error]);
 
