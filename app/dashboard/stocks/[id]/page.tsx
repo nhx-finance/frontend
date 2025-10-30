@@ -24,7 +24,7 @@ import { IconBrandTwitter } from "@tabler/icons-react";
 import { HistoricalChart } from "../historical-chart";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
-import SwapTokens, { KES_USDC_EXCHANGE_RATE } from "../swap-tokens";
+import SwapTokens from "../swap-tokens";
 import BuyToken from "../buy-token";
 import SellToken from "../sell-token";
 import { hederaLogo } from "@/assets";
@@ -47,21 +47,6 @@ function Stock() {
     toast.success("Copied to clipboard");
   };
 
-  const handleContinue = () => {
-    switch (tradeAction) {
-      case "swap":
-        console.log("Swapping USDC for nh token");
-        break;
-      case "buy":
-        // navigate to checkout
-        break;
-      case "sell":
-        console.log("Burining nh tokens and transferring fiat");
-      default:
-        console.log("Invalid op");
-        break;
-    }
-  };
 
   return (
     <div className="max-w-[1240px] mx-auto my-0 ">

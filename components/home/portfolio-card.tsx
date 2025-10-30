@@ -1,4 +1,4 @@
-import { ChevronsUp, Wallet2Icon } from "lucide-react";
+import { Wallet2Icon } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { usePortfolioBalance } from "@/hooks/use-portfolio-balance";

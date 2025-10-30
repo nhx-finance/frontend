@@ -23,6 +23,10 @@ export default function Page() {
       </div>
     );
   }
+
+  // Handle case where kycStatus might be undefined during prerender
+  const status = kycStatus?.kycStatus || "NOT_STARTED";
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -38,7 +42,7 @@ export default function Page() {
           Completed Verification
         </h1>
 
-        {kycStatus.kycStatus !== "COMPLETED" ? (
+        {status !== "COMPLETED" ? (
           <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 items-center mx-4">
             <NoVerification />
             <p className="text-sm font-funnel-display text-muted-foreground">
@@ -68,10 +72,10 @@ export default function Page() {
                 </div>
                 <Button
                   variant="outline"
-                  disabled={kycStatus.kycStatus === "COMPLETED"}
+                  disabled={status === "COMPLETED"}
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
                 >
-                  {kycStatus.kycStatus === "COMPLETED"
+                  {status === "COMPLETED"
                     ? "Verification Completed"
                     : "Start Verification"}
                 </Button>
@@ -123,10 +127,10 @@ export default function Page() {
                 </div>
                 <Button
                   variant="outline"
-                  disabled={kycStatus.kycStatus === "COMPLETED"}
+                  disabled={status === "COMPLETED"}
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
                 >
-                  {kycStatus.kycStatus === "COMPLETED"
+                  {status === "COMPLETED"
                     ? "Verification Completed"
                     : "Start Verification"}
                 </Button>
@@ -168,7 +172,7 @@ export default function Page() {
         <h1 className="text-lg mt-12 px-4 mb-2 font-funnel-display font-semibold">
           Pending Verification
         </h1>
-        {kycStatus.kycStatus === "COMPLETED" ? (
+        {status === "COMPLETED" ? (
           <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 items-center mx-4">
             <NoVerification />
             <p className="text-sm font-funnel-display text-muted-foreground">

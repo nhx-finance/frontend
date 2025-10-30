@@ -2,11 +2,10 @@
 import {
   flexRender,
   getCoreRowModel,
-  Row,
   useReactTable,
 } from "@tanstack/react-table";
 import { defaultColumns as columns } from "@/components/tables/wallet-columndef";
-import { wallets as data, Wallet } from "@/mocks/wallets";
+import { wallets as data } from "@/mocks/wallets";
 import React from "react";
 import { useRouter } from "next/navigation";
 

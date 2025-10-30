@@ -1,7 +1,6 @@
 import { OTPForm } from "@/components/otp-form";
 import { fin3 } from "@/assets";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function OTPPage() {
   return (

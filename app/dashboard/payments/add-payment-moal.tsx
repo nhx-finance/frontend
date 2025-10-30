@@ -20,8 +20,7 @@ function AddPaymentModal({
 }) {
   const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [accountNumber, setAccountNumber] = useState("");
-  const { addPaymentMethodMutation, isPending, isSuccess, isError, error } =
-    useAddPaymentMethod();
+  const { addPaymentMethodMutation, isPending } = useAddPaymentMethod();
 
   const handleSubmit = () => {
     if (accountNumber === "" || paymentMethod === "") {

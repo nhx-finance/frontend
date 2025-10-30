@@ -5,11 +5,9 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
@@ -33,8 +31,8 @@ const formSchema = z.object({
   country: z.string().min(1, { message: "Country is required" }),
   accountType: z.enum(["individual", "business"]),
   idNumber: z.string().min(1, { message: "ID number is required" }),
-  documentFront: z.any().optional(),
-  documentBack: z.any().optional(),
+  documentFront: z.custom<File>().optional(),
+  documentBack: z.custom<File>().optional(),
   documentType: z.enum(["id", "passport", "driver's license"]),
 });
 
@@ -337,7 +335,7 @@ const Step3 = ({
                     <SelectItem value="id">ID</SelectItem>
                     <SelectItem value="passport">Passport</SelectItem>
                     <SelectItem value="driver's license">
-                      Driver's License
+                      Driver&apos;s License
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -349,7 +347,7 @@ const Step3 = ({
           <FormField
             control={form.control}
             name="documentFront"
-            render={({ field }) => (
+            render={() => (
               <FormItem className="my-4 w-full md:w-1/2">
                 <FormLabel className="text-sm font-medium font-funnel-display">
                   Document Front
@@ -360,6 +358,7 @@ const Step3 = ({
                     onClick={handleDocumentFrontUpload}
                   >
                     {documentFront ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={URL.createObjectURL(documentFront)}
                         alt="Document Front"
@@ -388,7 +387,7 @@ const Step3 = ({
           <FormField
             control={form.control}
             name="documentBack"
-            render={({ field }) => (
+            render={() => (
               <FormItem className="my-4 w-full md:w-1/2">
                 <FormLabel className="text-sm font-medium font-funnel-display">
                   Document Backside
@@ -399,6 +398,7 @@ const Step3 = ({
                     onClick={handleDocumentBackUpload}
                   >
                     {documentBack ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={URL.createObjectURL(documentBack)}
                         alt="Document Back"
@@ -459,6 +459,7 @@ function VerificationModal({
   const [currentStep, setCurrentStep] = useState(1);
 
   const form = useForm<z.infer<typeof formSchema>>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(formSchema as any),
     defaultValues: {
       fullName: "",

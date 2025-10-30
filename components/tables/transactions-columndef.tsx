@@ -5,7 +5,7 @@ import Image from "next/image";
 const columnHelper = createColumnHelper<Transaction>();
 const formatAmount = (balance: number) => {
   const stringBalance = balance.toString();
-  const [whole, decimal] = stringBalance.split(".");
+  const [whole] = stringBalance.split(".");
   if (whole.length > 6) {
     return `${whole.charAt(0)}.${whole.slice(1, 2)}M`;
   }

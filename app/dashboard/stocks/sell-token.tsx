@@ -27,8 +27,7 @@ function SellToken({ stock }: { stock: Stock }) {
   const [sellValue, setSellValue] = useState("0");
   const [sellTo, setSellTo] = useState("USDC");
   const [isApproved, setIsApproved] = useState(false);
-  const { data: tokenBalance, isLoading: isTokenBalanceLoading } =
-    useTokenBalance(stock.hederaId);
+  const { data: tokenBalance } = useTokenBalance(stock.hederaId);
   const { sellTokensMutation, isError, isPending, isSuccess, error } =
     useSellTokens();
   const { approveTokenMutation, isApproveTokenPending, isApproveTokenSuccess } =
@@ -70,7 +69,7 @@ function SellToken({ stock }: { stock: Stock }) {
     } else if (isError) {
       toast.error(error?.message);
     }
-  }, [isSuccess, isError, isPending, error]);
+  }, [isSuccess, isError, isPending, error, sellValue, sendBurnRequestMutation, stock.price, stock.ticker]);
 
   const handleContinue = async () => {
     if (!isApproved) {

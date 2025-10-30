@@ -29,7 +29,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useActiveWalletConnectionStatus } from "thirdweb/react";
-import CustomConnectButton from "@/components/ui/connect-button";
 import { useRouter } from "next/navigation";
 
 export const KES_USDC_EXCHANGE_RATE = 129.15;
@@ -86,7 +85,6 @@ function SwapTokens({
   const {
     data: swapQuoteData,
     isLoading: isSwapQuoteLoading,
-    error: swapQuoteError,
   } = useSwapQuote(
     inputTokenAddress,
     outputTokenAddress,
@@ -97,7 +95,6 @@ function SwapTokens({
   const {
     data: reverseSwapQuoteData,
     isLoading: isReverseSwapQuoteLoading,
-    error: reverseSwapQuoteError,
   } = useSwapQuote(
     outputTokenAddress,
     inputTokenAddress,

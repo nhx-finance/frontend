@@ -99,7 +99,7 @@ export function DetailsForm({
       console.log("Submitting data:", submitData);
       toast.success("Account created successfully!");
       router.push("/kesy/login");
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setIsPending(false);

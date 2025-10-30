@@ -3,17 +3,10 @@ import Navbar from "@/components/home/navbar";
 import { stocks } from "@/mocks/stocks";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import SwapTokens, { KES_USDC_EXCHANGE_RATE } from "../../stocks/swap-tokens";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@radix-ui/react-popover";
-import { InfoIcon } from "lucide-react";
+import SwapTokens from "../../stocks/swap-tokens";
 import BuyToken from "../../stocks/buy-token";
 import SellToken from "../../stocks/sell-token";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 function Trade() {
   const { id } = useParams();
