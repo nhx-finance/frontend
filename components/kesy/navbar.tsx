@@ -93,8 +93,8 @@ function DesktopNavbar() {
                   className="rounded-lg object-cover border border-foreground/20"
                 />
                 <div className="">
-                  <p className="text-sm font-funnel-display text-white font-semibold">
-                    NHX Wallet
+                  <p className="text-sm font-funnel-display font-semibold">
+                    Orion
                   </p>
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
                     Dedicated onramp and off-ramp stablecoin solution on Hedera
