@@ -18,6 +18,7 @@ export const blog3 = "/services.png";
 export const nse = "/nse.png";
 export const hashgraph = "/hashgraphgroup.webp";
 export const hedera = "/hedera.png";
+export const orion = "/orion.jpg";
 
 // Stocks
 export const kcb = "/kcb.png";

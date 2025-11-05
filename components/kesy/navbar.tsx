@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { logo, nhxmmf } from "@/assets";
+import { logo, nhxmmf, orion } from "@/assets";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -86,8 +86,8 @@ function DesktopNavbar() {
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
                 <Image
-                  src={nhxmmf}
-                  alt="NHX Wallet"
+                  src={orion}
+                  alt="Orion"
                   width={36}
                   height={36}
                   className="rounded-lg object-cover border border-foreground/20"
@@ -97,7 +97,8 @@ function DesktopNavbar() {
                     Orion
                   </p>
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
-                    Dedicated onramp and off-ramp stablecoin solution on Hedera
+                    On-ramp and off-ramp infrastructure that connects local
+                    African fiat currencies directly to digital assets.
                   </p>
                 </div>
               </Link>
@@ -226,19 +227,20 @@ function MobileNavbar() {
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
                     >
                       <Image
-                        src={nhxmmf}
-                        alt="NHX Wallet"
+                        src={orion}
+                        alt="Orion"
                         width={36}
                         height={36}
                         className="rounded-lg object-cover border border-foreground/20"
                       />
                       <div className="">
                         <p className="text-sm text-start text-foreground/80 font-funnel-display font-semibold">
-                          NHX Wallet
+                          Orion
                         </p>
                         <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
-                          Dedicated onramp and off-ramp stablecoin solution on
-                          Hedera
+                          On-ramp and off-ramp infrastructure that connects
+                          local African fiat currencies directly to digital
+                          assets.
                         </p>
                       </div>
                     </Link>
