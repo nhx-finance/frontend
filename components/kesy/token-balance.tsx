@@ -32,12 +32,12 @@ function TokenBalance() {
         </div>
         <div className="flex items-center justify-end w-full gap-2 flex-col md:flex-row mt-8">
           <Button className="bg-foreground font-funnel-display hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 w-full md:w-1/2 md:py-1 backdrop-blur-sm hover:backdrop-blur-none cursor-pointer">
-            Transfer
-            <ArrowUpIcon className="w-4 h-4 text-muted-foreground" />
+            Withdraw
+            <ArrowDownIcon className="w-4 h-4 text-muted-foreground" />
           </Button>
           <Button className="bg-background text-foreground font-funnel-display border border-foreground/20 hover:bg-background/80 ease-in transition-all rounded-3xl duration-300 w-full md:w-1/2 md:py-1 backdrop-blur-sm hover:backdrop-blur-none cursor-pointer">
             Deposit
-            <ArrowDownIcon className="w-4 h-4 text-muted-foreground" />
+            <ArrowUpIcon className="w-4 h-4 text-muted-foreground" />
           </Button>
         </div>
       </div>
