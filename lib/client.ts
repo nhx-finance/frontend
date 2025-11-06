@@ -1,18 +1,14 @@
 import { createThirdwebClient, defineChain } from "thirdweb";
 
-const clientId =
-  process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID ||
-  "922f14460b91bd9ddba96df550dbc861";
-const secretKey =
-  process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_SECRET ||
-  "tv3Hiv53ar5DZE-2X0cdbL5RTCqelOOg5LI964FcOEkSOksJwXXsul6tnBwbvshQ3boB9jh8BERkxDoxYRZeLw";
+const clientId = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID;
+const secretKey = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_SECRET;
 
 if (!secretKey) {
-  throw new Error("NEXT_PUBLIC_THIRDWEB_CLIENT_SECRET must be set");
+  throw new Error("SECRET must be set");
 }
 
 if (!clientId) {
-  throw new Error("NEXT_PUBLIC_THIRDWEB_CLIENT_ID must be set");
+  throw new Error("CLIENT_ID must be set");
 }
 
 export const client = createThirdwebClient({
