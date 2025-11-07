@@ -59,12 +59,6 @@ const data = {
       items: [],
     },
     {
-      title: "Payments",
-      url: "/kesy/dashboard/payments",
-      icon: CreditCard,
-      items: [],
-    },
-    {
       title: "Verification",
       url: "/kesy/dashboard/verification",
       icon: BadgeCheck,

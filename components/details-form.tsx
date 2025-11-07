@@ -179,12 +179,12 @@ export function DetailsForm({
             <SelectValue placeholder="Select country" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="us">United States</SelectItem>
-            <SelectItem value="uk">United Kingdom</SelectItem>
-            <SelectItem value="ca">Canada</SelectItem>
-            <SelectItem value="ke">Kenya</SelectItem>
-            <SelectItem value="za">South Africa</SelectItem>
-            <SelectItem value="ng">Nigeria</SelectItem>
+            <SelectItem value="United States">United States</SelectItem>
+            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+            <SelectItem value="Canada">Canada</SelectItem>
+            <SelectItem value="Kenya">Kenya</SelectItem>
+            <SelectItem value="South Africa">South Africa</SelectItem>
+            <SelectItem value="Nigeria">Nigeria</SelectItem>
           </SelectContent>
         </Select>
       </Field>
@@ -219,11 +219,11 @@ export function DetailsForm({
             <SelectValue placeholder="Select timezone" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="utc">UTC</SelectItem>
-            <SelectItem value="est">EST (UTC-5)</SelectItem>
-            <SelectItem value="pst">PST (UTC-8)</SelectItem>
-            <SelectItem value="cet">CET (UTC+1)</SelectItem>
-            <SelectItem value="eat">EAT (UTC+3)</SelectItem>
+            <SelectItem value="UTC (UTC+0)">UTC (UTC+0)</SelectItem>
+            <SelectItem value="EST (UTC-5)">EST (UTC-5)</SelectItem>
+            <SelectItem value="PST (UTC-8)">PST (UTC-8)</SelectItem>
+            <SelectItem value="CET (UTC+1)">CET (UTC+1)</SelectItem>
+            <SelectItem value="EAT (UTC+3)">EAT (UTC+3)</SelectItem>
           </SelectContent>
         </Select>
       </Field>

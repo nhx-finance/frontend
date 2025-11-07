@@ -1,3 +1,4 @@
+"use client";
 import {
   SidebarInset,
   SidebarProvider,
@@ -5,8 +6,43 @@ import {
 } from "@/components/ui/sidebar";
 import NoWallet from "./no-wallet";
 import { KESYSidebar } from "@/components/kesy-sidebar";
+import { useWallets } from "@/hooks/kesy/useWallets";
+import { Loader2 } from "lucide-react";
+import AddWalletModal from "./add-wallet-modal";
+import { useState } from "react";
 
 export default function Page() {
+  const [isAddWalletModalOpen, setIsAddWalletModalOpen] = useState(false);
+  const { data, isLoading, error } = useWallets();
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-sm font-funnel-display text-muted-foreground">
+          Error: {error.message}
+        </p>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen px-4">
+        <Loader2 className="w-6 h-6 animate-spin text-foreground" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center h-screen px-4">
+        <p className="text-sm font-funnel-display text-muted-foreground">
+          No wallets found
+        </p>
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider>
       <KESYSidebar />
@@ -14,20 +50,40 @@ export default function Page() {
         <SidebarTrigger className="px-2" />
         <h1 className="text-2xl font-funnel-display font-bold px-4">Wallets</h1>
         <p className="text-sm font-funnel-display mb-4 text-muted-foreground px-4">
-          Only whitelisted wallets can receive NHX tokenized products
+          Add a wallet to receive KESY tokens once minted.
         </p>
         <div className="px-4">
-          <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 items-center">
-            <NoWallet />
-            <p className="text-sm font-funnel-display text-muted-foreground">
-              No wallets found
-            </p>
-            <button className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1">
-              Add Wallet
-            </button>
-          </div>
+          {data.wallets.length === 0 ? (
+            <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 items-center">
+              <NoWallet />
+              <p className="text-sm font-funnel-display text-muted-foreground">
+                No wallets found
+              </p>
+              <button
+                onClick={() => setIsAddWalletModalOpen(true)}
+                className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
+              >
+                Add Wallet
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+              <p className="text-sm font-funnel-display text-muted-foreground">
+                Wallets
+              </p>
+              <p className="text-sm font-funnel-display text-muted-foreground">
+                Wallets
+              </p>
+              <p className="text-sm font-funnel-display text-muted-foreground">
+                Wallets
+              </p>
+            </div>
+          )}
         </div>
       </SidebarInset>
+      {isAddWalletModalOpen && (
+        <AddWalletModal closeModal={() => setIsAddWalletModalOpen(false)} />
+      )}
     </SidebarProvider>
   );
 }

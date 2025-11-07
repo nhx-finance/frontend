@@ -6,8 +6,10 @@ import {
 } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
+import { getDate } from "@/app/kesy/admin/dashboard/page";
 
 function TokenBalance() {
+  const { dayOfWeek, day, month, year } = getDate();
   return (
     <div className="p-4 w-full max-h-[250px]">
       <div className="flex items-center justify-between">
@@ -21,12 +23,11 @@ function TokenBalance() {
       <div className="flex flex-col md:flex-row items-center justify-between mt-4">
         <div className="w-full md:w-3/4">
           <h1 className="text-3xl font-funnel-display font-bold">
-            KESY 10,000,000.87
+            KES 10,000,000.87
           </h1>
           <div className="flex items-center justify-between mt-2">
             <p className="text-sm font-funnel-display text-muted-foreground flex items-center gap-1 justify-center">
-              <ChevronsUp className="w-4 h-4 text-green-500" />
-              KESY 100,000.00 | August 25th 2025
+              {month} {day} {dayOfWeek}, {year}
             </p>
           </div>
         </div>

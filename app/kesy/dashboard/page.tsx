@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   const { data, isLoading, error } = useUserDetails();
-
+  console.log(data);
   if (error) {
     return <div>Error: {error.message}</div>;
   }

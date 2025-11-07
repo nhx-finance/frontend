@@ -5,7 +5,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import MintsTable from "./mints";
 
-function getDate() {
+export function getDate() {
   const date = new Date();
   const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "long" });
   const day = date.getDate();

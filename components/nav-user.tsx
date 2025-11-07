@@ -29,10 +29,11 @@ import { LoginResponse } from "@/hooks/use-login";
 import { useRouter } from "next/navigation";
 import { User } from "@/stores/userStore";
 import { IconWorldCheck } from "@tabler/icons-react";
+import { useKESYAuth } from "@/contexts/KESYContext";
 
 export function NavUser({ userDetails }: { userDetails: User }) {
   const { isMobile } = useSidebar();
-  const { logout } = useAuth();
+  const { logout } = useKESYAuth();
   const router = useRouter();
   return (
     <SidebarMenu className="font-funnel-display">

@@ -28,7 +28,7 @@ export function authAxios(): AxiosInstance {
     const rawUser = localStorage.getItem("kesy-user");
     if (!rawUser) {
       toast.error("Please login to continue", {
-        description: "You are not logged in. Please login to use this feature.",
+        description: "You are not logged in. Please login first.",
       });
       return axios.create({
         baseURL: KESY_URL,
