@@ -26,8 +26,9 @@ import {
 } from "@/components/ui/select";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useSubmitUserDetails } from "@/hooks/kesy/useAuthentication";
 
-interface DetailsFormData {
+export interface DetailsFormData {
   firstName: string;
   lastName: string;
   dob: Date | undefined;
@@ -35,7 +36,6 @@ interface DetailsFormData {
   province: string;
   timezone: string;
   termsAgreed: boolean;
-  privacyAgreed: boolean;
 }
 
 export function DetailsForm({
@@ -43,7 +43,6 @@ export function DetailsForm({
   ...props
 }: React.ComponentProps<"form">) {
   const [step, setStep] = useState(1);
-  const [isPending, setIsPending] = useState(false);
   const [formData, setFormData] = useState<DetailsFormData>({
     firstName: "",
     lastName: "",
@@ -52,9 +51,11 @@ export function DetailsForm({
     province: "",
     timezone: "",
     termsAgreed: false,
-    privacyAgreed: false,
   });
   const router = useRouter();
+  const { mutate: submitUserDetailsMutation, isPending } =
+    useSubmitUserDetails();
+
   const handleNext = () => {
     if (step === 1) {
       if (!formData.firstName || !formData.lastName || !formData.dob) {
@@ -79,31 +80,12 @@ export function DetailsForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.termsAgreed || !formData.privacyAgreed) {
+    if (!formData.termsAgreed) {
       toast.error("Please agree to all terms");
       return;
     }
 
-    setIsPending(true);
-    try {
-      const submitData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        dob: formData.dob ? format(formData.dob, "yyyy-MM-dd") : "",
-        country: formData.country,
-        province: formData.province,
-        timezone: formData.timezone,
-        termsAgreed: formData.termsAgreed,
-      };
-
-      console.log("Submitting data:", submitData);
-      toast.success("Account created successfully!");
-      router.push("/kesy/login");
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setIsPending(false);
-    }
+    submitUserDetailsMutation(formData);
   };
 
   const renderStep1 = () => (
@@ -165,7 +147,6 @@ export function DetailsForm({
               selected={formData.dob}
               onSelect={(date) => setFormData({ ...formData, dob: date })}
               captionLayout="dropdown"
-              initialFocus
             />
           </PopoverContent>
         </Popover>
@@ -297,9 +278,9 @@ export function DetailsForm({
           <input
             type="checkbox"
             id="privacyAgreed"
-            checked={formData.privacyAgreed}
+            checked={formData.termsAgreed}
             onChange={(e) =>
-              setFormData({ ...formData, privacyAgreed: e.target.checked })
+              setFormData({ ...formData, termsAgreed: e.target.checked })
             }
             className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
           />

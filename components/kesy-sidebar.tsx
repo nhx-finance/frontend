@@ -30,6 +30,7 @@ import {
 import { dummy, kesy } from "@/assets";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserDetails } from "@/hooks/kesy/useUserDetails";
 
 const data = {
   user: {
@@ -110,8 +111,9 @@ const data = {
 export function KESYSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAuth();
-  if (!user) return null;
+  const { data: userDetails, isLoading, error } = useUserDetails();
+
+  if (!userDetails || error) return null;
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -148,7 +150,7 @@ export function KESYSidebar({
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter className="font-funnel-display">
-        <NavUser user={user} />
+        <NavUser userDetails={userDetails} />
       </SidebarFooter>
     </Sidebar>
   );
