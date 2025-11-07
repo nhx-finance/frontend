@@ -6,8 +6,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  IconCheck,
-  IconDashboard,
   IconFileCertificate,
   IconLayoutDashboard,
   IconUserScan,

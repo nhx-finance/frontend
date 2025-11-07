@@ -24,8 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { format } from "date-fns";
-import { useRouter } from "next/navigation";
 import { useSubmitUserDetails } from "@/hooks/kesy/useAuthentication";
 
 export interface DetailsFormData {
@@ -52,7 +50,6 @@ export function DetailsForm({
     timezone: "",
     termsAgreed: false,
   });
-  const router = useRouter();
   const { mutate: submitUserDetailsMutation, isPending } =
     useSubmitUserDetails();
 
@@ -135,7 +132,7 @@ export function DetailsForm({
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {formData.dob ? (
-                format(formData.dob, "PPP")
+                formData.dob.toLocaleDateString()
               ) : (
                 <span>Pick a date</span>
               )}

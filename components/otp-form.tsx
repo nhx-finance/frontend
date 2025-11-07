@@ -31,7 +31,7 @@ export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
     if (userEmail === "") {
       router.push("/kesy/signup");
     }
-  }, [userEmail]);
+  }, [userEmail, router]);
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();

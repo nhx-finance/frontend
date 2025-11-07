@@ -7,14 +7,12 @@ import { AuthParams, useLogin } from "@/hooks/kesy/useAuthentication";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const { mutate: loginMutation, isPending } = useLogin();
-  const router = useRouter();
   const [formData, setFormData] = useState<AuthParams>({
     email: "",
     password: "",

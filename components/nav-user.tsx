@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  BookOpenIcon,
-  ChevronsUpDown,
-  LogOut,
-  Wallet2Icon,
-} from "lucide-react";
+import { BookOpenIcon, ChevronsUpDown, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -24,8 +19,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "./theme-toggle";
-import { useAuth } from "@/contexts/AuthContext";
-import { LoginResponse } from "@/hooks/use-login";
 import { useRouter } from "next/navigation";
 import { User } from "@/stores/userStore";
 import { IconWorldCheck } from "@tabler/icons-react";

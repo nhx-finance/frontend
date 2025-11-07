@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { logo, nhxmmf, orion } from "@/assets";
+import { logo, orion } from "@/assets";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";

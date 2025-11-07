@@ -5,7 +5,6 @@ import {
   BadgeCheck,
   SendIcon,
   Frame,
-  CreditCard,
   Wallet,
   Home,
   LifeBuoy,
@@ -29,7 +28,6 @@ import {
 } from "@/components/ui/sidebar";
 import { dummy, kesy } from "@/assets";
 import Image from "next/image";
-import { useAuth } from "@/contexts/AuthContext";
 import { useUserDetails } from "@/hooks/kesy/useUserDetails";
 
 const data = {
@@ -105,7 +103,7 @@ const data = {
 export function KESYSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const { data: userDetails, isLoading, error } = useUserDetails();
+  const { data: userDetails, error } = useUserDetails();
 
   if (!userDetails || error) return null;
   return (
