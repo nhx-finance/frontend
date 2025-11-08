@@ -10,10 +10,25 @@ import { useWallets } from "@/hooks/kesy/useWallets";
 import { Loader2 } from "lucide-react";
 import AddWalletModal from "./add-wallet-modal";
 import { useState } from "react";
+import { useKYCStatus } from "@/hooks/kesy/useKYC";
+import { toast } from "sonner";
 
 export default function Page() {
   const [isAddWalletModalOpen, setIsAddWalletModalOpen] = useState(false);
   const { data, isLoading, error } = useWallets();
+  const [loading, setLoading] = useState(false);
+  const { data: kycData } = useKYCStatus();
+
+  const handleAddWallet = () => {
+    setLoading(true);
+    if (kycData?.status?.toLocaleLowerCase() !== "verified") {
+      toast.error("Please complete your KYC verification first");
+      setLoading(false);
+      return;
+    }
+    setIsAddWalletModalOpen(true);
+    setLoading(false);
+  };
 
   if (error) {
     return (
@@ -60,10 +75,14 @@ export default function Page() {
                 No wallets found
               </p>
               <button
-                onClick={() => setIsAddWalletModalOpen(true)}
+                onClick={handleAddWallet}
                 className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
               >
-                Add Wallet
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  "Add Wallet"
+                )}
               </button>
             </div>
           ) : (

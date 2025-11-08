@@ -33,6 +33,7 @@ export const kesy = "/kes.jpg";
 export const nhxmmf = "/nhx-logo.png";
 export const hederaLogo = "/hedera-logo.jpg";
 export const usdcLogo = "/usdc.png";
+export const kesyLogo = "/kes.png";
 
 // Dummy
 export const dummy = "/dummy-profile.jpg";

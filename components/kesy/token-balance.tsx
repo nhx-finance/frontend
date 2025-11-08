@@ -1,10 +1,13 @@
+"use client";
 import { ArrowDownIcon, ArrowUpIcon, Wallet2Icon } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { getDate } from "@/app/kesy/admin/dashboard/page";
+import { useRouter } from "next/navigation";
 
 function TokenBalance() {
   const { dayOfWeek, day, month, year } = getDate();
+  const router = useRouter();
   return (
     <div className="p-4 w-full max-h-[250px]">
       <div className="flex items-center justify-between">
@@ -31,7 +34,10 @@ function TokenBalance() {
             Withdraw
             <ArrowDownIcon className="w-4 h-4 text-muted-foreground" />
           </Button>
-          <Button className="bg-background text-foreground font-funnel-display border border-foreground/20 hover:bg-background/80 ease-in transition-all rounded-3xl duration-300 w-full md:w-1/2 md:py-1 backdrop-blur-sm hover:backdrop-blur-none cursor-pointer">
+          <Button
+            onClick={() => router.push("/kesy/deposit")}
+            className="bg-background text-foreground font-funnel-display border border-foreground/20 hover:bg-background/80 ease-in transition-all rounded-3xl duration-300 w-full md:w-1/2 md:py-1 backdrop-blur-sm hover:backdrop-blur-none cursor-pointer"
+          >
             Deposit
             <ArrowUpIcon className="w-4 h-4 text-muted-foreground" />
           </Button>
