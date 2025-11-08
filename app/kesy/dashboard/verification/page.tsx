@@ -10,17 +10,19 @@ import NoVerification from "./no-verification";
 import { KESYSidebar } from "@/components/kesy-sidebar";
 import { useKYCStatus } from "@/hooks/kesy/useKYC";
 import { Loader2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import VerificationModal from "./verification-modal";
 
 export default function Page() {
   const { data, isLoading, error } = useKYCStatus();
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
 
   const isKYCComplete = useMemo(() => {
-    return data?.status?.toLocaleLowerCase() === "completed";
+    return data?.status?.toLocaleLowerCase() === "verified";
   }, [data]);
 
   const isKYCPending = useMemo(() => {
-    return data?.status?.toLocaleLowerCase() === "pending";
+    return data?.status?.toLocaleLowerCase() === "initiatedm";
   }, [data]);
 
   if (error) {
@@ -214,6 +216,7 @@ export default function Page() {
                   variant="outline"
                   disabled={isKYCPending}
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
+                  onClick={() => setShowVerificationModal(true)}
                 >
                   {isKYCPending ? "Pending Verification" : "Start Verification"}
                 </Button>
@@ -267,6 +270,7 @@ export default function Page() {
                   variant="outline"
                   disabled={isKYCPending}
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
+                  onClick={() => setShowVerificationModal(true)}
                 >
                   {isKYCPending ? "Pending Verification" : "Start Verification"}
                 </Button>
@@ -305,6 +309,11 @@ export default function Page() {
           </div>
         )}
       </SidebarInset>
+      {showVerificationModal && (
+        <VerificationModal
+          setShowVerificationModal={setShowVerificationModal}
+        />
+      )}
     </SidebarProvider>
   );
 }
