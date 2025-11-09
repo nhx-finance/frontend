@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { CalendarIcon, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,14 +21,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IconUpload } from "@tabler/icons-react";
-import { useCompleteKYC } from "@/hooks/use-verification";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@radix-ui/react-popover";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "Full name is required" }),
-  phoneNumber: z.string().min(1, { message: "Phone number is required" }),
-  address: z.string().min(1, { message: "Address is required" }),
-  city: z.string().min(1, { message: "City is required" }),
-  country: z.string().min(1, { message: "Country is required" }),
+  dob: z.date().min(1, { message: "Date of birth is required" }),
   accountType: z.enum(["individual", "business"]),
   idNumber: z.string().min(1, { message: "ID number is required" }),
   documentFront: z.custom<File>().optional(),
@@ -43,6 +48,9 @@ const Step1 = ({
   form: UseFormReturn<z.infer<typeof formSchema>>;
   onNext: () => void;
 }) => {
+  const dob = form.watch("dob");
+  const [isDobPopoverOpen, setIsDobPopoverOpen] = useState(false);
+
   return (
     <div className="">
       <div className="flex flex-col items-center gap-1 text-center">
@@ -50,7 +58,7 @@ const Step1 = ({
           Personal Information
         </h1>
         <p className="text-muted-foreground text-sm text-balance font-funnel-display">
-          Step 1 of 3
+          Step 1 of 2
         </p>
       </div>
       <div className="w-full max-w-md">
@@ -73,42 +81,34 @@ const Step1 = ({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="accountType"
-          render={({ field }) => (
-            <FormItem className="my-4">
-              <FormLabel className="text-sm font-medium font-funnel-display">
-                Account Type
-              </FormLabel>
-              <FormControl>
-                <Select
-                  {...field}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="rounded-3xl font-funnel-display shadow-none w-full">
-                    <SelectValue placeholder="Select account type" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-3xl font-funnel-display border border-foreground/20">
-                    <SelectItem
-                      value="individual"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Individual
-                    </SelectItem>
-                    <SelectItem
-                      value="business"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Business
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <Field>
+          <FieldLabel htmlFor="dob">Date of Birth</FieldLabel>
+          <Popover open={isDobPopoverOpen} onOpenChange={setIsDobPopoverOpen}>
+            <PopoverTrigger asChild className="h-10 rounded-3xl">
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !dob && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {dob ? dob.toLocaleDateString() : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={dob}
+                onSelect={(date) => {
+                  form.setValue("dob", date || new Date());
+                  setIsDobPopoverOpen(false);
+                }}
+                captionLayout="dropdown"
+              />
+            </PopoverContent>
+          </Popover>
+        </Field>
         <FormField
           control={form.control}
           name="idNumber"
@@ -138,189 +138,6 @@ const Step1 = ({
 
 const Step2 = ({
   form,
-  onNext,
-  onBack,
-}: {
-  form: UseFormReturn<z.infer<typeof formSchema>>;
-  onNext: () => void;
-  onBack: () => void;
-}) => {
-  return (
-    <div className="">
-      <div className="flex flex-col items-center gap-1 text-center">
-        <h1 className="text-lg font-funnel-display font-bold">
-          Residential Information
-        </h1>
-        <p className="text-muted-foreground text-sm text-balance font-funnel-display">
-          Step 2 of 3
-        </p>
-      </div>
-      <div className="w-full max-w-md">
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem className="my-4">
-              <FormLabel className="text-sm font-medium font-funnel-display">
-                Address
-              </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="123 Main St"
-                  className="rounded-3xl font-funnel-display shadow-none"
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="country"
-          render={({ field }) => (
-            <FormItem className="my-4">
-              <FormLabel className="text-sm font-medium font-funnel-display">
-                Residence Country
-              </FormLabel>
-              <FormControl>
-                <Select
-                  {...field}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="rounded-3xl font-funnel-display shadow-none w-full">
-                    <SelectValue placeholder="Select residence country" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-3xl font-funnel-display border border-foreground/20">
-                    <SelectItem
-                      value="us"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      United States
-                    </SelectItem>
-                    <SelectItem
-                      value="uk"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      United Kingdom
-                    </SelectItem>
-                    <SelectItem
-                      value="ca"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Canada
-                    </SelectItem>
-                    <SelectItem
-                      value="ke"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Kenya
-                    </SelectItem>
-                    <SelectItem
-                      value="za"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      South Africa
-                    </SelectItem>
-                    <SelectItem
-                      value="ng"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Nigeria
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem className="my-4">
-              <FormLabel className="text-sm font-medium font-funnel-display">
-                City/Province
-              </FormLabel>
-              <FormControl>
-                <Select
-                  {...field}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="rounded-3xl font-funnel-display shadow-none w-full">
-                    <SelectValue placeholder="Select city/province" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-3xl font-funnel-display border border-foreground/20">
-                    <SelectItem
-                      value="province1"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Province 1
-                    </SelectItem>
-                    <SelectItem
-                      value="province2"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Province 2
-                    </SelectItem>
-                    <SelectItem
-                      value="province3"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Province 3
-                    </SelectItem>
-                    <SelectItem
-                      value="province4"
-                      className="rounded-3xl font-funnel-display"
-                    >
-                      Province 4
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem className="my-4">
-              <FormLabel className="text-sm font-medium font-funnel-display">
-                Phone Number
-              </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="+254712345678"
-                  className="rounded-3xl font-funnel-display shadow-none"
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-      </div>
-      <div className="flex justify-between gap-2 mt-2">
-        <Button
-          onClick={onBack}
-          className="w-1/2 mt-2 shadow-none"
-          variant="outline"
-        >
-          Back
-        </Button>
-        <Button onClick={onNext} className="w-1/2 mt-2 shadow-none">
-          Next
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-const Step3 = ({
-  form,
   onBack,
 }: {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -328,7 +145,6 @@ const Step3 = ({
 }) => {
   const frontFileRef = React.useRef<HTMLInputElement>(null);
   const backFileRef = React.useRef<HTMLInputElement>(null);
-  const mutation = useCompleteKYC();
 
   const documentFront = form.watch("documentFront");
   const documentBack = form.watch("documentBack");
@@ -336,7 +152,7 @@ const Step3 = ({
   const handleSubmit = async () => {
     const formData = form.getValues();
     console.log(formData);
-    mutation?.completeKYCMutation();
+    toast.success("KYC submitted successfully");
   };
 
   const handleDocumentFrontUpload = () => {
@@ -370,7 +186,7 @@ const Step3 = ({
           Document Information
         </h1>
         <p className="text-muted-foreground text-sm text-balance font-funnel-display">
-          Step 3 of 3
+          Step 2 of 2
         </p>
       </div>
       <div className="w-full max-w-md">
@@ -504,20 +320,11 @@ const Step3 = ({
           onClick={onBack}
           className="w-1/2 mt-2 shadow-none"
           variant="outline"
-          disabled={mutation?.isPending}
         >
           Back
         </Button>
-        <Button
-          onClick={handleSubmit}
-          className="w-1/2 mt-2 shadow-none"
-          disabled={mutation?.isPending}
-        >
-          {mutation?.isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            "Submit"
-          )}
+        <Button onClick={handleSubmit} className="w-1/2 mt-2 shadow-none">
+          Submit
         </Button>
       </div>
     </div>
@@ -536,10 +343,7 @@ function VerificationModal({
     resolver: zodResolver(formSchema as any),
     defaultValues: {
       fullName: "",
-      phoneNumber: "",
-      address: "",
-      city: "",
-      country: "",
+      dob: new Date(),
       accountType: "individual",
       idNumber: "",
       documentFront: undefined,
@@ -552,7 +356,7 @@ function VerificationModal({
   }
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    if (currentStep < 2) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -568,10 +372,7 @@ function VerificationModal({
       return <Step1 form={form} onNext={handleNext} />;
     }
     if (currentStep === 2) {
-      return <Step2 form={form} onNext={handleNext} onBack={handleBack} />;
-    }
-    if (currentStep === 3) {
-      return <Step3 form={form} onBack={handleBack} />;
+      return <Step2 form={form} onBack={handleBack} />;
     }
     return null;
   };

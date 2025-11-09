@@ -31,9 +31,10 @@ function AdminDashboardPage() {
             <h1 className="text-2xl font-semibold font-funnel-display">
               Hi Sylus, Need Help?
             </h1>
-            <Input
+            <input
               placeholder="Ask me anything..."
-              className="border-none font-funnel-display shadow-none font-semibold bg-white text-2xl placeholder:text-xl focus-visible:ring-0 focus-visible:ring-offset-0 px-0 mt-1"
+              className="border-none font-funnel-display shadow-none font-semibold focus:outline-none text-2xl placeholder:text-xl focus-visible:ring-0 focus-visible:ring-offset-0 px-0 mt-1"
+              type="text"
             />
           </div>
           <div className="border border-foreground/20 rounded-full bg-background p-4 cursor-pointer">

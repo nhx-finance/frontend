@@ -16,6 +16,7 @@ import { CheckIcon, X } from "lucide-react";
 import { hederaLogo, kesy } from "@/assets";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 function formatAmount(amount: number) {
   return amount.toLocaleString("en-US", {
@@ -59,7 +60,7 @@ function ApproveModal({
             <X className="w-4 h-4" />
           </Button>
         </div>
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 flex items-center gap-4 md:gap-0 flex-col md:flex-row justify-between">
           <div className="w-full">
             <p className="text-sm font-funnel-display text-muted-foreground">
               Mint Request
@@ -133,7 +134,7 @@ function MintsTable() {
         Recent Mints Requests
       </p>
       <Table>
-        <TableCaption>A list of recent mint requests.</TableCaption>
+        <TableCaption className="">Recent mint requests.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Request ID</TableHead>
@@ -159,17 +160,29 @@ function MintsTable() {
               <TableCell className="text-right">
                 <Button
                   variant="outline"
-                  className="rounded-3xl border border-foreground/20 shadow-none text-sm"
-                  disabled={request.status !== "pending"}
+                  className="rounded-3xl border border-foreground/20 shadow-none text-xs w-24"
+                  disabled={request.status === "transferred"}
                   onClick={() => setApproveModalOpen(true)}
                 >
-                  {request.status === "pending" ? "Approve" : "Completed"}
+                  {request.status === "pending" && "Approve"}
+                  {request.status === "confirmed" && "Mint"}
+                  {request.status === "minted" && "Transfer"}
+                  {request.status === "transferred" && "Transferred"}
+                  {request.status === "failed" && "Retry"}
                 </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <div className="flex items-center justify-center">
+        <Link
+          href="/kesy/admin/mints"
+          className="text-blue-500 underline text-sm font-funnel-display"
+        >
+          View All
+        </Link>
+      </div>
       {approveModalOpen && (
         <ApproveModal
           request={mintRequests[0]}

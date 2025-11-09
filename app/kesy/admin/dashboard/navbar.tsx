@@ -87,28 +87,28 @@ function AdminNavbar() {
           </p>
         </Link>
         <Link
-          href="/kesy/admin/revenue"
+          href="/kesy/admin/mints"
           className={`flex items-center gap-1 py-2 cursor-pointer min-w-28 justify-center ${
-            checkActiveRoute("revenue", pathname)
+            checkActiveRoute("mints", pathname)
               ? "bg-foreground rounded-full"
               : ""
           }`}
         >
           <IconFileCertificate
             className={`${
-              checkActiveRoute("revenue", pathname)
+              checkActiveRoute("mints", pathname)
                 ? "text-background"
                 : "text-foreground"
             }`}
           />
           <p
             className={`text-sm font-funnel-display font-semibold ${
-              checkActiveRoute("revenue", pathname)
+              checkActiveRoute("mints", pathname)
                 ? "text-background"
                 : "text-foreground"
             }`}
           >
-            Revenue
+            Mints
           </p>
         </Link>
       </div>

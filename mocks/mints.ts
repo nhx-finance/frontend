@@ -1,7 +1,7 @@
 export interface MintRequest {
   id: string;
   amount: number;
-  status: "pending" | "approved" | "rejected";
+  status: "pending" | "confirmed" | "minted" | "transferred" | "failed";
   createdAt: string;
   updatedAt: string;
   toWallet: string;
@@ -19,7 +19,7 @@ export const mintRequests: MintRequest[] = [
   {
     id: "2",
     amount: 2000000,
-    status: "approved",
+    status: "confirmed",
     createdAt: "2025-01-02",
     updatedAt: "2025-01-02",
     toWallet: "0x1234567890123456789012345678901234567890",
@@ -27,7 +27,7 @@ export const mintRequests: MintRequest[] = [
   {
     id: "3",
     amount: 3000000,
-    status: "rejected",
+    status: "minted",
     createdAt: "2025-01-03",
     updatedAt: "2025-01-03",
     toWallet: "0x1234567890123456789012345678901234567890",
@@ -35,9 +35,17 @@ export const mintRequests: MintRequest[] = [
   {
     id: "4",
     amount: 4000000,
-    status: "pending",
+    status: "transferred",
     createdAt: "2025-01-04",
     updatedAt: "2025-01-04",
+    toWallet: "0x1234567890123456789012345678901234567890",
+  },
+  {
+    id: "5",
+    amount: 5000000,
+    status: "failed",
+    createdAt: "2025-01-05",
+    updatedAt: "2025-01-05",
     toWallet: "0x1234567890123456789012345678901234567890",
   },
 ];

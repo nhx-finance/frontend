@@ -22,7 +22,7 @@ export default function Page() {
   }, [data]);
 
   const isKYCPending = useMemo(() => {
-    return data?.status?.toLocaleLowerCase() === "initiated";
+    return data?.status?.toLocaleLowerCase() === "initiate0d";
   }, [data]);
 
   if (error) {
