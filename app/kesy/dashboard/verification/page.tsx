@@ -103,6 +103,7 @@ export default function Page() {
                 <Button
                   variant="outline"
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
+                  onClick={() => setShowVerificationModal(true)}
                 >
                   Start Verification
                 </Button>

@@ -152,7 +152,7 @@ function ApproveModal({
             {isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              "Approve"
+              "Verify"
             )}
             {isPending ? null : <CheckIcon className="w-4 h-4" />}
           </Button>
@@ -167,6 +167,21 @@ function KYCPage() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
   const [kyc, setKyc] = useState<KYCItem | null>(null);
   const router = useRouter();
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <AdminNavbar />
+        <h1 className="text-2xl font-funnel-display font-semibold mt-4 mb-12 px-4">
+          Review KYC Statuses
+        </h1>
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton key={index} className="w-[90%] h-10 rounded-xl my-2 mx-4" />
+        ))}
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="flex items-center flex-col justify-center h-screen w-full">
@@ -186,29 +201,13 @@ function KYCPage() {
       </div>
     );
   }
-
-  if (isLoading) {
-    return (
-      <div className="max-w-7xl mx-auto">
-        <AdminNavbar />
-        <h1 className="text-2xl font-funnel-display font-semibold mt-4 mb-12 px-4">
-          Review KYC Statuses
-        </h1>
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Skeleton key={index} className="w-[90%] h-10 rounded-xl my-2 mx-4" />
-        ))}
-      </div>
-    );
-  }
-
-  console.log(data);
   return (
     <div className="max-w-7xl mx-auto">
       <AdminNavbar />
-      <h1 className="text-2xl font-funnel-display font-semibold mt-4 px-4">
+      <h1 className="text-2xl font-funnel-display font-semibold mt-4 px-2">
         Review KYC Statuses
       </h1>
-      <Table>
+      <Table className="mt-4 px-4">
         <TableCaption>Submitted KYC Requests</TableCaption>
         <TableHeader>
           <TableRow className="font-funnel-display">
@@ -235,7 +234,8 @@ function KYCPage() {
                   variant="outline"
                   className="rounded-3xl border border-foreground/20 shadow-none text-xs w-24"
                   disabled={
-                    kyc.status === "verified" || kyc.status === "rejected"
+                    kyc.status.toLowerCase() === "verified" ||
+                    kyc.status.toLowerCase() === "rejected"
                   }
                   onClick={() => {
                     setKyc(kyc);
@@ -253,7 +253,9 @@ function KYCPage() {
         <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
+            <TableCell className="text-right">
+              {data?.content?.length || 0}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>

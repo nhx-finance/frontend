@@ -157,9 +157,7 @@ async function approveKYC(body: KYCApprovalBody) {
     };
     const response = await authenticatedInstance.patch(
       `${KESY_URL}/admin/kyc/${body.kycId}/status`,
-      {
-        data,
-      }
+      data
     );
     if (response.status !== 200) {
       throw new Error("Failed to approve KYC");
