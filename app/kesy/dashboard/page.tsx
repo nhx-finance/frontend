@@ -24,7 +24,7 @@ export default function Page() {
         <p className="text-sm font-funnel-display text-red-500">
           {error.message}
         </p>
-        <Link href="/kesy/login" className="underline">
+        <Link href="/kesy/login" className="underline font-funnel-display">
           Login Again
         </Link>
       </div>

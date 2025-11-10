@@ -15,6 +15,7 @@ import { useKESYAuth } from "@/contexts/KESYContext";
 import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMint } from "@/hooks/kesy/useMint";
 
 interface DepositFormData {
   kesAmount: string;
@@ -170,10 +171,12 @@ const Step2 = ({
   formData,
   setFormData,
   handleSubmit,
+  isPending,
 }: {
   formData: DepositFormData;
   setFormData: (data: DepositFormData) => void;
   handleSubmit: () => void;
+  isPending: boolean;
 }) => {
   const { data: wallets } = useWallets();
   return (
@@ -181,7 +184,7 @@ const Step2 = ({
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-funnel-display font-semibold">
-            Destination Wallet
+            Destination Wallet ID
           </h1>
         </div>
         <input
@@ -190,7 +193,7 @@ const Step2 = ({
             setFormData({ ...formData, destinationWallet: e.target.value })
           }
           className="w-full border-b mt-2 border-foreground/20 focus:outline-none text-sm focus:ring-0 focus:border-foreground/50"
-          placeholder="0x1d3456789012345678901234567825687769"
+          placeholder="Wallet ID"
         />
       </div>
       <div className="flex items-center justify-center my-12">
@@ -205,16 +208,19 @@ const Step2 = ({
             wallets?.wallets?.map((wallet) => (
               <div
                 key={wallet.walletId}
-                className="flex items-center justify-between cursor-pointer border border-foreground/20 rounded-xl p-2"
+                className="flex flex-col items-center justify-between cursor-pointer border border-foreground/20 rounded-xl p-2"
                 onClick={() =>
                   setFormData({
                     ...formData,
-                    destinationWallet: wallet.address,
+                    destinationWallet: wallet.walletId,
                   })
                 }
               >
                 <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                  {wallet.address.slice(0, 14)}...{wallet.address.slice(-4)}
+                  {wallet.address.slice(0, 10)}...{wallet.address.slice(-4)}
+                </p>
+                <p className="text-sm font-funnel-display font-light text-muted-foreground">
+                  {wallet.walletId.slice(0, 10)}...{wallet.walletId.slice(-5)}
                 </p>
               </div>
             ))}
@@ -237,11 +243,11 @@ const Step2 = ({
         approved.
       </p>
       <Button
-        disabled={!formData.destinationWallet}
+        disabled={!formData.destinationWallet || isPending}
         className="w-full mt-4 font-funnel-display rounded-3xl"
         onClick={handleSubmit}
       >
-        Finish
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Finish"}
       </Button>
     </div>
   );
@@ -257,6 +263,7 @@ export function DepositForm({
   });
   const [step, setStep] = useState(1);
   const router = useRouter();
+  const { mutate: mintMutation, isPending } = useMint();
 
   const handleNext = () => {
     if (step === 2) {
@@ -266,7 +273,10 @@ export function DepositForm({
   };
 
   const handleSubmit = () => {
-    router.push(`/kesy/deposit/MINT-KESY-${Date.now()}`);
+    mintMutation({
+      amountKes: Number(formData.kesAmount),
+      walletId: formData.destinationWallet,
+    });
   };
 
   return (
@@ -282,6 +292,7 @@ export function DepositForm({
           formData={formData}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
+          isPending={isPending}
         />
       )}
     </div>

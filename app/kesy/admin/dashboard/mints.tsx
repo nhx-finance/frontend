@@ -17,6 +17,10 @@ import { hederaLogo, kesy } from "@/assets";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useTransactions } from "@/hooks/kesy/useTransactions";
+import AdminNavbar from "./navbar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 function formatAmount(amount: number) {
   return amount.toLocaleString("en-US", {
@@ -127,6 +131,41 @@ function ApproveModal({
 
 function MintsTable() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
+  const { data: transactions, isLoading, error } = useTransactions();
+  const router = useRouter();
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <AdminNavbar />
+        <h1 className="text-2xl font-funnel-display font-semibold mt-4 mb-12 px-4">
+          Review KYC Statuses
+        </h1>
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton key={index} className="w-[90%] h-10 rounded-xl my-2 mx-4" />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center flex-col justify-center h-screen w-full">
+        <p className="text-sm text-red-500 font-funnel-display">
+          Error: {error.message}
+        </p>
+        <p className="text-muted-foreground font-funnel-display text-sm">
+          Seems like your session has expired. Please login again.
+        </p>
+        <Button
+          variant="outline"
+          className="mt-4 min-w-md shadow-none font-funnel-display"
+          onClick={() => router.push("/kesy/admin")}
+        >
+          Login Again
+        </Button>
+      </div>
+    );
+  }
   return (
     <div className="px-4 mt-12">
       <h1 className="text-2xl font-funnel-display font-bold">Mints</h1>
@@ -148,27 +187,36 @@ function MintsTable() {
           </TableRow>
         </TableHeader>
         <TableBody className="font-funnel-display">
-          {mintRequests.map((request) => (
-            <TableRow key={request.id}>
-              <TableCell className="font-medium">REQ-001</TableCell>
-              <TableCell>{request.status.toUpperCase()}</TableCell>
-              <TableCell>{formatAmount(request.amount)}</TableCell>
-              <TableCell>{formatDate(request.createdAt)}</TableCell>
+          {transactions?.content.map((transaction) => (
+            <TableRow key={transaction.requestId}>
+              <TableCell className="font-medium">
+                {transaction.requestId.slice(0, 6)}...
+                {transaction.requestId.slice(-4)}
+              </TableCell>
+              <TableCell>{transaction.status.toUpperCase()}</TableCell>
+              <TableCell>{formatAmount(transaction.amountKes)}</TableCell>
+              <TableCell>{formatDate(transaction.createdAt)}</TableCell>
               <TableCell>
-                {request.toWallet.slice(0, 6)}...{request.toWallet.slice(-4)}
+                {transaction.walletAddress.slice(0, 6)}...
+                {transaction.walletAddress.slice(-4)}
               </TableCell>
               <TableCell className="text-right">
                 <Button
                   variant="outline"
                   className="rounded-3xl border border-foreground/20 shadow-none text-xs w-24"
-                  disabled={request.status === "transferred"}
+                  disabled={transaction.status === "transferred"}
                   onClick={() => setApproveModalOpen(true)}
                 >
-                  {request.status === "pending" && "Approve"}
-                  {request.status === "confirmed" && "Mint"}
-                  {request.status === "minted" && "Transfer"}
-                  {request.status === "transferred" && "Transferred"}
-                  {request.status === "failed" && "Retry"}
+                  {transaction.status.toLocaleLowerCase() === "pending" &&
+                    "Approve"}
+                  {transaction.status.toLocaleLowerCase() === "confirmed" &&
+                    "Mint"}
+                  {transaction.status.toLocaleLowerCase() === "minted" &&
+                    "Transfer"}
+                  {transaction.status.toLocaleLowerCase() === "transferred" &&
+                    "Transferred"}
+                  {transaction.status.toLocaleLowerCase() === "failed" &&
+                    "Retry"}
                 </Button>
               </TableCell>
             </TableRow>

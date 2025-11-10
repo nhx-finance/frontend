@@ -17,7 +17,7 @@ import Image from "next/image";
 
 function WalletCard({ wallet }: { wallet: WalletResponse }) {
   return (
-    <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4">
+    <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 w-full md:w-1/2">
       <div className="flex items-center gap-2">
         <Image
           src={hederaLogo}
@@ -31,16 +31,36 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
         </p>
       </div>
       <div className="my-4">
-        <p
-          onClick={() => {
-            toast.success("Wallet address copied to clipboard");
-            navigator.clipboard.writeText(wallet.address);
-          }}
-          className="text-sm cursor-pointer flex items-center gap-2 font-semibold font-funnel-display text-muted-foreground"
-        >
-          {wallet.address.slice(0, 14)}...{wallet.address.slice(-4)}
-          <CopyIcon className="w-4 h-4" />
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display text-foreground/80">
+            Wallet Address
+          </p>
+          <p
+            onClick={() => {
+              toast.success("Wallet address copied to clipboard");
+              navigator.clipboard.writeText(wallet.address);
+            }}
+            className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display"
+          >
+            {wallet.address.slice(0, 14)}...{wallet.address.slice(-4)}
+            <CopyIcon className="w-4 h-4" />
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display text-foreground/80">
+            Wallet ID
+          </p>
+          <p
+            onClick={() => {
+              toast.success("Wallet ID copied to clipboard");
+              navigator.clipboard.writeText(wallet.walletId);
+            }}
+            className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display"
+          >
+            {wallet.walletId.slice(0, 14)}...{wallet.walletId.slice(-4)}
+            <CopyIcon className="w-4 h-4" />
+          </p>
+        </div>
       </div>
     </div>
   );
