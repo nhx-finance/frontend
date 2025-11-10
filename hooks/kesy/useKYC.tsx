@@ -17,6 +17,56 @@ interface KYCResponse {
   message: string;
 }
 
+export interface Sort {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+}
+
+export interface Pageable {
+  paged: boolean;
+  pageNumber: number;
+  offset: number;
+  sort: Sort;
+  pageSize: number;
+  unpaged: boolean;
+}
+
+export interface KYCItem {
+  kycId: string;
+  userId: string;
+  userEmail: string;
+  fullName: string;
+  dob: string;
+  documentType: string;
+  documentNumber: string;
+  sourceOfFunds: string;
+  documentFrontPath: string;
+  documentBackPath: string;
+  status: string;
+  submittedAt: string;
+}
+
+export interface KYCApprovalBody {
+  kycId: string;
+  status: string;
+  rejectedReason: string;
+  reviewerNotes: string;
+}
+export interface PaginatedKYCResponse {
+  totalElements: number;
+  totalPages: number;
+  pageable: Pageable;
+  first: boolean;
+  last: boolean;
+  size: number;
+  content: KYCItem[];
+  number: number;
+  sort: Sort;
+  numberOfElements: number;
+  empty: boolean;
+}
+
 async function getKYCStatus(): Promise<KYCStatus> {
   try {
     const authenticatedInstance = authAxios();
@@ -82,6 +132,58 @@ async function submitKYCDetails(data: KYCFormData): Promise<KYCResponse> {
   }
 }
 
+async function getAllKYCStatuses(): Promise<PaginatedKYCResponse> {
+  try {
+    const authenticatedInstance = authAxios();
+    const response = await authenticatedInstance.get(`${KESY_URL}/admin/kyc`);
+
+    if (response.status !== 200) {
+      throw new Error("Failed to get all KYC statuses");
+    }
+    return response.data;
+  } catch (error) {
+    console.error("error getting all KYC statuses", error);
+    throw error;
+  }
+}
+
+async function approveKYC(body: KYCApprovalBody) {
+  try {
+    const authenticatedInstance = authAxios();
+    const data = {
+      status: body.status,
+      rejectedReason: body.rejectedReason,
+      reviewerNotes: body.reviewerNotes,
+    };
+    const response = await authenticatedInstance.patch(
+      `${KESY_URL}/admin/kyc/${body.kycId}/status`,
+      {
+        data,
+      }
+    );
+    if (response.status !== 200) {
+      throw new Error("Failed to approve KYC");
+    }
+    return response.data;
+  } catch (error) {
+    console.error("error approving KYC", error);
+    throw error;
+  }
+}
+
+export const useApproveKYC = () => {
+  return useMutation({
+    mutationFn: approveKYC,
+    onSuccess: () => {
+      toast.success("KYC approved successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to approve KYC");
+      console.error(error);
+    },
+  });
+};
+
 export const useKYCStatus = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["kyc-status"],
@@ -104,4 +206,12 @@ export const useSubmitKYCDetails = () => {
       console.error(error);
     },
   });
+};
+
+export const useGetAllKYCStatuses = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["all-kyc-statuses"],
+    queryFn: getAllKYCStatuses,
+  });
+  return { data, isLoading, error };
 };
