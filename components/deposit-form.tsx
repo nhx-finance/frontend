@@ -197,15 +197,15 @@ const Step2 = ({
         <p className="text-lg text-muted-foreground text-center">Or</p>
       </div>
       <div className="">
-        <h1 className="text-lg font-funnel-display font-semibold">
+        <h1 className="text-lg font-funnel-display font-semibold mb-2">
           Select from your wallets
         </h1>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           {wallets?.wallets.length !== 0 &&
             wallets?.wallets?.map((wallet) => (
               <div
                 key={wallet.walletId}
-                className="flex items-center justify-between cursor-pointer border border-foreground/20 rounded-3xl p-2"
+                className="flex items-center justify-between cursor-pointer border border-foreground/20 rounded-xl p-2"
                 onClick={() =>
                   setFormData({
                     ...formData,
@@ -214,7 +214,7 @@ const Step2 = ({
                 }
               >
                 <p className="text-sm font-funnel-display font-light text-muted-foreground">
-                  {wallet.address.slice(0, 6)}...{wallet.address.slice(-4)}
+                  {wallet.address.slice(0, 14)}...{wallet.address.slice(-4)}
                 </p>
               </div>
             ))}
