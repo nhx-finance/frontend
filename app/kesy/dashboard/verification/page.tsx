@@ -12,6 +12,7 @@ import { useKYCStatus } from "@/hooks/kesy/useKYC";
 import { Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import VerificationModal from "./verification-modal";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
   const { data, isLoading, error } = useKYCStatus();
@@ -22,7 +23,7 @@ export default function Page() {
   }, [data]);
 
   const isKYCPending = useMemo(() => {
-    return data?.status?.toLocaleLowerCase() === "initiate0d";
+    return data?.status?.toLocaleLowerCase() === "submitted";
   }, [data]);
 
   if (error) {
@@ -37,9 +38,23 @@ export default function Page() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="w-6 h-6 animate-spin text-foreground" />
-      </div>
+      <SidebarProvider>
+        <KESYSidebar />
+        <SidebarInset>
+          <SidebarTrigger className="px-2" />
+          <Skeleton className="w-md h-6 mx-2 rounded-3xl mt-1" />
+          <Skeleton className="w-md h-4 mx-2 rounded-3xl mt-1" />
+          <Skeleton className="w-md h-6 mx-2 rounded-3xl mt-12" />
+
+          <Skeleton className="w-[90%] h-48 rounded-3xl mt-2 mx-2" />
+
+          <Skeleton className="w-md h-6 mx-2 rounded-3xl mt-12" />
+          <div className="flex flex-col gap-2 md:flex-row justify-between">
+            <Skeleton className="w-[90%] h-48 rounded-3xl mt-2 mx-2" />
+            <Skeleton className="w-[90%] h-48 rounded-3xl mt-2 mx-2" />
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
     );
   }
 
@@ -119,7 +134,7 @@ export default function Page() {
                     Provider
                   </p>
                   <p className="text-sm font-funnel-display flex items-center gap-0">
-                    Smile ID
+                    Custom
                   </p>
                 </div>
               </div>
@@ -170,7 +185,7 @@ export default function Page() {
                     Provider
                   </p>
                   <p className="text-sm font-funnel-display flex items-center gap-0">
-                    Smile ID
+                    Custom
                   </p>
                 </div>
               </div>
@@ -248,7 +263,7 @@ export default function Page() {
                     Provider
                   </p>
                   <p className="text-sm font-funnel-display flex items-center gap-0">
-                    Smile ID
+                    Custom
                   </p>
                 </div>
               </div>
@@ -301,7 +316,7 @@ export default function Page() {
                     Provider
                   </p>
                   <p className="text-sm font-funnel-display flex items-center gap-0">
-                    Smile ID
+                    Custom
                   </p>
                 </div>
               </div>

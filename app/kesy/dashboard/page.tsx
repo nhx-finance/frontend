@@ -11,12 +11,24 @@ import Wallets from "@/components/kesy/wallets";
 import Footer from "@/components/kesy/footer";
 import { useUserDetails } from "@/hooks/kesy/useUserDetails";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export default function Page() {
   const { data, isLoading, error } = useUserDetails();
-  console.log(data);
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return (
+      <div className="flex flex-col h-screen w-full items-center justify-center">
+        <p className="text-sm font-funnel-display text-muted-foreground">
+          Something went wrong. Please try logging in again.
+        </p>
+        <p className="text-sm font-funnel-display text-red-500">
+          {error.message}
+        </p>
+        <Link href="/kesy/login" className="underline">
+          Login Again
+        </Link>
+      </div>
+    );
   }
   return (
     <SidebarProvider>

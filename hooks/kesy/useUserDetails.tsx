@@ -7,8 +7,14 @@ import { useKESYAuth } from "@/contexts/KESYContext";
 
 async function getUserDetails(): Promise<User> {
   const authenticatedInstance = authAxios();
-  const response = await authenticatedInstance.get(`${KESY_URL}/user/profile`);
-  return response.data;
+  try {
+    const response = await authenticatedInstance.get(`${KESY_URL}/user`);
+    return response.data;
+  } catch (error) {
+    console.error("error getting user details", error);
+    throw error;
+  } finally {
+  }
 }
 
 export const useUserDetails = () => {
@@ -16,7 +22,6 @@ export const useUserDetails = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["user-details"],
     queryFn: getUserDetails,
-    enabled: !!user,
   });
   return { data, isLoading, error };
 };

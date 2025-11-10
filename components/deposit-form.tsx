@@ -14,6 +14,7 @@ import {
 import { useKESYAuth } from "@/contexts/KESYContext";
 import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface DepositFormData {
   kesAmount: string;
@@ -255,6 +256,7 @@ export function DepositForm({
     destinationWallet: "",
   });
   const [step, setStep] = useState(1);
+  const router = useRouter();
 
   const handleNext = () => {
     if (step === 2) {
@@ -264,7 +266,7 @@ export function DepositForm({
   };
 
   const handleSubmit = () => {
-    console.log(formData);
+    router.push(`/kesy/deposit/MINT-KESY-${Date.now()}`);
   };
 
   return (

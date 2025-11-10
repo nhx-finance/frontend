@@ -29,17 +29,25 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@radix-ui/react-popover";
-import { toast } from "sonner";
+import { useSubmitKYCDetails } from "@/hooks/kesy/useKYC";
 
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "Full name is required" }),
   dob: z.date().min(1, { message: "Date of birth is required" }),
-  accountType: z.enum(["individual", "business"]),
-  idNumber: z.string().min(1, { message: "ID number is required" }),
-  documentFront: z.custom<File>().optional(),
-  documentBack: z.custom<File>().optional(),
+  documentNumber: z.string().min(1, { message: "ID number is required" }),
+  documentFront: z.custom<File | undefined>(),
+  documentBack: z.custom<File | undefined>(),
   documentType: z.enum(["id", "passport", "driver's license"]),
 });
+
+export interface KYCFormData {
+  fullName: string;
+  dob: Date;
+  documentNumber: string;
+  documentFront: File | undefined;
+  documentBack: File | undefined;
+  documentType: string;
+}
 
 const Step1 = ({
   form,
@@ -111,11 +119,11 @@ const Step1 = ({
         </Field>
         <FormField
           control={form.control}
-          name="idNumber"
+          name="documentNumber"
           render={({ field }) => (
             <FormItem className="my-4">
               <FormLabel className="text-sm font-medium font-funnel-display">
-                ID Number
+                Document Number
               </FormLabel>
               <FormControl>
                 <Input
@@ -143,6 +151,7 @@ const Step2 = ({
   form: UseFormReturn<z.infer<typeof formSchema>>;
   onBack: () => void;
 }) => {
+  const { mutate: submitKYCDetails, isPending } = useSubmitKYCDetails();
   const frontFileRef = React.useRef<HTMLInputElement>(null);
   const backFileRef = React.useRef<HTMLInputElement>(null);
 
@@ -151,8 +160,7 @@ const Step2 = ({
 
   const handleSubmit = async () => {
     const formData = form.getValues();
-    console.log(formData);
-    toast.success("KYC submitted successfully");
+    submitKYCDetails(formData);
   };
 
   const handleDocumentFrontUpload = () => {
@@ -320,11 +328,16 @@ const Step2 = ({
           onClick={onBack}
           className="w-1/2 mt-2 shadow-none"
           variant="outline"
+          disabled={isPending}
         >
           Back
         </Button>
-        <Button onClick={handleSubmit} className="w-1/2 mt-2 shadow-none">
-          Submit
+        <Button
+          disabled={isPending}
+          onClick={handleSubmit}
+          className="w-1/2 mt-2 shadow-none"
+        >
+          {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Submit"}
         </Button>
       </div>
     </div>
@@ -344,16 +357,13 @@ function VerificationModal({
     defaultValues: {
       fullName: "",
       dob: new Date(),
-      accountType: "individual",
-      idNumber: "",
+      documentNumber: "",
       documentFront: undefined,
       documentBack: undefined,
       documentType: "id",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  function onSubmit(values: z.infer<typeof formSchema>) {}
 
   const handleNext = () => {
     if (currentStep < 2) {

@@ -22,6 +22,7 @@ export default function Page() {
   const handleAddWallet = () => {
     setLoading(true);
     if (kycData?.status?.toLocaleLowerCase() !== "verified") {
+      console.log(kycData);
       toast.error("Please complete your KYC verification first");
       setLoading(false);
       return;

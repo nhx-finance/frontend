@@ -1,5 +1,5 @@
 import { DepositForm } from "@/components/deposit-form";
-import { fin1, fin3, fin4, kesy } from "@/assets";
+import { fin1, kesy } from "@/assets";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Image from "next/image";
 import Link from "next/link";

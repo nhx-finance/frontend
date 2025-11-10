@@ -16,7 +16,6 @@ export function Faq() {
   };
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submitted");
   };
   return (
     <div className="h-[40rem] flex flex-col justify-center  items-center px-4">

@@ -23,7 +23,6 @@ function AdminNavbar() {
   const pathname = usePathname();
   const handleAuth = () => {
     if (isLoggedIn) {
-      console.log("Logout");
       router.push("/kesy/admin");
     } else {
       router.push("/kesy/admin");

@@ -35,7 +35,7 @@ export const useKESYAuth = () => {
 };
 
 function checkExpiry(expiry: number): boolean {
-  return Date.now() > expiry;
+  return Date.now() > Date.now() + expiry;
 }
 
 export const KESYAuthProvider = ({
@@ -49,7 +49,6 @@ export const KESYAuthProvider = ({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = localStorage.getItem("kesy-user");
-
       if (user) {
         try {
           const parsedUser = JSON.parse(user) as AuthResponse;
@@ -57,6 +56,7 @@ export const KESYAuthProvider = ({
           const isExpired = checkExpiry(parsedUser.expiresIn);
           if (isExpired) {
             localStorage.removeItem("kesy-user");
+            console.log("User expired, logging out");
             setUser(null);
             router.push("/kesy/login");
           }
