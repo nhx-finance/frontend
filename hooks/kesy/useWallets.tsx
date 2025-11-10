@@ -8,7 +8,7 @@ interface Wallet {
   walletAddress: string;
 }
 
-interface WalletResponse {
+export interface WalletResponse {
   walletId: string;
   address: string;
 }

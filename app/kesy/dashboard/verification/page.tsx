@@ -103,9 +103,9 @@ export default function Page() {
                 <Button
                   variant="outline"
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
-                  onClick={() => setShowVerificationModal(true)}
+                  disabled
                 >
-                  Start Verification
+                  Verified
                 </Button>
               </div>
               <div className="mt-4 flex flex-col gap-2">
@@ -156,8 +156,9 @@ export default function Page() {
                 <Button
                   variant="outline"
                   className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
+                  disabled
                 >
-                  Start Verification
+                  Verified
                 </Button>
               </div>
               <div className="mt-4 flex flex-col gap-2">

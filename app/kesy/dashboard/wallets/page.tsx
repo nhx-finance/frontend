@@ -6,12 +6,45 @@ import {
 } from "@/components/ui/sidebar";
 import NoWallet from "./no-wallet";
 import { KESYSidebar } from "@/components/kesy-sidebar";
-import { useWallets } from "@/hooks/kesy/useWallets";
-import { Loader2 } from "lucide-react";
+import { useWallets, WalletResponse } from "@/hooks/kesy/useWallets";
+import { CopyIcon, Loader2 } from "lucide-react";
 import AddWalletModal from "./add-wallet-modal";
 import { useState } from "react";
 import { useKYCStatus } from "@/hooks/kesy/useKYC";
 import { toast } from "sonner";
+import { hederaLogo, kesy } from "@/assets";
+import Image from "next/image";
+
+function WalletCard({ wallet }: { wallet: WalletResponse }) {
+  return (
+    <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4">
+      <div className="flex items-center gap-2">
+        <Image
+          src={hederaLogo}
+          alt="Hedera"
+          width={20}
+          height={20}
+          className="rounded-full border border-foreground/20 h-8 w-8"
+        />
+        <p className="text-sm font-funnel-display text-muted-foreground">
+          Hedera
+        </p>
+      </div>
+      <div className="my-4">
+        <p
+          onClick={() => {
+            toast.success("Wallet address copied to clipboard");
+            navigator.clipboard.writeText(wallet.address);
+          }}
+          className="text-sm cursor-pointer flex items-center gap-2 font-semibold font-funnel-display text-muted-foreground"
+        >
+          {wallet.address.slice(0, 14)}...{wallet.address.slice(-4)}
+          <CopyIcon className="w-4 h-4" />
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function Page() {
   const [isAddWalletModalOpen, setIsAddWalletModalOpen] = useState(false);
@@ -88,15 +121,9 @@ export default function Page() {
             </div>
           ) : (
             <div className="flex flex-col md:flex-row gap-4 flex-wrap">
-              <p className="text-sm font-funnel-display text-muted-foreground">
-                Wallets
-              </p>
-              <p className="text-sm font-funnel-display text-muted-foreground">
-                Wallets
-              </p>
-              <p className="text-sm font-funnel-display text-muted-foreground">
-                Wallets
-              </p>
+              {data.wallets.map((wallet) => (
+                <WalletCard key={wallet.walletId} wallet={wallet} />
+              ))}
             </div>
           )}
         </div>
