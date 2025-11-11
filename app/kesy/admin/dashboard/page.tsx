@@ -1,8 +1,10 @@
+"use client";
 import React from "react";
 import AdminNavbar from "./navbar";
 import { IconSearch } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import MintsTable from "./mints";
+import { useTransactions } from "@/hooks/kesy/useTransactions";
 
 export function getDate() {
   const date = new Date();
@@ -19,6 +21,7 @@ export function getDate() {
 }
 
 function AdminDashboardPage() {
+  const { data: transactions } = useTransactions("admin");
   const { dayOfWeek, day, month, year } = getDate();
 
   return (
@@ -72,9 +75,9 @@ function AdminDashboardPage() {
             <div className="flex items-center justify-between mt-4">
               <div className="flex flex-col">
                 <p className="text-sm font-funnel-display text-muted-foreground">
-                  Institutions
+                  Users
                 </p>
-                <p className="font-funnel-display font-semibold">1</p>
+                <p className="font-funnel-display font-semibold">4</p>
               </div>
               <div className="flex flex-col">
                 <p className="text-sm font-funnel-display text-muted-foreground">
@@ -86,7 +89,9 @@ function AdminDashboardPage() {
                 <p className="text-sm font-funnel-display text-muted-foreground">
                   Total Mints
                 </p>
-                <p className="font-funnel-display font-semibold">14</p>
+                <p className="font-funnel-display font-semibold">
+                  {transactions?.totalElements ?? 0}
+                </p>
               </div>
             </div>
           </div>
@@ -108,7 +113,7 @@ function AdminDashboardPage() {
                 <p className="text-sm font-funnel-display text-muted-foreground">
                   Fees Collected
                 </p>
-                <p className="font-funnel-display font-semibold">KES 100K</p>
+                <p className="font-funnel-display font-semibold">KES 720K</p>
               </div>
               <div className="flex flex-col justify-end items-end">
                 <p className="text-sm font-funnel-display text-muted-foreground">

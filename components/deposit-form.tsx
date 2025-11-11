@@ -257,7 +257,7 @@ export function DepositForm({
   ...props
 }: React.ComponentProps<"form">) {
   const [formData, setFormData] = useState<DepositFormData>({
-    kesAmount: "0.00",
+    kesAmount: "0",
     destinationWallet: "",
   });
   const [step, setStep] = useState(1);

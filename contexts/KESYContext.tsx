@@ -84,7 +84,7 @@ export const KESYAuthProvider = ({
       localStorage.removeItem("kesy-user");
     }
     setUser(null);
-    router.push("/kesy/login");
+    router.push("/kesy");
   };
 
   const isAuthenticated = !!user;

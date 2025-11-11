@@ -73,9 +73,10 @@ function ApproveModal({
     }
     switch (status) {
       case "confirmed":
+        console.log("confirmed", request.requestId, payload, status);
         updateTransactionStatus({
           mintId: request.requestId,
-          status: status,
+          status: status.toUpperCase(),
           payload: payload,
         });
         break;
@@ -232,6 +233,9 @@ function ApproveModal({
                 The mint request is pending approval. Please approve or reject
                 the request.
               </p>
+              <p className="text-sm font-funnel-display my-4 text-muted-foreground">
+                Mint ID: {request.requestId}
+              </p>
             </div>
             <Button
               variant="outline"
@@ -297,13 +301,13 @@ function ApproveModal({
           <div className="flex items-center justify-end">
             <Button
               variant="outline"
-              className="w-1/2 mt-4 rounded-3xl border border-foreground/20 shadow-none"
+              className="w-1/2 text-sm font-funnel-display mt-4 rounded-3xl border border-foreground/20 shadow-none"
               onClick={() =>
                 handleUpdateTransactionStatus("confirmed", payload)
               }
               disabled={isPending}
             >
-              Confirm Transaction
+              Confirm
               <CheckIcon className="w-4 h-4" />
             </Button>
           </div>
@@ -390,7 +394,7 @@ function ApproveModal({
           <div className="flex items-center justify-end">
             <Button
               variant="outline"
-              className="w-1/2 mt-4 rounded-3xl border border-foreground/20 shadow-none"
+              className="w-1/2 mt-4 text-sm font-funnel-display rounded-3xl border border-foreground/20 shadow-none"
               onClick={() => handleUpdateTransactionStatus("minted", payload)}
               disabled={isPending || isExecuting}
             >

@@ -11,8 +11,7 @@ import {
   IconUserScan,
 } from "@tabler/icons-react";
 import Link from "next/link";
-
-const isLoggedIn = true;
+import { useKESYAuth } from "@/contexts/KESYContext";
 
 function checkActiveRoute(path: string, currentPath: string) {
   return currentPath.includes(path);
@@ -21,9 +20,11 @@ function checkActiveRoute(path: string, currentPath: string) {
 function AdminNavbar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { logout, isAuthenticated } = useKESYAuth();
+
   const handleAuth = () => {
-    if (isLoggedIn) {
-      router.push("/kesy/admin");
+    if (isAuthenticated) {
+      logout();
     } else {
       router.push("/kesy/admin");
     }
@@ -118,7 +119,7 @@ function AdminNavbar() {
           onClick={handleAuth}
         >
           <span className="font-funnel-display font-semibold text-background">
-            {isLoggedIn ? "Logout" : "Login"}
+            {isAuthenticated ? "Logout" : "Login"}
           </span>
         </Button>
       </div>
