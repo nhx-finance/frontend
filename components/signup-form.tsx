@@ -10,28 +10,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useState } from "react";
-import { AuthData } from "@/hooks/use-login";
-import { useRegister } from "@/hooks/use-register";
+import { AuthParams } from "@/hooks/kesy/useAuthentication";
+import { useRegister } from "@/hooks/kesy/useAuthentication";
 import { Loader2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const { mutate: registerMutation, isPending } = useRegister();
   const [confirmPassword, setConfirmPassword] = useState("");
-  const router = useRouter();
-  const [formData, setFormData] = useState<AuthData>({
-    username: "",
+  const [formData, setFormData] = useState<AuthParams>({
+    email: "",
     password: "",
   });
-  const pathname = usePathname();
-  const isKesy = pathname.includes("/kesy");
+  const { mutate: registerMutation, isPending } = useRegister();
+  const { setUserEmail } = useAuthStore();
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (formData.username === "" || formData.password === "") {
+    if (formData.email === "" || formData.password === "") {
       toast.error("Please fill in all fields");
       return;
     }
@@ -39,11 +37,7 @@ export function SignupForm({
       toast.error("Passwords do not match");
       return;
     }
-    if (isKesy) {
-      toast.info("KESY registration is coming soon");
-      router.push("/kesy/details");
-      return;
-    }
+    setUserEmail(formData.email);
     registerMutation(formData);
   };
   return (
@@ -65,9 +59,9 @@ export function SignupForm({
             type="email"
             placeholder="m@example.com"
             required
-            value={formData.username}
+            value={formData.email}
             onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
+              setFormData({ ...formData, email: e.target.value })
             }
           />
           <FieldDescription>
@@ -118,8 +112,7 @@ export function SignupForm({
         </Field>
         <Field>
           <FieldDescription className="px-6 text-center">
-            Already have an account?{" "}
-            <a href={isKesy ? "/kesy/login" : "/login"}>Sign in</a>
+            Already have an account? <a href="/kesy/login">Sign in</a>
           </FieldDescription>
         </Field>
       </FieldGroup>

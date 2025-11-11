@@ -3,36 +3,30 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthData, useLogin } from "@/hooks/use-login";
+import { AuthParams, useLogin } from "@/hooks/kesy/useAuthentication";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const { mutate: loginMutation, isPending } = useLogin();
-  const router = useRouter();
-  const [formData, setFormData] = useState<AuthData>({
-    username: "",
+  const { mutate: loginMutation, isPending } = useLogin({
+    isAdminLogin: false,
+  });
+  const [formData, setFormData] = useState<AuthParams>({
+    email: "",
     password: "",
   });
-  const pathname = usePathname();
-  const isKesy = pathname.includes("/kesy");
+
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (formData.username === "" || formData.password === "") {
+    if (formData.email === "" || formData.password === "") {
       toast.error("Please fill in all fields");
       return;
     }
-    if (isKesy) {
-      toast.info("KESY login is coming soon");
-      router.push("/kesy/dashboard");
-      return;
-    }
+
     loginMutation(formData);
   };
   return (
@@ -54,21 +48,24 @@ export function LoginForm({
             type="email"
             placeholder="m@example.com"
             required
-            value={formData.username}
+            value={formData.email}
             onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
+              setFormData({ ...formData, email: e.target.value })
             }
           />
         </div>
         <div className="grid gap-3">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <a
-              href="/otp"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
+
+            <div
+              className="cursor-pointer text-sm text-muted-foreground underline"
+              onClick={() =>
+                toast.info("Please contact support to reset your password.")
+              }
             >
               Forgot your password?
-            </a>
+            </div>
           </div>
           <Input
             id="password"
@@ -91,10 +88,7 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a
-          href={isKesy ? "/kesy/signup" : "/signup"}
-          className="underline underline-offset-4"
-        >
+        <a href="/kesy/signup" className="underline underline-offset-4">
           Sign up
         </a>
       </div>

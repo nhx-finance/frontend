@@ -7,17 +7,41 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { defaultColumns } from "@/components/tables/transactions-columndef";
+import { useMyTransactions } from "@/hooks/kesy/useTransactions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function TransactionTable() {
+  const { data: transactions, isLoading, error } = useMyTransactions("user");
   const table = useReactTable({
     columns: defaultColumns,
-    data: kesyTransactions,
+    data: transactions ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isLoading) {
+    return (
+      <div className="px-4 mt-4">
+        <Skeleton className="w-1/2 md:w-1/3 h-10 mt-2 mb-8" />
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton key={index} className="w-full h-10 my-2" />
+        ))}
+      </div>
+    );
+  }
   if (kesyTransactions.length === 0) {
     return (
       <div className="px-4 mt-4">
         <h1 className="">No transactions found</h1>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="px-4 mt-4">
+        <h1 className="text-red-500 font-funnel-display">
+          Error: {error.message}
+        </h1>
       </div>
     );
   }

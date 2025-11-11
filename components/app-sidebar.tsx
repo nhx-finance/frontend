@@ -18,26 +18,18 @@ import {
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { dummy, logo } from "@/assets";
+import { logo } from "@/assets";
 import Image from "next/image";
-import { useAuth } from "@/contexts/AuthContext";
 
 const data = {
-  user: {
-    name: "sylusabel",
-    email: "sylusabel@gmail.com",
-    avatar: dummy,
-  },
   navMain: [
     {
       title: "Overview",
@@ -115,9 +107,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAuth();
-
-  if (!user) return null;
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -147,9 +136,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter className="font-funnel-display">
-        <NavUser user={user} />
-      </SidebarFooter>
     </Sidebar>
   );
 }

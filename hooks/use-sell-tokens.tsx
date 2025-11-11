@@ -47,7 +47,6 @@ export const useSellTokens = () => {
 export const useBurnTokens = () => {
   const { data: userAccountId } = useAccountId();
   const { user } = useAuth();
-  console.log(user);
   const queryClient = useQueryClient();
   const {
     mutate: sendBurnRequestMutation,
@@ -122,20 +121,8 @@ async function sendBurnRequest(
     recipientAccountIdStr: userAccountId,
   };
 
-  console.log("Request values (original):", {
-    usdcAmount,
-    nhTokenAmount,
-    nhTokenName,
-    userAccountId,
-  });
-  console.log(
-    "Request body (being sent as strings):",
-    JSON.stringify(requestBody, null, 2)
-  );
-
   try {
     const response = await instance.post(fullUrl, requestBody);
-    console.log("Response:", response);
     return response.data;
   } catch (error: any) {
     console.error("Request failed:", {

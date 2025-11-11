@@ -5,17 +5,29 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { defaultColumns as columns } from "@/components/tables/wallet-columndef";
-import { wallets as data } from "@/mocks/wallets";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useWalletsWithBalances } from "@/hooks/kesy/useWallets";
+import { Skeleton } from "../ui/skeleton";
 
 function Wallets() {
   const router = useRouter();
+  const { data: walletsWithBalances, isLoading } = useWalletsWithBalances();
   const table = useReactTable({
     columns,
-    data,
+    data: walletsWithBalances ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isLoading) {
+    return (
+      <div className="mt-10 rounded-3xl border border-foreground/20 p-4">
+        <Skeleton className="w-full h-10 my-2" />
+        <Skeleton className="w-full h-10 my-2" />
+        <Skeleton className="w-full h-10 my-2" />
+      </div>
+    );
+  }
 
   const onRowClick = () => {
     router.push(`/kesy/dashboard/wallets`);

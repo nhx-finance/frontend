@@ -66,7 +66,7 @@ async function addPaymentMethod(
     name: paymentMethod,
     mobileNumber: accountNumber,
   });
-  console.log(response.data);
+
   return response.data;
 }
 

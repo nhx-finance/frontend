@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { logo, nhxmmf, orion } from "@/assets";
+import { logo, orion } from "@/assets";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -70,7 +70,7 @@ function DesktopNavbar() {
       </div>
       <div className="flex items-center justify-between gap-4">
         <Link
-          href="/home"
+          href="/"
           className="text-sm font-funnel-display text-white font-semibold"
         >
           Markets
@@ -203,7 +203,7 @@ function MobileNavbar() {
               <DrawerDescription>
                 <div className="flex flex-col gap-2 mt-2">
                   <Link
-                    href="/home"
+                    href="/"
                     className="text-base text-start text-foreground font-funnel-display font-semibold"
                   >
                     <div className="flex items-center gap-1">

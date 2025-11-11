@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  BookOpenIcon,
-  ChevronsUpDown,
-  LogOut,
-  Wallet2Icon,
-} from "lucide-react";
+import { BookOpenIcon, ChevronsUpDown, LogOut } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -24,13 +19,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "./theme-toggle";
-import { useAuth } from "@/contexts/AuthContext";
-import { LoginResponse } from "@/hooks/use-login";
 import { useRouter } from "next/navigation";
+import { User } from "@/stores/userStore";
+import { IconWorldCheck } from "@tabler/icons-react";
+import { useKESYAuth } from "@/contexts/KESYContext";
 
-export function NavUser({ user }: { user: LoginResponse }) {
+export function NavUser({ userDetails }: { userDetails: User }) {
   const { isMobile } = useSidebar();
-  const { logout } = useAuth();
+  const { logout } = useKESYAuth();
   const router = useRouter();
   return (
     <SidebarMenu className="font-funnel-display">
@@ -43,13 +39,16 @@ export function NavUser({ user }: { user: LoginResponse }) {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarFallback className="rounded-lg">
-                  {user.userEmail.charAt(0)}
+                  {userDetails.email.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.userEmail}</span>
+                <span className="truncate font-medium">
+                  {userDetails.firstName} {userDetails.lastName}
+                </span>
                 <span className="truncate text-xs">
-                  {user.userEmail.slice(0, 2)}****{user.userEmail.slice(-10)}
+                  {userDetails.email.slice(0, 2)}****
+                  {userDetails.email.slice(-10)}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -65,14 +64,17 @@ export function NavUser({ user }: { user: LoginResponse }) {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarFallback className="rounded-lg">
-                    {user.userEmail.charAt(0)}
+                    {userDetails.email.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.userEmail}</span>
+                  <span className="truncate font-medium">
+                    {userDetails.firstName} {userDetails.lastName}
+                  </span>
                   <span className="truncate text-xs">
                     {" "}
-                    {user.userEmail.slice(0, 2)}****{user.userEmail.slice(-10)}
+                    {userDetails.email.slice(0, 2)}****
+                    {userDetails.email.slice(-10)}
                   </span>
                 </div>
               </div>
@@ -91,8 +93,8 @@ export function NavUser({ user }: { user: LoginResponse }) {
                   router.push("/home");
                 }}
               >
-                <Wallet2Icon />
-                Buy nhStocks
+                <IconWorldCheck />
+                Explore Ecosystem
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

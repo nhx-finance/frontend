@@ -29,7 +29,7 @@ import { useRouter } from "next/navigation";
 function CustomUserAuthButton() {
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
-  console.log(user);
+
   return (
     <>
       {isAuthenticated ? (

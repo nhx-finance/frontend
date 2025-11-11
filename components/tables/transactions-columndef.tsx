@@ -1,8 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { Transaction } from "@/mocks/transactions";
+import { UserTransactionItem } from "@/hooks/kesy/useTransactions";
 import Image from "next/image";
+import { kesy } from "@/assets";
 
-const columnHelper = createColumnHelper<Transaction>();
+const columnHelper = createColumnHelper<UserTransactionItem>();
 const formatAmount = (balance: number) => {
   const stringBalance = balance.toString();
   const [whole] = stringBalance.split(".");
@@ -16,74 +17,73 @@ const formatAmount = (balance: number) => {
 };
 
 export const defaultColumns = [
-  columnHelper.accessor("asset", {
-    id: "asset",
+  columnHelper.accessor("id", {
+    id: "id",
     header: () => (
-      <div className="font-funnel-display font-semibold">Asset</div>
+      <div className="font-funnel-display font-semibold text-sm">ID</div>
     ),
     cell: (props) => (
       <div className="flex items-center gap-2 w-[250px]">
         <div className="w-12 h-12 p-1 border-2 border-foreground/20 rounded-lg">
           <Image
-            src={props.row.original.asset.logo}
-            alt={props.row.original.asset.name}
+            src={kesy}
+            alt="KESY"
             width={40}
             height={40}
             className="rounded object-contain"
           />
         </div>
         <div className="flex flex-col items-start justify-center">
-          <p className="text-sm font-funnel-display font-semibold">
-            <span className="text-muted-foreground font-medieval-sharp">
-              nh
-            </span>
-            {props.row.original.asset.ticker}
-          </p>
+          <p className="text-sm font-funnel-display font-semibold">KESY</p>
           <p className="text-xs font-funnel-display text-muted-foreground">
-            {props.row.original.asset.name}
+            {props.row.original.id.slice(0, 6)}...
+            {props.row.original.id.slice(-4)}
           </p>
         </div>
       </div>
     ),
   }),
-  columnHelper.accessor("amount", {
-    id: "amount",
+  columnHelper.accessor("amountKes", {
+    id: "amountKes",
     header: () => (
-      <div className="font-funnel-display font-semibold">Amount</div>
+      <div className="font-funnel-display font-semibold text-sm">Amount</div>
     ),
     cell: (props) => (
-      <div className="text-left font-funnel-display text-sm">
-        {formatAmount(props.row.original.amount)}
+      <div className="text-left font-funnel-display text-xs">
+        {formatAmount(props.row.original.amountKes)}
       </div>
     ),
   }),
   columnHelper.accessor("status", {
     id: "status",
     header: () => (
-      <div className="font-funnel-display font-semibold">Quantity</div>
+      <div className="font-funnel-display font-semibold text-sm">Status</div>
     ),
     cell: (props) => (
-      <div className="text-left font-funnel-display text-sm">
-        {(props.row.original.amount / props.row.original.asset.price).toFixed(
-          2
-        )}
+      <div className="text-left font-funnel-display text-xs">
+        {props.row.original.status.toUpperCase()}
       </div>
     ),
   }),
-  columnHelper.accessor("type", {
-    id: "type",
-    header: () => <div className="font-funnel-display font-semibold">Type</div>,
+  columnHelper.accessor("walletAddress", {
+    id: "walletAddress",
+    header: () => (
+      <div className="font-funnel-display font-semibold text-sm">Address</div>
+    ),
     cell: (props) => (
-      <div className="text-left uppercase font-funnel-display text-sm">
-        {props.row.original.type}
+      <div className="text-left uppercase font-funnel-display text-xs">
+        {props.row.original.walletAddress.slice(0, 6)}...
+        {props.row.original.walletAddress.slice(-4)}
       </div>
     ),
   }),
   columnHelper.accessor("createdAt", {
     id: "createdAt",
-    header: () => <div className="font-funnel-display font-semibold">Date</div>,
+    header: () => (
+      <div className="font-funnel-display font-semibold text-sm">Date</div>
+    ),
     cell: (props) => (
-      <div className="text-left font-funnel-display text-sm">
+      <div className="text-left font-funnel-display text-xs">
         {new Date(props.row.original.createdAt).toLocaleDateString()}
       </div>
     ),

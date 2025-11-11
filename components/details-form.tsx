@@ -24,10 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { format } from "date-fns";
-import { useRouter } from "next/navigation";
+import { useSubmitUserDetails } from "@/hooks/kesy/useAuthentication";
 
-interface DetailsFormData {
+export interface DetailsFormData {
   firstName: string;
   lastName: string;
   dob: Date | undefined;
@@ -35,7 +34,6 @@ interface DetailsFormData {
   province: string;
   timezone: string;
   termsAgreed: boolean;
-  privacyAgreed: boolean;
 }
 
 export function DetailsForm({
@@ -43,7 +41,6 @@ export function DetailsForm({
   ...props
 }: React.ComponentProps<"form">) {
   const [step, setStep] = useState(1);
-  const [isPending, setIsPending] = useState(false);
   const [formData, setFormData] = useState<DetailsFormData>({
     firstName: "",
     lastName: "",
@@ -52,9 +49,10 @@ export function DetailsForm({
     province: "",
     timezone: "",
     termsAgreed: false,
-    privacyAgreed: false,
   });
-  const router = useRouter();
+  const { mutate: submitUserDetailsMutation, isPending } =
+    useSubmitUserDetails();
+
   const handleNext = () => {
     if (step === 1) {
       if (!formData.firstName || !formData.lastName || !formData.dob) {
@@ -79,31 +77,12 @@ export function DetailsForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.termsAgreed || !formData.privacyAgreed) {
+    if (!formData.termsAgreed) {
       toast.error("Please agree to all terms");
       return;
     }
 
-    setIsPending(true);
-    try {
-      const submitData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        dob: formData.dob ? format(formData.dob, "yyyy-MM-dd") : "",
-        country: formData.country,
-        province: formData.province,
-        timezone: formData.timezone,
-        termsAgreed: formData.termsAgreed,
-      };
-
-      console.log("Submitting data:", submitData);
-      toast.success("Account created successfully!");
-      router.push("/kesy/login");
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setIsPending(false);
-    }
+    submitUserDetailsMutation(formData);
   };
 
   const renderStep1 = () => (
@@ -153,7 +132,7 @@ export function DetailsForm({
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {formData.dob ? (
-                format(formData.dob, "PPP")
+                formData.dob.toLocaleDateString()
               ) : (
                 <span>Pick a date</span>
               )}
@@ -165,7 +144,6 @@ export function DetailsForm({
               selected={formData.dob}
               onSelect={(date) => setFormData({ ...formData, dob: date })}
               captionLayout="dropdown"
-              initialFocus
             />
           </PopoverContent>
         </Popover>
@@ -198,12 +176,12 @@ export function DetailsForm({
             <SelectValue placeholder="Select country" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="us">United States</SelectItem>
-            <SelectItem value="uk">United Kingdom</SelectItem>
-            <SelectItem value="ca">Canada</SelectItem>
-            <SelectItem value="ke">Kenya</SelectItem>
-            <SelectItem value="za">South Africa</SelectItem>
-            <SelectItem value="ng">Nigeria</SelectItem>
+            <SelectItem value="United States">United States</SelectItem>
+            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+            <SelectItem value="Canada">Canada</SelectItem>
+            <SelectItem value="Kenya">Kenya</SelectItem>
+            <SelectItem value="South Africa">South Africa</SelectItem>
+            <SelectItem value="Nigeria">Nigeria</SelectItem>
           </SelectContent>
         </Select>
       </Field>
@@ -238,11 +216,11 @@ export function DetailsForm({
             <SelectValue placeholder="Select timezone" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="utc">UTC</SelectItem>
-            <SelectItem value="est">EST (UTC-5)</SelectItem>
-            <SelectItem value="pst">PST (UTC-8)</SelectItem>
-            <SelectItem value="cet">CET (UTC+1)</SelectItem>
-            <SelectItem value="eat">EAT (UTC+3)</SelectItem>
+            <SelectItem value="UTC (UTC+0)">UTC (UTC+0)</SelectItem>
+            <SelectItem value="EST (UTC-5)">EST (UTC-5)</SelectItem>
+            <SelectItem value="PST (UTC-8)">PST (UTC-8)</SelectItem>
+            <SelectItem value="CET (UTC+1)">CET (UTC+1)</SelectItem>
+            <SelectItem value="EAT (UTC+3)">EAT (UTC+3)</SelectItem>
           </SelectContent>
         </Select>
       </Field>
@@ -297,9 +275,9 @@ export function DetailsForm({
           <input
             type="checkbox"
             id="privacyAgreed"
-            checked={formData.privacyAgreed}
+            checked={formData.termsAgreed}
             onChange={(e) =>
-              setFormData({ ...formData, privacyAgreed: e.target.checked })
+              setFormData({ ...formData, termsAgreed: e.target.checked })
             }
             className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
           />
