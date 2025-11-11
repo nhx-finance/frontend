@@ -31,7 +31,7 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
         </p>
       </div>
       <div className="my-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
           <p className="text-sm font-funnel-display text-foreground/80">
             Wallet Address
           </p>
@@ -46,7 +46,7 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
             <CopyIcon className="w-4 h-4" />
           </p>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
           <p className="text-sm font-funnel-display text-foreground/80">
             Wallet ID
           </p>
@@ -59,6 +59,41 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
           >
             {wallet.walletId.slice(0, 14)}...{wallet.walletId.slice(-4)}
             <CopyIcon className="w-4 h-4" />
+          </p>
+        </div>
+        <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
+          <p className="text-sm font-funnel-display text-foreground/80">
+            Network
+          </p>
+          <p
+            onClick={() => {
+              toast.success("Wallet ID copied to clipboard");
+              navigator.clipboard.writeText(wallet.walletId);
+            }}
+            className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display"
+          >
+            <Image
+              src={hederaLogo}
+              alt="Hedera"
+              width={20}
+              height={20}
+              className="rounded-full border border-foreground/20 h-6 w-6"
+            />
+            Hedera
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display text-foreground/80">
+            Whitelisted
+          </p>
+          <p
+            onClick={() => {
+              toast.success("Wallet ID copied to clipboard");
+              navigator.clipboard.writeText(wallet.walletId);
+            }}
+            className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display"
+          >
+            Yes
           </p>
         </div>
       </div>
@@ -144,6 +179,16 @@ export default function Page() {
               {data.wallets.map((wallet) => (
                 <WalletCard key={wallet.walletId} wallet={wallet} />
               ))}
+            </div>
+          )}
+          {data.wallets.length > 0 && (
+            <div className="flex items-center justify-center mt-12">
+              <button
+                onClick={handleAddWallet}
+                className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
+              >
+                Add Wallet
+              </button>
             </div>
           )}
         </div>
