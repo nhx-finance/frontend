@@ -42,7 +42,7 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
             }}
             className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display"
           >
-            {wallet.address.slice(0, 14)}...{wallet.address.slice(-4)}
+            {wallet.address.slice(0, 5)}...{wallet.address.slice(-4)}
             <CopyIcon className="w-4 h-4" />
           </p>
         </div>
@@ -57,7 +57,7 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
             }}
             className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display"
           >
-            {wallet.walletId.slice(0, 14)}...{wallet.walletId.slice(-4)}
+            {wallet.walletId.slice(0, 5)}...{wallet.walletId.slice(-4)}
             <CopyIcon className="w-4 h-4" />
           </p>
         </div>

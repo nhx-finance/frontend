@@ -36,13 +36,33 @@ export function authAxios(): AxiosInstance {
     }
     user = JSON.parse(rawUser) as AuthResponse;
   }
-  return axios.create({
+  const instance = axios.create({
     baseURL: KESY_URL,
     headers: {
       Authorization: `Bearer ${user?.accessToken}`,
       "Content-Type": "application/json",
     },
   });
+
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 403) {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("kesy-user");
+        }
+        toast.error("Session expired", {
+          description: "Please login again to continue.",
+        });
+        if (typeof window !== "undefined") {
+          window.location.href = "/kesy/login";
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  return instance;
 }
 
 async function registerUser(data: AuthParams): Promise<RegistrationResponse> {

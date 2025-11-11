@@ -10,17 +10,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MintRequest, mintRequests } from "@/mocks/mints";
 import React from "react";
 import { CheckIcon, MailIcon, RefreshCcwIcon, X } from "lucide-react";
 import { hederaLogo, kesy } from "@/assets";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { TransactionItem, useTransactions } from "@/hooks/kesy/useTransactions";
+import {
+  TransactionItem,
+  useExecuteTransaction,
+  useTransactions,
+  useUpdateTransactionStatus,
+} from "@/hooks/kesy/useTransactions";
 import AdminNavbar from "./navbar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function formatAmount(amount: number) {
   return amount.toLocaleString("en-US", {
@@ -44,6 +49,11 @@ function ApproveModal({
   request: TransactionItem | null;
   closeModal: () => void;
 }) {
+  const { mutate: updateTransactionStatus, isPending } =
+    useUpdateTransactionStatus();
+  const { mutate: executeTransaction, isPending: isExecuting } =
+    useExecuteTransaction();
+  const [payload, setPayload] = useState<string>("");
   if (!request) {
     return (
       <div className="fixed inset-0 px-2 w-screen z-50 bg-black/50 flex items-center justify-center backdrop-blur-sm">
@@ -55,6 +65,46 @@ function ApproveModal({
       </div>
     );
   }
+
+  const handleUpdateTransactionStatus = (status: string, payload: string) => {
+    if (payload.length === 0) {
+      toast.error("Please enter a valid payload");
+      return;
+    }
+    switch (status) {
+      case "confirmed":
+        updateTransactionStatus({
+          mintId: request.requestId,
+          status: status,
+          payload: payload,
+        });
+        break;
+      case "minted":
+        executeTransaction({
+          mintId: request.requestId,
+          payload: payload,
+          action: "minted",
+        });
+        break;
+      case "transferred":
+        executeTransaction({
+          mintId: request.requestId,
+          payload: payload,
+          action: "transferred",
+        });
+        break;
+      case "failed":
+        executeTransaction({
+          mintId: request.requestId,
+          payload: payload,
+          action: "failed",
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   if (request.status.toLowerCase() === "transferred") {
     return (
       <div className="fixed inset-0 px-2 w-screen z-50 bg-black/50 flex items-center justify-center backdrop-blur-sm">
@@ -239,6 +289,8 @@ function ApproveModal({
           <div className="mt-4 ">
             <Input
               placeholder="Enter Bank Transaction ID"
+              value={payload}
+              onChange={(e) => setPayload(e.target.value)}
               className="w-full rounded-3xl font-funnel-display shadow-none h-[2.8rem] border border-foreground/20"
             />
           </div>
@@ -246,7 +298,10 @@ function ApproveModal({
             <Button
               variant="outline"
               className="w-1/2 mt-4 rounded-3xl border border-foreground/20 shadow-none"
-              onClick={closeModal}
+              onClick={() =>
+                handleUpdateTransactionStatus("confirmed", payload)
+              }
+              disabled={isPending}
             >
               Confirm Transaction
               <CheckIcon className="w-4 h-4" />
@@ -327,6 +382,8 @@ function ApproveModal({
           <div className="mt-4 ">
             <Input
               placeholder="Enter signatures"
+              value={payload}
+              onChange={(e) => setPayload(e.target.value)}
               className="w-full rounded-3xl font-funnel-display shadow-none h-[2.8rem] border border-foreground/20"
             />
           </div>
@@ -334,7 +391,8 @@ function ApproveModal({
             <Button
               variant="outline"
               className="w-1/2 mt-4 rounded-3xl border border-foreground/20 shadow-none"
-              onClick={closeModal}
+              onClick={() => handleUpdateTransactionStatus("minted", payload)}
+              disabled={isPending || isExecuting}
             >
               Mint To Treasury
               <CheckIcon className="w-4 h-4" />
@@ -414,6 +472,8 @@ function ApproveModal({
           <div className="mt-4 ">
             <Input
               placeholder="Enter signatures"
+              value={payload}
+              onChange={(e) => setPayload(e.target.value)}
               className="w-full rounded-3xl font-funnel-display shadow-none h-[2.8rem] border border-foreground/20"
             />
           </div>
@@ -421,7 +481,10 @@ function ApproveModal({
             <Button
               variant="outline"
               className="w-1/2 mt-4 rounded-3xl border border-foreground/20 shadow-none"
-              onClick={closeModal}
+              onClick={() =>
+                handleUpdateTransactionStatus("transferred", payload)
+              }
+              disabled={isPending || isExecuting}
             >
               Transfer to User
               <CheckIcon className="w-4 h-4" />
@@ -515,7 +578,7 @@ function ApproveModal({
 function MintsTable() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
   const [mintRequest, setMintRequest] = useState<TransactionItem | null>(null);
-  const { data: transactions, isLoading, error } = useTransactions();
+  const { data: transactions, isLoading, error } = useTransactions("admin");
   const router = useRouter();
   if (isLoading) {
     return (
