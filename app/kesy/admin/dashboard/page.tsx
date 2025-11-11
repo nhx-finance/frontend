@@ -1,6 +1,5 @@
 import React from "react";
 import AdminNavbar from "./navbar";
-import { Input } from "@/components/ui/input";
 import { IconSearch } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import MintsTable from "./mints";

@@ -363,7 +363,9 @@ function VerificationModal({
       documentType: "id",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+  }
 
   const handleNext = () => {
     if (currentStep < 2) {

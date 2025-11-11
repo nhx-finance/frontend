@@ -10,7 +10,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { logo } from "@/assets";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLogin } from "@/hooks/kesy/useAuthentication";
@@ -22,7 +21,6 @@ export function AdminLoginForm({
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const { mutate: loginMutation, isPending } = useLogin({
     isAdminLogin: true,
   });

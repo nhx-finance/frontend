@@ -12,7 +12,6 @@ import {
   PieChart,
   Send,
   Settings2,
-  Loader2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";

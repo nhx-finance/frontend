@@ -12,7 +12,7 @@ import AddWalletModal from "./add-wallet-modal";
 import { useState } from "react";
 import { useKYCStatus } from "@/hooks/kesy/useKYC";
 import { toast } from "sonner";
-import { hederaLogo, kesy } from "@/assets";
+import { hederaLogo } from "@/assets";
 import Image from "next/image";
 
 function WalletCard({ wallet }: { wallet: WalletResponse }) {

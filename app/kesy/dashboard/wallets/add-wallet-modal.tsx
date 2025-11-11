@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAddWallet } from "@/hooks/kesy/useWallets";
-import { useKYCStatus } from "@/hooks/kesy/useKYC";
 
 interface AddWalletModalProps {
   closeModal: () => void;

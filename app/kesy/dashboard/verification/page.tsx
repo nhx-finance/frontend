@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import NoVerification from "./no-verification";
 import { KESYSidebar } from "@/components/kesy-sidebar";
 import { useKYCStatus } from "@/hooks/kesy/useKYC";
-import { Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import VerificationModal from "./verification-modal";
 import { Skeleton } from "@/components/ui/skeleton";

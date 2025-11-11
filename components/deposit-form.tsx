@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronsDown, InfoIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { kesy, kesyLogo, usdcLogo } from "@/assets";
+import { kesy, kesyLogo } from "@/assets";
 import Image from "next/image";
 import "@/components/kesy/styles.css";
 import { useDynamicFontSize } from "@/hooks/use-dynamic-font-size";
@@ -14,7 +14,6 @@ import {
 import { useKESYAuth } from "@/contexts/KESYContext";
 import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useMint } from "@/hooks/kesy/useMint";
 
 interface DepositFormData {
@@ -262,7 +261,6 @@ export function DepositForm({
     destinationWallet: "",
   });
   const [step, setStep] = useState(1);
-  const router = useRouter();
   const { mutate: mintMutation, isPending } = useMint();
 
   const handleNext = () => {
@@ -280,7 +278,7 @@ export function DepositForm({
   };
 
   return (
-    <div>
+    <div className={className}>
       {step === 1 ? (
         <Step1
           formData={formData}
