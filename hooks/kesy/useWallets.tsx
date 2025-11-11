@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authAxios } from "./useAuthentication";
-import { KESY_URL } from "@/lib/utils";
+import { DECIMALS, HEDERA_URL, KESY_TOKEN_ID, KESY_URL } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface Wallet {
@@ -13,8 +13,31 @@ export interface WalletResponse {
   address: string;
 }
 
+export interface WalletWithBalanceResponse {
+  walletId: string;
+  address: string;
+  balance: number;
+}
+
 interface WalletListResponse {
   wallets: WalletResponse[];
+}
+
+export interface TokenBalance {
+  automatic_association: boolean;
+  balance: number;
+  created_timestamp: string;
+  decimals: number;
+  token_id: string;
+  freeze_status: string;
+  kyc_status: string;
+}
+
+export interface TokenBalanceResponse {
+  tokens: TokenBalance[];
+  links: {
+    next: string | null;
+  };
 }
 
 async function getWallets(): Promise<WalletListResponse> {
@@ -22,14 +45,6 @@ async function getWallets(): Promise<WalletListResponse> {
   const response = await authenticatedInstance.get(`${KESY_URL}/wallet/list`);
   return response.data;
 }
-
-export const useWallets = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["wallets"],
-    queryFn: getWallets,
-  });
-  return { data, isLoading, error };
-};
 
 async function addWallet(wallet: Wallet): Promise<WalletResponse> {
   const authenticatedInstance = authAxios();
@@ -39,6 +54,50 @@ async function addWallet(wallet: Wallet): Promise<WalletResponse> {
   );
   return response.data.wallets;
 }
+
+async function getWalletsWithBalances({
+  wallets,
+}: {
+  wallets: WalletResponse[];
+}): Promise<WalletWithBalanceResponse[]> {
+  let walletsWithBalances: WalletWithBalanceResponse[] = [];
+  for (const wallet of wallets) {
+    const url = `${HEDERA_URL}/accounts/0xf586d221da1565d80b9244877979c16cf5d68d17/tokens?limit=2&order=desc&token.id=${KESY_TOKEN_ID}`;
+    const response = await fetch(url);
+    if (response.status === 404) {
+      console.log("404");
+      walletsWithBalances.push({ ...wallet, balance: 0 });
+      continue;
+    }
+    const data = (await response.json()) as TokenBalanceResponse;
+    if (data.tokens.length === 0) {
+      console.log("0 tokens");
+      walletsWithBalances.push({ ...wallet, balance: 0 });
+      continue;
+    }
+    walletsWithBalances.push({
+      ...wallet,
+      balance: data.tokens[0].balance / 10 ** DECIMALS,
+    });
+  }
+  return walletsWithBalances;
+}
+
+function getTotalBalance({
+  wallets,
+}: {
+  wallets: WalletWithBalanceResponse[];
+}): number {
+  return wallets.reduce((acc, wallet) => acc + wallet.balance, 0);
+}
+
+export const useWallets = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["wallets"],
+    queryFn: getWallets,
+  });
+  return { data, isLoading, error };
+};
 
 export const useAddWallet = () => {
   const queryClient = useQueryClient();
@@ -53,4 +112,32 @@ export const useAddWallet = () => {
       toast.error(error.message);
     },
   });
+};
+
+export const useWalletsWithBalances = () => {
+  const { data: walletsData } = useWallets();
+  const {
+    data: walletsWithBalances,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["walletsWithBalances"],
+    queryFn: () =>
+      getWalletsWithBalances({ wallets: walletsData?.wallets ?? [] }),
+    enabled: !!walletsData?.wallets,
+  });
+  return { data: walletsWithBalances, isLoading, error };
+};
+
+export const useTotalBalance = () => {
+  const {
+    data: walletsWithBalances,
+    isLoading,
+    error,
+  } = useWalletsWithBalances();
+  return {
+    data: getTotalBalance({ wallets: walletsWithBalances ?? [] }),
+    isLoading: isLoading,
+    error: error,
+  };
 };

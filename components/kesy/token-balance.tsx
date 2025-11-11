@@ -4,8 +4,20 @@ import React from "react";
 import { Button } from "../ui/button";
 import { getDate } from "@/app/kesy/admin/dashboard/page";
 import { useRouter } from "next/navigation";
+import { useTotalBalance } from "@/hooks/kesy/useWallets";
+import { Skeleton } from "../ui/skeleton";
 
 function TokenBalance() {
+  const { data: totalBalance, isLoading, error } = useTotalBalance();
+  if (error) {
+    return (
+      <div className="p-4 w-full max-h-[250px]">
+        <p className="text-sm font-funnel-display text-red-500">
+          {error.message}
+        </p>
+      </div>
+    );
+  }
   const { dayOfWeek, day, month, year } = getDate();
   const router = useRouter();
   return (
@@ -20,9 +32,17 @@ function TokenBalance() {
       </div>
       <div className="flex flex-col md:flex-row items-center justify-between mt-4">
         <div className="w-full md:w-3/4">
-          <h1 className="text-3xl font-funnel-display font-bold">
-            KES 10,000,000.87
-          </h1>
+          {isLoading ? (
+            <Skeleton className="h-12 w-full md:w-1/2" />
+          ) : (
+            <h1 className="text-3xl font-funnel-display font-bold">
+              KES{" "}
+              {totalBalance?.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </h1>
+          )}
           <div className="flex items-center justify-between mt-2">
             <p className="text-sm font-funnel-display text-muted-foreground flex items-center gap-1 justify-center">
               {month} {day} {dayOfWeek}, {year}
