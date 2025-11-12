@@ -9,6 +9,9 @@ import { Skeleton } from "../ui/skeleton";
 
 function TokenBalance() {
   const { data: totalBalance, isLoading, error } = useTotalBalance();
+  const { dayOfWeek, day, month, year } = getDate();
+  const router = useRouter();
+  
   if (error) {
     return (
       <div className="p-4 w-full max-h-[250px]">
@@ -18,8 +21,6 @@ function TokenBalance() {
       </div>
     );
   }
-  const { dayOfWeek, day, month, year } = getDate();
-  const router = useRouter();
   return (
     <div className="p-4 w-full max-h-[250px]">
       <div className="flex items-center justify-between">

@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
-import { CheckIcon, MailIcon, RefreshCcwIcon, X } from "lucide-react";
+import { CheckIcon, RefreshCcwIcon, X } from "lucide-react";
 import { hederaLogo, kesy } from "@/assets";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -116,7 +116,7 @@ function ApproveModal({
                 Mint Transferred
               </h1>
               <p className="text-sm font-funnel-display text-muted-foreground">
-                The mint request has been transferred to the user's wallet.
+                The mint request has been transferred to the user&apos;s wallet.
               </p>
             </div>
             <Button
@@ -417,7 +417,7 @@ function ApproveModal({
                 Execute Transfer
               </h1>
               <p className="text-sm font-funnel-display text-muted-foreground">
-                Transfer the minted tokens to the user's wallet.
+                Transfer the minted tokens to the user&apos;s wallet.
               </p>
             </div>
             <Button
