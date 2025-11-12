@@ -254,7 +254,6 @@ const Step2 = ({
 
 export function DepositForm({
   className,
-  ...props
 }: React.ComponentProps<"form">) {
   const [formData, setFormData] = useState<DepositFormData>({
     kesAmount: "0",
