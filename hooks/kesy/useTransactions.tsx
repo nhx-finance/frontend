@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { KESY_URL } from "@/lib/utils";
 import { authAxios } from "./useAuthentication";
 import type { Sort, Pageable } from "./useKYC";
@@ -147,6 +147,7 @@ async function executeTransaction({
 
 export const useExecuteTransaction = () => {
   const { mutate: updateTxnStatus } = useUpdateTransactionStatus();
+
   return useMutation({
     mutationFn: executeTransaction,
     onSuccess: (data) => {
@@ -179,10 +180,12 @@ export const useMyTransactions = (role: string) => {
 };
 
 export const useUpdateTransactionStatus = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateTransactionStatus,
     onSuccess: () => {
       toast.success("Transaction status updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["transactions", "admin"] });
     },
     onError: (error) => {
       toast.error("Failed to update transaction status");
