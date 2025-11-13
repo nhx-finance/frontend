@@ -1,8 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { KESY_URL } from "@/lib/utils";
+import { KESY_TOKEN_ID, KESY_URL, setUpClient } from "@/lib/utils";
 import { authAxios } from "./useAuthentication";
 import type { Sort, Pageable } from "./useKYC";
 import { toast } from "sonner";
+import {
+  ContractExecuteTransaction,
+  ContractFunctionParameters,
+} from "@hashgraph/sdk";
 
 export interface TransactionItem {
   requestId: string;
@@ -102,6 +106,7 @@ async function updateTransactionStatus({
   try {
     const url = `${KESY_URL}/admin/mints/${mintId}/status`;
     const authenticatedInstance = authAxios();
+    console.log("updating transaction status in be", status, payload);
     const body = {
       status: status,
       notes: payload,
@@ -124,19 +129,35 @@ async function executeTransaction({
   mintId,
   payload,
   action,
+  amount,
 }: {
   mintId: string;
   payload: string;
   action: string;
+  amount: number;
 }): Promise<ExecuteTxnResponse> {
   try {
+    const client = setUpClient();
     const data: ExecuteTxnResponse = {
       txnId: "",
       action: action,
       mintId: mintId,
     };
-    console.log("executing transaction", mintId, payload);
+    console.log("executing transaction", mintId, payload, amount);
+    const transaction = new ContractExecuteTransaction()
+      .setContractId("0.0.7228865")
+      .setGas(100_000)
+      .setFunction(
+        "mint(address account, int64 amount)",
+        new ContractFunctionParameters().addString(payload).addInt64(amount)
+      );
+    const txResponse = await transaction.execute(client);
+    const receipt = await txResponse.getReceipt(client);
+    const transactionStatus = receipt.status;
+    console.log("The transaction consensus status is " + transactionStatus);
     console.log("for action", action);
+    data.txnId = txResponse.transactionId.toString();
+    console.log("transaction id", data.txnId);
     return data;
   } catch (error) {
     console.error("error executing transaction", error);

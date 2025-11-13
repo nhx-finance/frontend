@@ -81,24 +81,32 @@ function ApproveModal({
         });
         break;
       case "minted":
-        executeTransaction({
+        updateTransactionStatus({
           mintId: request.requestId,
-          payload: payload,
-          action: "minted",
+          status: status.toUpperCase(),
+          payload: "MINTED",
         });
+        // executeTransaction({
+        //   mintId: request.requestId,
+        //   payload: payload,
+        //   action: "MINTED",
+        //   amount: request.amountKes,
+        // });
         break;
       case "transferred":
         executeTransaction({
           mintId: request.requestId,
           payload: payload,
-          action: "transferred",
+          action: "TRANSFERRED",
+          amount: request.amountKes,
         });
         break;
       case "failed":
         executeTransaction({
           mintId: request.requestId,
           payload: payload,
-          action: "failed",
+          action: "FAILED",
+          amount: request.amountKes,
         });
         break;
       default:

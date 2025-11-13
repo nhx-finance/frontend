@@ -6,7 +6,7 @@ function MintsPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <AdminNavbar />
-      <h1 className="text-2xl MT-4 px-4 font-funnel-display font-bold">
+      <h1 className="text-2xl mt-4 px-4 font-funnel-display font-bold">
         Transaction History
       </h1>
       <p className="text-sm px-4 font-funnel-display text-muted-foreground">
