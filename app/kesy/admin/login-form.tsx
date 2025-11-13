@@ -21,9 +21,7 @@ export function AdminLoginForm({
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate: loginMutation, isPending } = useLogin({
-    isAdminLogin: true,
-  });
+  const { mutate: loginMutation, isPending } = useLogin();
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();

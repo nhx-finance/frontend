@@ -22,6 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CheckIcon, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Link from "next/link";
 
 function ApproveModal({
   kyc,
@@ -119,7 +120,11 @@ function ApproveModal({
                   Documents
                 </h1>
                 <div className="flex items-center gap-2 md:flex-row flex-col mt-2">
-                  <div className="flex w-full md:w-1/2 items-center gap-2 rounded-3xl border border-foreground/20 p-2">
+                  <Link
+                    href={kyc.documentFrontPath}
+                    target="_blank"
+                    className="flex w-full md:w-1/2 items-center gap-2 rounded-3xl border border-foreground/20 p-2"
+                  >
                     <Image
                       src={kyc.documentFrontPath}
                       alt="Document Front"
@@ -127,8 +132,12 @@ function ApproveModal({
                       height={100}
                       className="h-48 w-full object-contain rounded-2xl"
                     />
-                  </div>
-                  <div className="flex w-full md:w-1/2 items-center gap-2 rounded-3xl border border-foreground/20 p-2">
+                  </Link>
+                  <Link
+                    href={kyc.documentBackPath}
+                    target="_blank"
+                    className="flex w-full md:w-1/2 items-center gap-2 rounded-3xl border border-foreground/20 p-2"
+                  >
                     <Image
                       src={kyc.documentBackPath}
                       alt="Document Back"
@@ -136,7 +145,7 @@ function ApproveModal({
                       height={100}
                       className="h-48 w-full object-contain rounded-2xl"
                     />
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -147,14 +156,26 @@ function ApproveModal({
             variant="outline"
             className="w-1/2 mt-4 rounded-3xl border border-foreground/20 shadow-none"
             onClick={handleApprove}
-            disabled={isPending}
+            disabled={
+              isPending ||
+              kyc.status.toLowerCase() === "verified" ||
+              kyc.status.toLowerCase() === "rejected"
+            }
           >
             {isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
+            ) : kyc.status.toLowerCase() === "verified" ? (
+              "Verified"
+            ) : kyc.status.toLowerCase() === "rejected" ? (
+              "Rejected"
             ) : (
               "Verify"
             )}
-            {isPending ? null : <CheckIcon className="w-4 h-4" />}
+            {isPending ||
+            kyc.status.toLowerCase() === "verified" ||
+            kyc.status.toLowerCase() === "rejected" ? null : (
+              <CheckIcon className="w-4 h-4" />
+            )}
           </Button>
         </div>
       </div>
@@ -233,10 +254,6 @@ function KYCPage() {
                 <Button
                   variant="outline"
                   className="rounded-3xl border border-foreground/20 shadow-none text-xs w-24"
-                  disabled={
-                    kyc.status.toLowerCase() === "verified" ||
-                    kyc.status.toLowerCase() === "rejected"
-                  }
                   onClick={() => {
                     setKyc(kyc);
                     setApproveModalOpen(true);

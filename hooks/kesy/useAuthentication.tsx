@@ -111,16 +111,19 @@ async function submitUserDetails(data: DetailsFormData): Promise<AuthResponse> {
   return response.data;
 }
 
-export const useLogin = ({ isAdminLogin }: { isAdminLogin: boolean }) => {
+export const useLogin = () => {
   const router = useRouter();
   const { login } = useKESYAuth();
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
+      const isAdmin = data.role.toLowerCase() === "admin";
+      if (isAdmin) {
+        router.push("/kesy/admin/dashboard");
+      } else {
+        router.push("/kesy/dashboard");
+      }
       toast.success("Login successful. Welcome back to KESY!");
-      isAdminLogin
-        ? router.push("/kesy/admin/dashboard")
-        : router.push("/kesy/dashboard");
       login(data);
     },
     onError: (error) => {

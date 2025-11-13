@@ -12,9 +12,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const { mutate: loginMutation, isPending } = useLogin({
-    isAdminLogin: false,
-  });
+  const { mutate: loginMutation, isPending } = useLogin();
   const [formData, setFormData] = useState<AuthParams>({
     email: "",
     password: "",

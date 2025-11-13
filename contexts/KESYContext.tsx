@@ -13,6 +13,7 @@ export interface AuthResponse {
   refreshToken: string;
   tokenType: string;
   expiresIn: number;
+  role: string;
 }
 
 export interface KESYContextType {
@@ -60,7 +61,6 @@ export const KESYAuthProvider = ({
             setUser(null);
             router.push("/kesy/login");
           }
-
           setUser(parsedUser);
         } catch (error) {
           console.error("Error parsing user from localStorage:", error);
