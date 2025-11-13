@@ -4,7 +4,15 @@ import AdminNavbar from "./navbar";
 import { IconSearch } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import MintsTable from "./mints";
-import { useTransactions } from "@/hooks/kesy/useTransactions";
+import {
+  useSettledTransactions,
+  useTransactions,
+} from "@/hooks/kesy/useTransactions";
+import {
+  useTokenBalances,
+  useTokenDetails,
+} from "@/hooks/kesy/useTokenDetails";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function getDate() {
   const date = new Date();
@@ -22,8 +30,13 @@ export function getDate() {
 
 function AdminDashboardPage() {
   const { data: transactions } = useTransactions("admin");
+  const { data: settledTransactions, isLoading: isSettledTransactionsLoading } =
+    useSettledTransactions();
   const { dayOfWeek, day, month, year } = getDate();
-
+  const { data: tokenDetails, isLoading: isTokenDetailsLoading } =
+    useTokenDetails();
+  const { data: tokenBalances, isLoading: isTokenBalancesLoading } =
+    useTokenBalances();
   return (
     <div className="max-w-7xl mx-auto px-1 md:px-4">
       <AdminNavbar />
@@ -66,34 +79,50 @@ function AdminDashboardPage() {
       <div className="mt-12">
         <div className="w-full flex flex-col xl:flex-row gap-4">
           <div className="w-full xl:w-1/2 bg-background rounded-3xl border border-foreground/20 p-4">
-            <h1 className="text-sm text-muted-foreground font-funnel-display">
-              Circulating Supply
-            </h1>
-            <p className="text-2xl font-funnel-display font-semibold mt-4">
-              KESY 10,000,000.87
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex flex-col">
-                <p className="text-sm font-funnel-display text-muted-foreground">
-                  Users
-                </p>
-                <p className="font-funnel-display font-semibold">4</p>
+            {isTokenDetailsLoading ? (
+              <div className="flex items-center justify-center">
+                <Skeleton className="w-full h-48 rounded-3xl" />
               </div>
-              <div className="flex flex-col">
-                <p className="text-sm font-funnel-display text-muted-foreground">
-                  Holders
+            ) : (
+              <>
+                <h1 className="text-sm text-muted-foreground font-funnel-display">
+                  Circulating Supply
+                </h1>
+                <p className="text-2xl font-funnel-display font-semibold mt-4">
+                  KESY {tokenDetails?.total_supply ?? 0}
                 </p>
-                <p className="font-funnel-display font-semibold">10K</p>
-              </div>
-              <div className="flex flex-col justify-end items-end">
-                <p className="text-sm font-funnel-display text-muted-foreground">
-                  Total Mints
-                </p>
-                <p className="font-funnel-display font-semibold">
-                  {transactions?.totalElements ?? 0}
-                </p>
-              </div>
-            </div>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-funnel-display text-muted-foreground">
+                      Token ID
+                    </p>
+                    <p className="font-funnel-display font-semibold">
+                      {tokenDetails?.token_id ?? 0}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-sm font-funnel-display text-muted-foreground">
+                      Holders
+                    </p>
+                    <p className="font-funnel-display font-semibold">
+                      {tokenBalances?.balances.length ?? 0}
+                    </p>
+                  </div>
+                  <div className="flex flex-col justify-end items-end">
+                    <p className="text-sm font-funnel-display text-muted-foreground">
+                      Total Mints
+                    </p>
+                    <div className="font-funnel-display font-semibold">
+                      {isSettledTransactionsLoading ? (
+                        <Skeleton className="w-10 h-4 rounded-full" />
+                      ) : (
+                        settledTransactions.length
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="w-full xl:w-1/2 bg-background rounded-3xl border border-foreground/20 p-4">
             <h1 className="text-sm text-muted-foreground font-funnel-display">
@@ -125,7 +154,7 @@ function AdminDashboardPage() {
           </div>
           <div className="w-full xl:w-1/2 bg-background rounded-3xl border border-foreground/20 p-4">
             <h1 className="text-sm text-muted-foreground font-funnel-display">
-              Staked KESY
+              Interest Earned
             </h1>
             <p className="text-2xl font-funnel-display font-semibold mt-4">
               KES 5,050,456.00

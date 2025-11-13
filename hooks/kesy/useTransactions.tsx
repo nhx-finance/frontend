@@ -190,3 +190,12 @@ export const useUpdateTransactionStatus = () => {
     },
   });
 };
+
+export const useSettledTransactions = () => {
+  const { data: transactions, isLoading, error } = useTransactions("admin");
+  const settledTransactions =
+    transactions?.content.filter(
+      (transaction) => transaction.status === "MINTED"
+    ) ?? [];
+  return { data: settledTransactions, isLoading, error };
+};
