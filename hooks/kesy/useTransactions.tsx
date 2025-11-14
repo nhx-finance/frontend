@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { KESY_TOKEN_ID, KESY_URL, setUpClient } from "@/lib/utils";
+import {
+  DECIMALS,
+  KESY_URL,
+  setUpClient,
+  TREASURY_ACCOUNT_ID,
+} from "@/lib/utils";
 import { authAxios } from "./useAuthentication";
 import type { Sort, Pageable } from "./useKYC";
 import { toast } from "sonner";
@@ -74,6 +79,7 @@ async function getTransactions({
     throw error;
   }
 }
+
 async function getMyTransactions({
   role,
 }: {
@@ -143,13 +149,15 @@ async function executeTransaction({
       action: action,
       mintId: mintId,
     };
-    console.log("executing transaction", mintId, payload, amount);
+    console.log("executing transaction", payload, amount);
     const transaction = new ContractExecuteTransaction()
-      .setContractId("0.0.7228865")
-      .setGas(100_000)
+      .setContractId(TREASURY_ACCOUNT_ID)
+      .setGas(15_000_000)
       .setFunction(
-        "mint(address account, int64 amount)",
-        new ContractFunctionParameters().addString(payload).addInt64(amount)
+        "mint",
+        new ContractFunctionParameters()
+          .addAddress(payload)
+          .addInt64(amount * 10 ** DECIMALS)
       );
     const txResponse = await transaction.execute(client);
     const receipt = await txResponse.getReceipt(client);
@@ -165,24 +173,19 @@ async function executeTransaction({
     throw error;
   }
 }
+// when a txn is minted, we ask the admin to input their pbk
+// we use the multisig id to get the txn and see if the admin's key has signed the message
+// if so we disable the sign button if not we show them an input section to enter the signed
+// txn message and sent it to /v1/transactions/{transactionId}/signature
+// async function getMultisigTransaction({
+//   mintId,
+// }: {
+//   mintId: string;
+// }): {}
 
 export const useExecuteTransaction = () => {
-  const { mutate: updateTxnStatus } = useUpdateTransactionStatus();
-
   return useMutation({
     mutationFn: executeTransaction,
-    onSuccess: (data) => {
-      toast.success("Transaction executed successfully");
-      updateTxnStatus({
-        mintId: data.mintId,
-        status: data.action,
-        payload: data.txnId,
-      });
-    },
-    onError: (error) => {
-      toast.error("Failed to execute transaction");
-      console.error(error);
-    },
   });
 };
 export const useTransactions = (role: string) => {
