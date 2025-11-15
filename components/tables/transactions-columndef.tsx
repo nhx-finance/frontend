@@ -4,17 +4,13 @@ import Image from "next/image";
 import { kesy } from "@/assets";
 
 const columnHelper = createColumnHelper<UserTransactionItem>();
-const formatAmount = (balance: number) => {
-  const stringBalance = balance.toString();
-  const [whole] = stringBalance.split(".");
-  if (whole.length > 6) {
-    return `${whole.charAt(0)}.${whole.slice(1, 2)}M`;
-  }
-  if (whole.length > 3) {
-    return `${whole.charAt(0)}.${whole.slice(1, 2)}K`;
-  }
-  return `${balance}`;
-};
+
+export function formatAmount(amount: number): string {
+  return amount.toLocaleString("en-US", {
+    style: "currency",
+    currency: "KES",
+  });
+}
 
 export const defaultColumns = [
   columnHelper.accessor("id", {

@@ -17,6 +17,7 @@ function TransactionTable() {
     data: transactions ?? [],
     getCoreRowModel: getCoreRowModel(),
   });
+  console.log("transactions", transactions);
 
   if (isLoading) {
     return (

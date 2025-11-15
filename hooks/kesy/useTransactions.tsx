@@ -173,6 +173,30 @@ async function executeTransaction({
     throw error;
   }
 }
+export async function constructTransferTransaction({
+  amount,
+  address,
+}: {
+  amount: number;
+  address: string;
+}): Promise<ContractExecuteTransaction> {
+  try {
+    return new ContractExecuteTransaction()
+      .setContractId(TREASURY_ACCOUNT_ID)
+      .setGas(15_000_000)
+      .setFunction(
+        "transfer",
+        new ContractFunctionParameters()
+          .addAddress(address)
+          .addInt64(amount * 10 ** DECIMALS)
+      );
+  } catch (error) {
+    console.error("error constructing transfer transaction", error);
+    toast.error("Failed to construct transfer transaction");
+    throw error;
+  }
+}
+
 // when a txn is minted, we ask the admin to input their pbk
 // we use the multisig id to get the txn and see if the admin's key has signed the message
 // if so we disable the sign button if not we show them an input section to enter the signed

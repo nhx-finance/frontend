@@ -15,6 +15,8 @@ import { useKESYAuth } from "@/contexts/KESYContext";
 import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
 import { useMint } from "@/hooks/kesy/useMint";
+import { constructTransferTransaction } from "@/hooks/kesy/useTransactions";
+import { toast } from "sonner";
 
 interface DepositFormData {
   kesAmount: string;
@@ -252,15 +254,14 @@ const Step2 = ({
   );
 };
 
-export function DepositForm({
-  className,
-}: React.ComponentProps<"form">) {
+export function DepositForm({ className }: React.ComponentProps<"form">) {
   const [formData, setFormData] = useState<DepositFormData>({
     kesAmount: "0",
     destinationWallet: "",
   });
   const [step, setStep] = useState(1);
   const { mutate: mintMutation, isPending } = useMint();
+  const { data: wallets } = useWallets();
 
   const handleNext = () => {
     if (step === 2) {
@@ -269,10 +270,24 @@ export function DepositForm({
     setStep(step + 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!wallets || wallets.wallets.length === 0) {
+      toast.error("No wallets found");
+      return;
+    }
+    const payload = await constructTransferTransaction({
+      amount: Number(formData.kesAmount),
+      address:
+        wallets?.wallets.find(
+          (wallet) => wallet.walletId === formData.destinationWallet
+        )?.address ?? "",
+    });
+    const transactionBytes = payload.toBytes();
+    const transactionHex = Buffer.from(transactionBytes).toString("hex");
     mintMutation({
       amountKes: Number(formData.kesAmount),
       walletId: formData.destinationWallet,
+      transaction_message: transactionHex,
     });
   };
 
