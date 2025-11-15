@@ -19,6 +19,10 @@ async function mint({
   transaction_message: string;
 }): Promise<MintRequestResponse> {
   try {
+    console.log("minting tokens");
+    console.log("amountKes", amountKes);
+    console.log("walletId", walletId);
+    console.log("transaction_message", transaction_message);
     const authenticatedAxios = authAxios();
     const response = await authenticatedAxios.post(`${KESY_URL}/kesy/mint`, {
       amountKes,

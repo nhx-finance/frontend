@@ -14,6 +14,7 @@ import { useKYCStatus } from "@/hooks/kesy/useKYC";
 import { toast } from "sonner";
 import { hederaLogo } from "@/assets";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function WalletCard({ wallet }: { wallet: WalletResponse }) {
   return (
@@ -131,9 +132,31 @@ export default function Page() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen px-4">
-        <Loader2 className="w-6 h-6 animate-spin text-foreground" />
-      </div>
+      <SidebarProvider>
+        <KESYSidebar />
+        <SidebarInset>
+          <SidebarTrigger className="px-2" />
+          <h1 className="text-2xl font-funnel-display font-bold px-4">
+            Wallets
+          </h1>
+          <p className="text-sm font-funnel-display mb-4 text-muted-foreground px-4">
+            Add a wallet to receive KESY tokens once minted.
+          </p>
+          <div className="px-4">
+            <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="w-full h-24 my-2 rounded-3xl"
+                />
+              ))}
+            </div>
+          </div>
+        </SidebarInset>
+        {isAddWalletModalOpen && (
+          <AddWalletModal closeModal={() => setIsAddWalletModalOpen(false)} />
+        )}
+      </SidebarProvider>
     );
   }
 
