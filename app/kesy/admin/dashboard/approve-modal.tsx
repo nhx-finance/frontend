@@ -2,10 +2,17 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { CheckIcon, RefreshCcwIcon } from "lucide-react";
+import {
+  CheckIcon,
+  CopyIcon,
+  RefreshCcwIcon,
+  SignatureIcon,
+} from "lucide-react";
 import {
   TransactionItem,
   useExecuteTransaction,
+  useGetMultisigTransaction,
+  useSignMultisigTransaction,
   useUpdateTransactionStatus,
 } from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
@@ -30,7 +37,15 @@ export default function ApproveModal({
     useUpdateTransactionStatus();
   const { mutate: executeTransaction, isPending: isExecuting } =
     useExecuteTransaction();
+  const { mutate: signMultisigTransaction, isPending: isSigning } =
+    useSignMultisigTransaction();
+  const {
+    data: multisigTransaction,
+    isLoading: isLoadingMultisigTransaction,
+    error: errorMultisigTransaction,
+  } = useGetMultisigTransaction(request?.treasuryTransactionId);
   const [payload, setPayload] = useState<string>("");
+  const [adminAccountID, setAdminAccountID] = useState("");
   const [error, setError] = useState<string>("");
 
   const handleCloseModal = () => {
@@ -108,7 +123,7 @@ export default function ApproveModal({
                   {
                     mintId: data.mintId,
                     status: data.action,
-                    payload: data.txnId,
+                    payload: data.txnId + " " + payload,
                   },
                   {
                     onSuccess: () => {
@@ -131,7 +146,50 @@ export default function ApproveModal({
           );
           break;
         case MintStatus.TRANSFERRED:
-          toast.info("Transfer functionality not yet implemented");
+          if (!payload || payload.trim().length === 0) {
+            setError("Please enter your signing key");
+            toast.error("Please enter your signing key");
+            return;
+          }
+          if (!adminAccountID || adminAccountID.trim().length === 0) {
+            setError("Please enter your Hedera account ID");
+            toast.error("Please enter your Hedera account ID");
+            return;
+          }
+          if (!multisigTransaction?.transaction_message) {
+            setError("Transaction message not available");
+            toast.error("Transaction message not available");
+            return;
+          }
+          if (!request?.treasuryTransactionId) {
+            setError("Multisig transaction ID not available");
+            toast.error("Multisig transaction ID not available");
+            return;
+          }
+
+          signMultisigTransaction(
+            {
+              signingKey: payload,
+              multisigId: request.treasuryTransactionId,
+              txnMessage: multisigTransaction.transaction_message,
+              accountId: adminAccountID,
+            },
+            {
+              onSuccess: () => {
+                toast.success("Transaction signed successfully");
+                setTimeout(() => {
+                  handleCloseModal();
+                }, 1000);
+              },
+              onError: (err) => {
+                const errorMessage =
+                  err instanceof Error
+                    ? err.message
+                    : "Failed to sign multisig transaction";
+                setError(errorMessage);
+              },
+            }
+          );
           break;
         case MintStatus.FAILED:
           toast.info("Retry functionality not yet implemented");
@@ -193,9 +251,45 @@ export default function ApproveModal({
           title="Mint Pending"
           description="The mint request is pending approval. Please approve or reject the request."
         >
-          <p className="text-sm font-funnel-display my-4 text-muted-foreground">
-            Mint ID: {request.requestId}
-          </p>
+          <div className="my-4">
+            <div className="flex items-center justify-between border-b border-foreground/20 pb-2 border-dashed mt-2">
+              <p className="text-sm font-funnel-display mt-2 text-muted-foreground">
+                Mint ID:
+              </p>
+              <p className="text-sm flex items-center gap-2 font-funnel-display text-muted-foreground">
+                {request.requestId.slice(0, 6)}...
+                {request.requestId.slice(-4)}
+                <CopyIcon
+                  className="w-4 h-4 cursor-pointer"
+                  onClick={() => {
+                    toast.success("Mint ID copied to clipboard");
+                    navigator.clipboard.writeText(request.requestId);
+                  }}
+                />
+              </p>
+            </div>
+            <div className="flex items-center justify-between border-b border-foreground/20 pb-2 border-dashed">
+              <p className="text-sm font-funnel-display mt-2 text-muted-foreground">
+                Treasury Transaction ID:
+              </p>
+              <p className="text-sm flex items-center gap-2 font-funnel-display text-muted-foreground">
+                {request.treasuryTransactionId || "Unavailable"}
+                {request.treasuryTransactionId && (
+                  <CopyIcon
+                    className="w-4 h-4 cursor-pointer"
+                    onClick={() => {
+                      toast.success(
+                        "Treasury Transaction ID copied to clipboard"
+                      );
+                      navigator.clipboard.writeText(
+                        request.treasuryTransactionId
+                      );
+                    }}
+                  />
+                )}
+              </p>
+            </div>
+          </div>
         </ModalHeader>
         <TransactionDetails transaction={request} />
         <PayloadInput
@@ -231,7 +325,7 @@ export default function ApproveModal({
         />
         <TransactionDetails transaction={request} />
         <PayloadInput
-          placeholder="Enter signatures"
+          placeholder="Admin Minting this transaction"
           value={payload}
           onChange={setPayload}
           error={error}
@@ -258,14 +352,21 @@ export default function ApproveModal({
     return (
       <ModalWrapper onClose={handleCloseModal}>
         <ModalHeader
-          title="Execute Transfer"
-          description="Transfer the minted tokens to the user's wallet."
+          title="Sign Transaction"
+          description="Sign the transfer transaction."
         />
         <TransactionDetails transaction={request} />
         <PayloadInput
-          placeholder="Enter signatures"
+          placeholder="Enter your signing key"
           value={payload}
           onChange={setPayload}
+          error={error}
+          isSecureEntry={true}
+        />
+        <PayloadInput
+          placeholder="Enter your Account ID"
+          value={adminAccountID}
+          onChange={setAdminAccountID}
           error={error}
         />
         {error && <ErrorMessage message={error} />}
@@ -276,10 +377,18 @@ export default function ApproveModal({
             onClick={() =>
               handleUpdateTransactionStatus(MintStatus.TRANSFERRED, payload)
             }
-            disabled={isPending || isExecuting}
+            disabled={
+              isPending ||
+              isExecuting ||
+              isSigning ||
+              isLoadingMultisigTransaction ||
+              !multisigTransaction?.transaction_message ||
+              !payload ||
+              multisigTransaction?.status === "SIGNED"
+            }
           >
-            Transfer to User
-            <CheckIcon className="w-4 h-4" />
+            Sign Transaction
+            <SignatureIcon className="w-4 h-4" />
           </Button>
         </div>
       </ModalWrapper>

@@ -27,15 +27,12 @@ import ApproveModal from "./approve-modal";
 function MintsTable() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
   const [mintRequest, setMintRequest] = useState<TransactionItem | null>(null);
+  console.log("mintRequest", mintRequest);
   const { data: transactions, isLoading, error } = useTransactions("admin");
   const router = useRouter();
   if (isLoading) {
     return (
       <div className="max-w-7xl mx-auto">
-        <AdminNavbar />
-        <h1 className="text-2xl font-funnel-display font-semibold mt-4 mb-12 px-4">
-          Review KYC Statuses
-        </h1>
         {Array.from({ length: 3 }).map((_, index) => (
           <Skeleton key={index} className="w-[90%] h-10 rounded-xl my-2 mx-4" />
         ))}

@@ -6,16 +6,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function setUpClient(): Client {
+export function setUpClient({
+  accountId = process.env.NEXT_PUBLIC_ACCOUNT_ID,
+  privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY,
+}): Client {
   let client: Client;
-  if (!process.env.NEXT_PUBLIC_ACCOUNT_ID) {
+  if (!accountId) {
     throw new Error("NEXT_PUBLIC_ACCOUNT_ID is not set");
   }
-  if (!process.env.NEXT_PUBLIC_PRIVATE_KEY) {
+  if (!privateKey) {
     throw new Error("NEXT_PUBLIC_PRIVATE_KEY is not set");
   }
-  const ACCOUNT_ID = AccountId.fromString(process.env.NEXT_PUBLIC_ACCOUNT_ID);
-  const KEY = PrivateKey.fromStringECDSA(process.env.NEXT_PUBLIC_PRIVATE_KEY);
+  const ACCOUNT_ID = AccountId.fromString(accountId);
+  const KEY = PrivateKey.fromStringECDSA(privateKey);
 
   client = Client.forTestnet();
 
@@ -32,6 +35,8 @@ export function getAccountId(): AccountId {
 }
 
 export const API_URL = "https://nhx-server.orcus-finance.space/api/v1";
+export const MULTI_SIG_API_URL =
+  "https://multisig.definetlynotlocalhost.space/api";
 export const KESY_URL =
   "https://nhxkesy-agdnfmf3cnb4abff.northeurope-01.azurewebsites.net/api";
 export const HEDERA_URL = "https://testnet.mirrornode.hedera.com/api/v1";

@@ -13,6 +13,7 @@ import {
   useTokenDetails,
 } from "@/hooks/kesy/useTokenDetails";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DECIMALS } from "@/lib/utils";
 
 export function getDate() {
   const date = new Date();
@@ -89,7 +90,16 @@ function AdminDashboardPage() {
                   Circulating Supply
                 </h1>
                 <p className="text-2xl font-funnel-display font-semibold mt-4">
-                  KESY {tokenDetails?.total_supply ?? 0}
+                  KESY{" "}
+                  {tokenDetails?.total_supply
+                    ? (
+                        Number(tokenDetails?.total_supply) /
+                        10 ** DECIMALS
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : 0}
                 </p>
                 <div className="flex items-center justify-between mt-4">
                   <div className="flex flex-col">

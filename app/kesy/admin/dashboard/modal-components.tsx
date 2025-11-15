@@ -138,11 +138,13 @@ export function PayloadInput({
   onChange,
   placeholder,
   error,
+  isSecureEntry = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   error?: string;
+  isSecureEntry?: boolean;
 }) {
   return (
     <div className="mt-4">
@@ -155,6 +157,7 @@ export function PayloadInput({
         }`}
         aria-invalid={!!error}
         aria-describedby={error ? "payload-error" : undefined}
+        type={isSecureEntry ? "password" : "text"}
       />
       {error && (
         <p
