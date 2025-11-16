@@ -89,7 +89,7 @@ export function AdminLoginForm({
           </Field>
         </FieldGroup>
       </form>
-      <FieldDescription className="px-6 text-center">
+      <FieldDescription className="px-6 text-center font-funnel-display">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </FieldDescription>

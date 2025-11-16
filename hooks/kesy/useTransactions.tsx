@@ -3,6 +3,7 @@ import {
   DECIMALS,
   KESY_URL,
   MULTI_SIG_API_URL,
+  MULTSIG_ACCOUNT_ID,
   setUpClient,
   TREASURY_ACCOUNT_ID,
 } from "@/lib/utils";
@@ -205,7 +206,7 @@ export async function constructTransferTransaction({
       privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
     });
     const transaction = new ContractExecuteTransaction()
-      .setContractId(TREASURY_ACCOUNT_ID)
+      .setContractId(MULTSIG_ACCOUNT_ID) // TODO: Confirm if we need to use the multisig account id or the treasury account id
       .setGas(15_000_000)
       .setFunction(
         "transfer",

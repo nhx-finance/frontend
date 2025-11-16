@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import { KESY_URL } from "@/lib/utils";
 import {
   AuthResponse,
@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { DetailsFormData } from "@/components/details-form";
+import { LoginErrorResponse } from "../use-login";
 
 export interface AuthParams {
   email: string;
@@ -126,9 +127,10 @@ export const useLogin = () => {
       toast.success("Login successful. Welcome back to KESY!");
       login(data);
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
+      const errorResponse = error.response?.data as LoginErrorResponse;
       toast.error("Login failed.", {
-        description: error.message,
+        description: errorResponse.error.message,
       });
       console.error(error);
     },

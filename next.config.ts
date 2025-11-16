@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "nhxstorage.blob.core.windows.net",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "nhxblob.blob.core.windows.net",
+        pathname: "/**",
+      },
     ],
   },
 };
