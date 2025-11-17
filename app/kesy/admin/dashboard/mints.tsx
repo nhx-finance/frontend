@@ -13,7 +13,6 @@ import {
 import React from "react";
 import Link from "next/link";
 import { TransactionItem, useTransactions } from "@/hooks/kesy/useTransactions";
-import AdminNavbar from "./navbar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { MintStatus, normalizeStatus, getActionButtonText } from "./constants";

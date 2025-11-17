@@ -158,7 +158,7 @@ const Step1 = ({
         </div>
       </div>
       <Button
-        disabled={Number(formData.kesAmount) < 1000000 || !isAuthenticated}
+        disabled={Number(formData.kesAmount) < 100 || !isAuthenticated}
         className="w-full mt-4 font-funnel-display rounded-3xl"
         onClick={handleNext}
       >

@@ -34,6 +34,7 @@ export function getAccountId(): AccountId {
   return AccountId.fromString("");
 }
 
+// URLS
 export const API_URL = "https://nhx-server.orcus-finance.space/api/v1";
 export const MULTI_SIG_API_URL =
   "https://multisig.definetlynotlocalhost.space/api";
@@ -42,9 +43,14 @@ export const KESY_URL =
 export const HEDERA_URL = "https://testnet.mirrornode.hedera.com/api/v1";
 export const HEDERA_KESY_BALANCES_URL =
   "https://testnet.mirrornode.hedera.com/api/v1/tokens/0.0.7228867/balances?account.publickey=3c3d546321ff6f63d701d2ec5c277095874e19f4a235bee1e6bb19258bf362be&order=asc";
+export const SDK_URL = "https://sdk.definetlynotlocalhost.space/api";
+
+// ACCOUNT IDS & ADDRESSES
 export const KESY_TOKEN_ID = "0.0.7228867";
 export const MULTSIG_ADDR = "0x00000000000000000000000000000000006e39e4";
 export const MULTSIG_ACCOUNT_ID = "0.0.7223780";
 export const TREASURY_ACCOUNT_ID = "0.0.7228866";
+export const FACTORY_ADDRESS = "0.0.6431833";
+export const RESOLVER_ADDRESS = "0.0.6431794";
 
 export const DECIMALS = 6;

@@ -4,8 +4,8 @@ import {
   KESY_URL,
   MULTI_SIG_API_URL,
   MULTSIG_ACCOUNT_ID,
+  SDK_URL,
   setUpClient,
-  TREASURY_ACCOUNT_ID,
 } from "@/lib/utils";
 import { authAxios } from "./useAuthentication";
 import type { Sort, Pageable } from "./useKYC";
@@ -74,6 +74,10 @@ export interface MultisigTransactionItem {
   network: string;
   hedera_account_id: string;
   start_date: string;
+}
+export interface MintTokensResponse {
+  success: boolean;
+  message: string;
 }
 
 async function getTransactions({
@@ -147,48 +151,24 @@ async function updateTransactionStatus({
   }
 }
 
-async function executeTransaction({
-  mintId,
-  payload,
-  action,
+async function mintTokens({
   amount,
 }: {
-  mintId: string;
-  payload: string;
-  action: string;
   amount: number;
-}): Promise<ExecuteTxnResponse> {
+}): Promise<MintTokensResponse> {
   try {
-    const client = setUpClient({
-      accountId: process.env.NEXT_PUBLIC_ACCOUNT_ID,
-      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+    console.log("minting tokens", amount);
+    const response = await axios.post(`${SDK_URL}/mint`, {
+      amount,
     });
-    const data: ExecuteTxnResponse = {
-      txnId: "",
-      action: action,
-      mintId: mintId,
-    };
-    console.log("executing transaction", payload, amount);
-    const transaction = new ContractExecuteTransaction()
-      .setContractId(TREASURY_ACCOUNT_ID)
-      .setGas(15_000_000)
-      .setFunction(
-        "mint",
-        new ContractFunctionParameters()
-          .addAddress(payload)
-          .addInt64(amount * 10 ** DECIMALS)
-      );
-    const txResponse = await transaction.execute(client);
-    const receipt = await txResponse.getReceipt(client);
-    const transactionStatus = receipt.status;
-    console.log("The transaction consensus status is " + transactionStatus);
-    console.log("for action", action);
-    data.txnId = txResponse.transactionId.toString();
-    console.log("transaction id", data.txnId);
-    return data;
+    if (response.status !== 200) {
+      throw new Error("Failed to mint tokens");
+    }
+    toast.success("Tokens minted successfully");
+    return response.data;
   } catch (error) {
-    console.error("error executing transaction", error);
-    toast.error("Failed to execute transaction");
+    console.error("error minting tokens", error);
+    toast.error("Failed to mint tokens");
     throw error;
   }
 }
@@ -355,21 +335,12 @@ export async function signMultisigTransaction({
   }
 }
 
-// when a txn is minted, we ask the admin to input their pbk
-// we use the multisig id to get the txn and see if the admin's key has signed the message
-// if so we disable the sign button if not we show them an input section to enter the signed
-// txn message and sent it to /v1/transactions/{transactionId}/signature
-// async function getMultisigTransaction({
-//   mintId,
-// }: {
-//   mintId: string;
-// }): {}
-
 export const useExecuteTransaction = () => {
   return useMutation({
-    mutationFn: executeTransaction,
+    mutationFn: mintTokens,
   });
 };
+
 export const useTransactions = (role: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["transactions", role],
@@ -377,6 +348,7 @@ export const useTransactions = (role: string) => {
   });
   return { data, isLoading, error };
 };
+
 export const useMyTransactions = (role: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["transactions", role],
@@ -384,6 +356,7 @@ export const useMyTransactions = (role: string) => {
   });
   return { data, isLoading, error };
 };
+
 export const useUpdateTransactionStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -398,6 +371,7 @@ export const useUpdateTransactionStatus = () => {
     },
   });
 };
+
 export const useSettledTransactions = () => {
   const { data: transactions, isLoading, error } = useTransactions("admin");
   const settledTransactions =
@@ -406,6 +380,7 @@ export const useSettledTransactions = () => {
     ) ?? [];
   return { data: settledTransactions, isLoading, error };
 };
+
 export const useGetMultisigTransaction = (multisigId: string | undefined) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["multisigTransaction", multisigId],

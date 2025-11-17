@@ -111,9 +111,6 @@ export default function ApproveModal({
         case MintStatus.MINTED:
           executeTransaction(
             {
-              mintId: request.requestId,
-              payload: MULTSIG_ADDR,
-              action: "MINTED",
               amount: request.amountKes,
             },
             {
@@ -121,9 +118,9 @@ export default function ApproveModal({
                 toast.success("Transaction executed successfully");
                 updateTransactionStatus(
                   {
-                    mintId: data.mintId,
-                    status: data.action,
-                    payload: data.txnId + " " + payload,
+                    mintId: data.message,
+                    status: "MINTED",
+                    payload: data.message,
                   },
                   {
                     onSuccess: () => {
