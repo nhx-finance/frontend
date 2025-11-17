@@ -26,7 +26,6 @@ import ApproveModal from "./approve-modal";
 function MintsTable() {
   const [approveModalOpen, setApproveModalOpen] = useState(false);
   const [mintRequest, setMintRequest] = useState<TransactionItem | null>(null);
-  console.log("mintRequest", mintRequest);
   const { data: transactions, isLoading, error } = useTransactions("admin");
   const router = useRouter();
   if (isLoading) {

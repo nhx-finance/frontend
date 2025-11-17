@@ -1,11 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DECIMALS,
+  HEDERA_URL,
+  KESY_TOKEN_ID,
   KESY_URL,
   MULTI_SIG_API_URL,
-  MULTSIG_ACCOUNT_ID,
   SDK_URL,
   setUpClient,
+  TREASURY_ACCOUNT_ID,
+  TREASURY_ADDRESS,
 } from "@/lib/utils";
 import { authAxios } from "./useAuthentication";
 import type { Sort, Pageable } from "./useKYC";
@@ -15,8 +18,59 @@ import {
   ContractFunctionParameters,
   PrivateKey,
   Transaction,
+  TransferTransaction,
 } from "@hashgraph/sdk";
 import axios from "axios";
+import { keccak256 } from "ethereum-cryptography/keccak";
+
+import { getContract } from "thirdweb";
+import { client, hederaTestnet } from "@/lib/client";
+
+export const treasuryContract = getContract({
+  client,
+  chain: hederaTestnet,
+  address: TREASURY_ADDRESS,
+});
+
+export interface HederaAccountToken {
+  token_id: string;
+  balance: number;
+}
+export interface HederaAccountBalance {
+  balance: number;
+  timestamp: string;
+  tokens: HederaAccountToken[];
+}
+export interface ProtobufEncodedKey {
+  _type: "ProtobufEncoded";
+  key: string;
+}
+export interface HederaAccountLinks {
+  next?: string;
+  prev?: string;
+}
+export interface HederaAccount {
+  account: string;
+  alias: string | null;
+  auto_renew_period: number;
+  balance: HederaAccountBalance;
+  created_timestamp: string;
+  decline_reward: boolean;
+  deleted: boolean;
+  ethereum_nonce: number;
+  evm_address: string;
+  expiry_timestamp: string;
+  key: ProtobufEncodedKey;
+  max_automatic_token_associations: number;
+  memo: string;
+  pending_reward: number;
+  receiver_sig_required: boolean | null;
+  staked_account_id: string | null;
+  staked_node_id: number | null;
+  stake_period_start: string | null;
+  transactions: unknown[]; // Can be typed more specifically if needed
+  links: HederaAccountLinks;
+}
 
 export interface TransactionItem {
   requestId: string;
@@ -78,6 +132,7 @@ export interface MultisigTransactionItem {
 export interface MintTokensResponse {
   success: boolean;
   message: string;
+  mintId: string;
 }
 
 async function getTransactions({
@@ -132,7 +187,7 @@ async function updateTransactionStatus({
   try {
     const url = `${KESY_URL}/admin/mints/${mintId}/status`;
     const authenticatedInstance = authAxios();
-    console.log("updating transaction status in be", status, payload);
+    console.log("updating transaction status in be", status, payload, mintId);
     const body = {
       status: status,
       notes: payload,
@@ -153,22 +208,49 @@ async function updateTransactionStatus({
 
 async function mintTokens({
   amount,
+  mintId,
 }: {
   amount: number;
+  mintId: string;
 }): Promise<MintTokensResponse> {
   try {
+    const data: MintTokensResponse = {
+      success: false,
+      message: "",
+      mintId: "",
+    };
     console.log("minting tokens", amount);
     const response = await axios.post(`${SDK_URL}/mint`, {
-      amount,
+      amount: "100", // TODO: Change to amount
     });
     if (response.status !== 200) {
       throw new Error("Failed to mint tokens");
     }
     toast.success("Tokens minted successfully");
-    return response.data;
+    data.success = response.data.success;
+    data.message = response.data.message;
+    data.mintId = mintId;
+    return data;
   } catch (error) {
     console.error("error minting tokens", error);
     toast.error("Failed to mint tokens");
+    throw error;
+  }
+}
+
+async function getAccountByAddress({
+  address,
+}: {
+  address: string;
+}): Promise<HederaAccount> {
+  try {
+    const url = `${HEDERA_URL}/accounts/${address}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("error getting account by address", error);
+    toast.error("Failed to get account by address");
     throw error;
   }
 }
@@ -186,7 +268,7 @@ export async function constructTransferTransaction({
       privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
     });
     const transaction = new ContractExecuteTransaction()
-      .setContractId(MULTSIG_ACCOUNT_ID) // TODO: Confirm if we need to use the multisig account id or the treasury account id
+      .setContractId(TREASURY_ACCOUNT_ID) // TODO: Confirm if we need to use the multisig account id or the treasury account id
       .setGas(15_000_000)
       .setFunction(
         "transfer",
@@ -202,7 +284,6 @@ export async function constructTransferTransaction({
     throw error;
   }
 }
-
 export async function getMultisigTransaction({
   multisigId,
 }: {
@@ -225,116 +306,60 @@ export async function getMultisigTransaction({
     throw error;
   }
 }
-
 export async function signMultisigTransaction({
   signingKey,
   multisigId,
   txnMessage,
   accountId,
+  amount,
 }: {
   signingKey: string;
   multisigId: string;
   txnMessage: string;
   accountId: string;
+  amount: number;
 }) {
   try {
-    // Step 1: Deserialize the transaction from hex bytes
-    const transactionBytes = Buffer.from(txnMessage, "hex");
-    const transaction = Transaction.fromBytes(transactionBytes);
-
-    // Step 2: Create private key and client
-    const privateKey = PrivateKey.fromStringECDSA(signingKey);
+    console.log("sending transfer transaction", accountId, amount);
     const client = setUpClient({
-      accountId: accountId,
-      privateKey: signingKey,
+      accountId: process.env.NEXT_PUBLIC_ACCOUNT_ID,
+      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
     });
-
-    // Step 3: Freeze the transaction (async) - this ensures it has a transactionId
-    // This is critical - the transaction must be frozen before signing
-    // The frozen transaction has a stable hash that can be signed
-    const frozenTransaction = await transaction.freezeWith(client);
-
-    // Step 4: Extract the body bytes that the backend uses for verification
-    // The backend extracts these exact bytes to verify the signature
-    // We need to sign the same body bytes the server will use
-    // @ts-ignore - accessing internal property to get body bytes
-    const bodyBytes = frozenTransaction._signedTransactions.get(0)?.bodyBytes;
-
-    if (!bodyBytes) {
-      throw new Error("Failed to extract body bytes from frozen transaction");
+    const account = await getAccountByAddress({ address: accountId });
+    if (!account) {
+      throw new Error("Account not found");
     }
 
-    // Step 5: Sign the body bytes directly with the private key
-    // This gives us just the signature bytes (64/65 bytes for ECDSA)
-    // This is what the multisig API expects - just the signature, not the full transaction
-    const signatureBytes = privateKey.sign(bodyBytes);
+    const tokenTransferTx = await new TransferTransaction()
+      .addTokenTransfer(KESY_TOKEN_ID, accountId, -(amount * 10 ** DECIMALS))
+      .addTokenTransfer(KESY_TOKEN_ID, account.account, amount * 10 ** DECIMALS)
+      .freezeWith(client)
+      .sign(PrivateKey.fromStringECDSA(signingKey));
 
-    // Step 7: Convert signature bytes to hex string
-    const signatureHex = Buffer.from(signatureBytes).toString("hex");
+    const tokenTransferRx = await (
+      await tokenTransferTx.execute(client)
+    ).getReceipt(client);
 
     console.log(
-      "Signature length:",
-      signatureHex.length,
-      "characters (",
-      signatureHex.length / 2,
-      "bytes)"
+      `Stablecoin transfer from Treasury to ${account.account}: ${tokenTransferRx.status} ✅`
     );
-    console.log("Public key:", privateKey.publicKey.toStringRaw());
-    console.log("Signature:", signatureHex);
-
-    const response = await axios.put(
-      `${MULTI_SIG_API_URL}/transactions/${multisigId}/signature`,
-      {
-        signature: signatureHex,
-        public_key: privateKey.publicKey.toString(),
-      }
-    );
-
-    if (response.status === 204) {
-      toast.success("Transaction signed successfully");
-      return response.data;
-    }
-
-    if (response.status === 409) {
-      toast.error("Transaction already signed by this key");
-      throw new Error("Transaction already signed");
-    }
-
-    if (response.status === 400) {
-      toast.error("Invalid transaction id format");
-      throw new Error("Invalid transaction id format");
-    }
-
-    if (response.status === 404) {
-      toast.error("Transaction not found");
-      throw new Error("Transaction not found");
-    }
-
-    if (response.status === 401) {
-      toast.error("Unauthorized key");
-      throw new Error("Unauthorized key");
-    }
-
-    throw new Error(`Unexpected response status: ${response.status}`);
   } catch (error: any) {
-    console.error("error signing multisig transaction", error);
+    console.error("error sending transfer transaction", error);
 
-    // Log server error details if available
     if (error?.response?.data) {
       console.error("Server error details:", error.response.data);
       const errorMessage =
         error.response.data?.message ||
         error.response.data?.error ||
-        "Failed to sign multisig transaction";
+        "Failed to send transfer transaction";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
 
-    toast.error("Failed to sign multisig transaction");
+    toast.error("Failed to send transfer transaction");
     throw error;
   }
 }
-
 export const useExecuteTransaction = () => {
   return useMutation({
     mutationFn: mintTokens,

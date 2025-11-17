@@ -112,6 +112,7 @@ export default function ApproveModal({
           executeTransaction(
             {
               amount: request.amountKes,
+              mintId: request.requestId,
             },
             {
               onSuccess: (data) => {
@@ -170,19 +171,32 @@ export default function ApproveModal({
               multisigId: request.treasuryTransactionId,
               txnMessage: multisigTransaction.transaction_message,
               accountId: adminAccountID,
+              amount: request.amountKes,
             },
             {
-              onSuccess: () => {
-                toast.success("Transaction signed successfully");
-                setTimeout(() => {
-                  handleCloseModal();
-                }, 1000);
+              onSuccess: (data) => {
+                toast.success("Transaction sent successfully");
+                updateTransactionStatus(
+                  {
+                    mintId: request.requestId,
+                    status: "TRANSFERRED",
+                    payload: request.requestId,
+                  },
+                  {
+                    onSuccess: () => {
+                      setTimeout(() => {
+                        handleCloseModal();
+                      }, 500);
+                    },
+                  }
+                );
               },
               onError: (err) => {
                 const errorMessage =
                   err instanceof Error
                     ? err.message
-                    : "Failed to sign multisig transaction";
+                    : "Failed to send transfer transaction";
+                toast.error("Failed to send transfer transaction");
                 setError(errorMessage);
               },
             }
