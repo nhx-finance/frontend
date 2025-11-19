@@ -255,6 +255,26 @@ async function getAccountByAddress({
   }
 }
 
+async function isAssociated({
+  address,
+}: {
+  address: string;
+}): Promise<boolean> {
+  try {
+    const account = await getAccountByAddress({ address: address });
+    const response = await axios.get(
+      `${HEDERA_URL}/accounts/${account.account}/tokens?token.id=${KESY_TOKEN_ID}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Failed to check if associated");
+    }
+    return response.data.tokens.length > 0;
+  } catch (error) {
+    console.error("error checking if associated", error);
+    return false;
+  }
+}
+
 export async function constructTransferTransaction({
   amount,
   address,
@@ -429,4 +449,13 @@ export const useSignMultisigTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ["transactions", "admin"] });
     },
   });
+};
+
+export const useIsAssociated = (address: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["isAssociated", address],
+    queryFn: () => isAssociated({ address: address }),
+    enabled: !!address,
+  });
+  return { data, isLoading, error };
 };

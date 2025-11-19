@@ -7,7 +7,7 @@ import {
 import NoWallet from "./no-wallet";
 import { KESYSidebar } from "@/components/kesy-sidebar";
 import { useWallets, WalletResponse } from "@/hooks/kesy/useWallets";
-import { CopyIcon, Loader2 } from "lucide-react";
+import { CopyIcon, InfoIcon, Loader2 } from "lucide-react";
 import AddWalletModal from "./add-wallet-modal";
 import { useState } from "react";
 import { useKYCStatus } from "@/hooks/kesy/useKYC";
@@ -15,8 +15,15 @@ import { toast } from "sonner";
 import { hederaLogo } from "@/assets";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsAssociated } from "@/hooks/kesy/useTransactions";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 function WalletCard({ wallet }: { wallet: WalletResponse }) {
+  const { data: isAssociated, isLoading } = useIsAssociated(wallet.address);
   return (
     <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 w-full md:w-1/2">
       <div className="flex items-center gap-2">
@@ -83,7 +90,7 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
             Hedera
           </p>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
           <p className="text-sm font-funnel-display text-foreground/80">
             Whitelisted
           </p>
@@ -96,6 +103,37 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
           >
             Yes
           </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-funnel-display text-foreground/80">
+            Association Status
+          </p>
+          {isLoading ? (
+            <Skeleton className="w-10 h-4" />
+          ) : (
+            <p className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display">
+              {isAssociated ? "Associated" : "Not Associated"}
+              <Popover>
+                <PopoverTrigger>
+                  <InfoIcon className="w-4 h-4" />
+                </PopoverTrigger>
+                <PopoverContent>
+                  <p className="text-xs font-funnel-display text-muted-foreground">
+                    {isAssociated
+                      ? "Token associated you can use it to receive KESY."
+                      : "Token not associated the transfer will fail. Please associate the token to your wallet."}
+                  </p>
+                  <a
+                    href="https://medium.com/@elastum/hedera-how-to-associate-your-tokens-c7021c96cc25"
+                    target="_blank"
+                    className="text-xs font-funnel-display text-blue-500"
+                  >
+                    Learn more
+                  </a>
+                </PopoverContent>
+              </Popover>
+            </p>
+          )}
         </div>
       </div>
     </div>

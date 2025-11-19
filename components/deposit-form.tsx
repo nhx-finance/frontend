@@ -15,7 +15,10 @@ import { useKESYAuth } from "@/contexts/KESYContext";
 import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
 import { useMint } from "@/hooks/kesy/useMint";
-import { constructTransferTransaction } from "@/hooks/kesy/useTransactions";
+import {
+  constructTransferTransaction,
+  useIsAssociated,
+} from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
 
 interface DepositFormData {
@@ -180,6 +183,7 @@ const Step2 = ({
   isPending: boolean;
 }) => {
   const { data: wallets } = useWallets();
+
   return (
     <div className="flex flex-col justify-between">
       <div className="flex flex-col gap-2">
@@ -262,6 +266,7 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
   const [step, setStep] = useState(1);
   const { mutate: mintMutation, isPending } = useMint();
   const { data: wallets } = useWallets();
+  const { data: isAssociated } = useIsAssociated(formData.destinationWallet);
 
   const handleNext = () => {
     if (step === 2) {
@@ -273,6 +278,23 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
   const handleSubmit = async () => {
     if (!wallets || wallets.wallets.length === 0) {
       toast.error("No wallets found");
+      return;
+    }
+    if (!isAssociated) {
+      toast.error(
+        "This address is not associated with the KESY token. Please associate the wallet to continue.",
+        {
+          action: {
+            label: "Associate",
+            onClick: () => {
+              window.open(
+                "https://medium.com/@elastum/hedera-how-to-associate-your-tokens-c7021c96cc25",
+                "_blank"
+              );
+            },
+          },
+        }
+      );
       return;
     }
     const payload = await constructTransferTransaction({
