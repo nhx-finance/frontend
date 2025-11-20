@@ -218,7 +218,7 @@ async function mintTokens({
     };
     console.log("minting tokens", amount);
     const response = await axios.post(`${SDK_URL}/mint`, {
-      amount: "100", // TODO: Change to amount
+      amount: amount.toString(),
     });
     if (response.status !== 200) {
       throw new Error("Failed to mint tokens");
@@ -288,7 +288,7 @@ export async function constructTransferTransaction({
       privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
     });
     const transaction = new ContractExecuteTransaction()
-      .setContractId(TREASURY_ACCOUNT_ID) // TODO: Confirm if we need to use the multisig account id or the treasury account id
+      .setContractId(TREASURY_ACCOUNT_ID)
       .setGas(15_000_000)
       .setFunction(
         "transfer",
