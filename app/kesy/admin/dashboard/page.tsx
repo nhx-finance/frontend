@@ -4,16 +4,14 @@ import AdminNavbar from "./navbar";
 import { IconSearch } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import MintsTable from "./mints";
-import {
-  useSettledTransactions,
-  useTransactions,
-} from "@/hooks/kesy/useTransactions";
+import { useSettledTransactions } from "@/hooks/kesy/useTransactions";
 import {
   useTokenBalances,
   useTokenDetails,
 } from "@/hooks/kesy/useTokenDetails";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DECIMALS } from "@/lib/utils";
+import { useTokenReserve } from "@/hooks/kesy/useAnalytics";
 
 export function getDate() {
   const date = new Date();
@@ -30,14 +28,14 @@ export function getDate() {
 }
 
 function AdminDashboardPage() {
-  const { data: transactions } = useTransactions("admin");
   const { data: settledTransactions, isLoading: isSettledTransactionsLoading } =
     useSettledTransactions();
   const { dayOfWeek, day, month, year } = getDate();
   const { data: tokenDetails, isLoading: isTokenDetailsLoading } =
     useTokenDetails();
-  const { data: tokenBalances, isLoading: isTokenBalancesLoading } =
-    useTokenBalances();
+  const { data: tokenBalances } = useTokenBalances();
+  const { data: tokenReserve, isLoading: isTokenReserveLoading } =
+    useTokenReserve();
   return (
     <div className="max-w-7xl mx-auto px-1 md:px-4">
       <AdminNavbar />
@@ -135,32 +133,49 @@ function AdminDashboardPage() {
             )}
           </div>
           <div className="w-full xl:w-1/2 bg-background rounded-3xl border border-foreground/20 p-4">
-            <h1 className="text-sm text-muted-foreground font-funnel-display">
-              Reserve Balance(T-Bills)
-            </h1>
-            <p className="text-2xl font-funnel-display font-semibold mt-4">
-              KES 15,050,000.87
-            </p>
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex flex-col">
-                <p className="text-sm font-funnel-display text-muted-foreground">
-                  OV Ratio (%)
+            {isTokenReserveLoading ? (
+              <Skeleton className="w-full h-full rounded-3xl" />
+            ) : (
+              <>
+                <h1 className="text-sm text-muted-foreground font-funnel-display">
+                  Reserve Balance(T-Bills)
+                </h1>
+                <p className="text-2xl font-funnel-display font-semibold mt-4">
+                  KES{" "}
+                  {tokenReserve?.reserveAmount
+                    ? (
+                        Number(tokenReserve?.reserveAmount) /
+                        10 ** 5
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : 0}
                 </p>
-                <p className="font-funnel-display font-semibold">105%</p>
-              </div>
-              <div className="flex flex-col">
-                <p className="text-sm font-funnel-display text-muted-foreground">
-                  Fees Collected
-                </p>
-                <p className="font-funnel-display font-semibold">KES 720K</p>
-              </div>
-              <div className="flex flex-col justify-end items-end">
-                <p className="text-sm font-funnel-display text-muted-foreground">
-                  APY
-                </p>
-                <p className="font-funnel-display font-semibold">9.56%</p>
-              </div>
-            </div>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-funnel-display text-muted-foreground">
+                      OV Ratio (%)
+                    </p>
+                    <p className="font-funnel-display font-semibold">105%</p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-sm font-funnel-display text-muted-foreground">
+                      Fees Collected
+                    </p>
+                    <p className="font-funnel-display font-semibold">
+                      KES 720K
+                    </p>
+                  </div>
+                  <div className="flex flex-col justify-end items-end">
+                    <p className="text-sm font-funnel-display text-muted-foreground">
+                      APY
+                    </p>
+                    <p className="font-funnel-display font-semibold">9.56%</p>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="w-full xl:w-1/2 bg-background rounded-3xl border border-foreground/20 p-4">
             <h1 className="text-sm text-muted-foreground font-funnel-display">

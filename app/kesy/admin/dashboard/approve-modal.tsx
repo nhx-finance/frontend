@@ -7,7 +7,6 @@ import {
   CopyIcon,
   RefreshCcwIcon,
   SendHorizonalIcon,
-  SignatureIcon,
 } from "lucide-react";
 import {
   TransactionItem,
@@ -17,7 +16,6 @@ import {
   useUpdateTransactionStatus,
 } from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
-import { MULTSIG_ADDR } from "@/lib/utils";
 import { MintStatus, normalizeStatus } from "./constants";
 import {
   ModalWrapper,
@@ -40,11 +38,8 @@ export default function ApproveModal({
     useExecuteTransaction();
   const { mutate: signMultisigTransaction, isPending: isSigning } =
     useSignMultisigTransaction();
-  const {
-    data: multisigTransaction,
-    isLoading: isLoadingMultisigTransaction,
-    error: errorMultisigTransaction,
-  } = useGetMultisigTransaction(request?.treasuryTransactionId);
+  const { data: multisigTransaction, isLoading: isLoadingMultisigTransaction } =
+    useGetMultisigTransaction(request?.treasuryTransactionId);
   const [payload, setPayload] = useState<string>("");
   const [adminAccountID, setAdminAccountID] = useState("");
   const [error, setError] = useState<string>("");
@@ -164,7 +159,7 @@ export default function ApproveModal({
               amount: request.amountKes,
             },
             {
-              onSuccess: (data) => {
+              onSuccess: () => {
                 toast.success("Transaction sent successfully");
                 updateTransactionStatus(
                   {

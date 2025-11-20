@@ -10,17 +10,15 @@ export function setUpClient({
   accountId = process.env.NEXT_PUBLIC_ACCOUNT_ID,
   privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY,
 }): Client {
-  let client: Client;
   if (!accountId) {
     throw new Error("NEXT_PUBLIC_ACCOUNT_ID is not set");
   }
   if (!privateKey) {
     throw new Error("NEXT_PUBLIC_PRIVATE_KEY is not set");
   }
+  const client = Client.forTestnet();
   const ACCOUNT_ID = AccountId.fromString(accountId);
   const KEY = PrivateKey.fromStringECDSA(privateKey);
-
-  client = Client.forTestnet();
 
   client.setOperator(ACCOUNT_ID, KEY);
   return client;

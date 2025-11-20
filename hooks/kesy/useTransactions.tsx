@@ -16,12 +16,8 @@ import { toast } from "sonner";
 import {
   ContractExecuteTransaction,
   ContractFunctionParameters,
-  PrivateKey,
-  Transaction,
-  TransferTransaction,
 } from "@hashgraph/sdk";
 import axios from "axios";
-import { keccak256 } from "ethereum-cryptography/keccak";
 
 import { getContract } from "thirdweb";
 import { client, hederaTestnet } from "@/lib/client";
