@@ -25,6 +25,7 @@ import { keccak256 } from "ethereum-cryptography/keccak";
 
 import { getContract } from "thirdweb";
 import { client, hederaTestnet } from "@/lib/client";
+import { useWallets } from "./useWallets";
 
 export const treasuryContract = getContract({
   client,
@@ -258,9 +259,12 @@ async function getAccountByAddress({
 async function isAssociated({
   address,
 }: {
-  address: string;
+  address: string | undefined;
 }): Promise<boolean> {
   try {
+    if (!address) {
+      return false;
+    }
     const account = await getAccountByAddress({ address: address });
     const response = await axios.get(
       `${HEDERA_URL}/accounts/${account.account}/tokens?token.id=${KESY_TOKEN_ID}`
@@ -327,55 +331,28 @@ export async function getMultisigTransaction({
   }
 }
 export async function signMultisigTransaction({
-  signingKey,
-  multisigId,
-  txnMessage,
-  accountId,
+  address,
   amount,
 }: {
-  signingKey: string;
-  multisigId: string;
-  txnMessage: string;
-  accountId: string;
+  address: string;
   amount: number;
 }) {
   try {
-    console.log("sending transfer transaction", accountId, amount);
-    const client = setUpClient({
-      accountId: process.env.NEXT_PUBLIC_ACCOUNT_ID,
-      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-    });
-    const account = await getAccountByAddress({ address: accountId });
+    console.log("sending transfer transaction", address, amount);
+    const account = await getAccountByAddress({ address });
     if (!account) {
       throw new Error("Account not found");
     }
+    const response = await axios.post(`${SDK_URL}/token/transfer`, {
+      amount: (amount * 10 ** DECIMALS).toString(),
+      targetAccountId: account.account,
+    });
 
-    const tokenTransferTx = await new TransferTransaction()
-      .addTokenTransfer(KESY_TOKEN_ID, accountId, -(amount * 10 ** DECIMALS))
-      .addTokenTransfer(KESY_TOKEN_ID, account.account, amount * 10 ** DECIMALS)
-      .freezeWith(client)
-      .sign(PrivateKey.fromStringECDSA(signingKey));
-
-    const tokenTransferRx = await (
-      await tokenTransferTx.execute(client)
-    ).getReceipt(client);
-
-    console.log(
-      `Stablecoin transfer from Treasury to ${account.account}: ${tokenTransferRx.status} ✅`
-    );
+    if (response.status !== 200) {
+      throw new Error("Failed to send transfer transaction");
+    }
   } catch (error: any) {
     console.error("error sending transfer transaction", error);
-
-    if (error?.response?.data) {
-      console.error("Server error details:", error.response.data);
-      const errorMessage =
-        error.response.data?.message ||
-        error.response.data?.error ||
-        "Failed to send transfer transaction";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
     toast.error("Failed to send transfer transaction");
     throw error;
   }
@@ -444,14 +421,18 @@ export const useSignMultisigTransaction = () => {
     mutationFn: signMultisigTransaction,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["multisigTransaction", variables.multisigId],
+        queryKey: ["multisigTransaction", variables.address],
       });
       queryClient.invalidateQueries({ queryKey: ["transactions", "admin"] });
     },
   });
 };
 
-export const useIsAssociated = (address: string) => {
+export const useIsAssociated = (id: string) => {
+  const { data: wallets } = useWallets();
+  const address = wallets?.wallets.find(
+    (wallet) => wallet.walletId === id
+  )?.address;
   const { data, isLoading, error } = useQuery({
     queryKey: ["isAssociated", address],
     queryFn: () => isAssociated({ address: address }),

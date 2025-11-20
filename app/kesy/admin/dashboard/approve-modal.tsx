@@ -6,6 +6,7 @@ import {
   CheckIcon,
   CopyIcon,
   RefreshCcwIcon,
+  SendHorizonalIcon,
   SignatureIcon,
 } from "lucide-react";
 import {
@@ -74,10 +75,7 @@ export default function ApproveModal({
   ) => {
     setError("");
 
-    if (
-      (status === MintStatus.CONFIRMED || status === MintStatus.TRANSFERRED) &&
-      payload.trim().length === 0
-    ) {
+    if (status === MintStatus.CONFIRMED && payload.trim().length === 0) {
       setError("Please enter a valid payload");
       toast.error("Please enter a valid payload");
       return;
@@ -119,7 +117,7 @@ export default function ApproveModal({
                 toast.success("Transaction executed successfully");
                 updateTransactionStatus(
                   {
-                    mintId: data.message,
+                    mintId: request.requestId,
                     status: "MINTED",
                     payload: data.message,
                   },
@@ -144,11 +142,6 @@ export default function ApproveModal({
           );
           break;
         case MintStatus.TRANSFERRED:
-          if (!payload || payload.trim().length === 0) {
-            setError("Please enter your signing key");
-            toast.error("Please enter your signing key");
-            return;
-          }
           if (!adminAccountID || adminAccountID.trim().length === 0) {
             setError("Please enter your Hedera account ID");
             toast.error("Please enter your Hedera account ID");
@@ -167,10 +160,7 @@ export default function ApproveModal({
 
           signMultisigTransaction(
             {
-              signingKey: payload,
-              multisigId: request.treasuryTransactionId,
-              txnMessage: multisigTransaction.transaction_message,
-              accountId: adminAccountID,
+              address: request.walletAddress,
               amount: request.amountKes,
             },
             {
@@ -180,7 +170,7 @@ export default function ApproveModal({
                   {
                     mintId: request.requestId,
                     status: "TRANSFERRED",
-                    payload: request.requestId,
+                    payload: adminAccountID,
                   },
                   {
                     onSuccess: () => {
@@ -368,14 +358,7 @@ export default function ApproveModal({
         />
         <TransactionDetails transaction={request} />
         <PayloadInput
-          placeholder="Enter your signing key"
-          value={payload}
-          onChange={setPayload}
-          error={error}
-          isSecureEntry={true}
-        />
-        <PayloadInput
-          placeholder="Enter your Account ID"
+          placeholder="Admin executing this transaction"
           value={adminAccountID}
           onChange={setAdminAccountID}
           error={error}
@@ -394,12 +377,13 @@ export default function ApproveModal({
               isSigning ||
               isLoadingMultisigTransaction ||
               !multisigTransaction?.transaction_message ||
-              !payload ||
+              !adminAccountID ||
+              adminAccountID.trim().length === 0 ||
               multisigTransaction?.status === "SIGNED"
             }
           >
-            Sign Transaction
-            <SignatureIcon className="w-4 h-4" />
+            Transfer
+            <SendHorizonalIcon className="w-4 h-4" />
           </Button>
         </div>
       </ModalWrapper>

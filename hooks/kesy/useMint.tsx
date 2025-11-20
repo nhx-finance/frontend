@@ -52,6 +52,7 @@ export const useMint = () => {
       router.push(`/kesy/deposit/${data.requestId}`);
     },
     onError: (error) => {
+      console.error(error);
       toast.error(error.message);
     },
   });

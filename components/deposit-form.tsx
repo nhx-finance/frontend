@@ -280,6 +280,7 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
       toast.error("No wallets found");
       return;
     }
+
     if (!isAssociated) {
       toast.error(
         "This address is not associated with the KESY token. Please associate the wallet to continue.",
@@ -297,12 +298,16 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
       );
       return;
     }
+    const address = wallets?.wallets.find(
+      (wallet) => wallet.walletId === formData.destinationWallet
+    )?.address;
+    if (!address) {
+      toast.error("Invalid wallet ID");
+      return;
+    }
     const payload = await constructTransferTransaction({
       amount: Number(formData.kesAmount),
-      address:
-        wallets?.wallets.find(
-          (wallet) => wallet.walletId === formData.destinationWallet
-        )?.address ?? "",
+      address: address,
     });
     const transactionBytes = payload.toBytes();
     const transactionHex = Buffer.from(transactionBytes).toString("hex");
