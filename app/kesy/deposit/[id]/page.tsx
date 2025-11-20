@@ -3,6 +3,7 @@
 import { fin1, kesy } from "@/assets";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { useDepositStore } from "@/stores/depositStore";
 import { IconCopy } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +22,7 @@ const bankDetails = {
 export default function DepositDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-
+  const { depositAmount, kesyAmount } = useDepositStore();
   return (
     <div className="grid min-h-svh lg:grid-cols-2 font-noto-sans">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -71,7 +72,23 @@ export default function DepositDetailsPage() {
                 Wire Amount
               </p>
               <p className="text-xs font-funnel-display text-foreground">
-                1000000
+                {depositAmount.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+                KES
+              </p>
+            </div>
+            <div className="flex items-center justify-between py-2 px-4">
+              <p className="text-sm font-funnel-display text-muted-foreground">
+                KESY Tokens
+              </p>
+              <p className="text-xs font-funnel-display text-foreground">
+                {kesyAmount.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+                KESY
               </p>
             </div>
             <div className="flex items-center justify-between py-2 px-4">

@@ -6,7 +6,10 @@ import {
 } from "@/components/ui/sidebar";
 import NoWallet from "./no-wallet";
 import { KESYSidebar } from "@/components/kesy-sidebar";
-import { useWallets, WalletResponse } from "@/hooks/kesy/useWallets";
+import {
+  useWalletsWithBalances,
+  WalletWithBalanceResponse,
+} from "@/hooks/kesy/useWallets";
 import { CopyIcon, InfoIcon, Loader2 } from "lucide-react";
 import AddWalletModal from "./add-wallet-modal";
 import { useState } from "react";
@@ -22,7 +25,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-function WalletCard({ wallet }: { wallet: WalletResponse }) {
+function WalletCard({ wallet }: { wallet: WalletWithBalanceResponse }) {
   const { data: isAssociated, isLoading } = useIsAssociated(wallet.address);
   return (
     <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 w-full md:w-1/2">
@@ -39,6 +42,18 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
         </p>
       </div>
       <div className="my-4">
+        <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
+          <p className="text-sm font-funnel-display text-foreground/80">
+            Balance
+          </p>
+          <p className="text-xs cursor-pointer flex items-center gap-2 font-semibold font-funnel-display">
+            {wallet.balance.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{" "}
+            KESY
+          </p>
+        </div>
         <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
           <p className="text-sm font-funnel-display text-foreground/80">
             Wallet Address
@@ -142,7 +157,7 @@ function WalletCard({ wallet }: { wallet: WalletResponse }) {
 
 export default function Page() {
   const [isAddWalletModalOpen, setIsAddWalletModalOpen] = useState(false);
-  const { data, isLoading, error } = useWallets();
+  const { data, isLoading, error } = useWalletsWithBalances();
   const [loading, setLoading] = useState(false);
   const { data: kycData } = useKYCStatus();
 
@@ -218,7 +233,7 @@ export default function Page() {
           Add a wallet to receive KESY tokens once minted.
         </p>
         <div className="px-4">
-          {data.wallets.length === 0 ? (
+          {data.length === 0 ? (
             <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 items-center">
               <NoWallet />
               <p className="text-sm font-funnel-display text-muted-foreground">
@@ -237,12 +252,12 @@ export default function Page() {
             </div>
           ) : (
             <div className="flex flex-col md:flex-row gap-4 flex-wrap">
-              {data.wallets.map((wallet) => (
+              {data.map((wallet) => (
                 <WalletCard key={wallet.walletId} wallet={wallet} />
               ))}
             </div>
           )}
-          {data.wallets.length > 0 && (
+          {data.length > 0 && (
             <div className="flex items-center justify-center mt-12">
               <button
                 onClick={handleAddWallet}

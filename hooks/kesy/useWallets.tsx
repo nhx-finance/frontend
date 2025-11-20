@@ -62,16 +62,14 @@ async function getWalletsWithBalances({
 }): Promise<WalletWithBalanceResponse[]> {
   let walletsWithBalances: WalletWithBalanceResponse[] = [];
   for (const wallet of wallets) {
-    const url = `${HEDERA_URL}/accounts/0xf586d221da1565d80b9244877979c16cf5d68d17/tokens?limit=2&order=desc&token.id=${KESY_TOKEN_ID}`;
+    const url = `${HEDERA_URL}/accounts/${wallet.address}/tokens?limit=2&order=desc&token.id=${KESY_TOKEN_ID}`;
     const response = await fetch(url);
     if (response.status === 404) {
-      console.log("404");
       walletsWithBalances.push({ ...wallet, balance: 0 });
       continue;
     }
     const data = (await response.json()) as TokenBalanceResponse;
     if (data.tokens.length === 0) {
-      console.log("0 tokens");
       walletsWithBalances.push({ ...wallet, balance: 0 });
       continue;
     }

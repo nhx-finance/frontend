@@ -11,7 +11,7 @@ function TokenBalance() {
   const { data: totalBalance, isLoading, error } = useTotalBalance();
   const { dayOfWeek, day, month, year } = getDate();
   const router = useRouter();
-  
+
   if (error) {
     return (
       <div className="p-4 w-full max-h-[250px]">
