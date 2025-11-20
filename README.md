@@ -1,14 +1,13 @@
 # NHX Frontend
 
-**Tokenized Securities Trading Platform for the Nairobi Securities Exchange**
+**KESY Stablecoin Platform**
 
-NHX Frontend is a Next.js-based decentralized application (dApp) that enables users to trade tokenized Nairobi Securities Exchange (NSE) stocks on the Hedera network. Built with modern web technologies, it provides a seamless interface for buying, selling, and swapping tokenized securities using USDC stablecoin.
+NHX Frontend is a Next.js-based decentralized application (dApp) that provides institutional access to KESY, a Kenyan Shilling-backed stablecoin on the Hedera network. Built with modern web technologies, it enables institutions to mint, manage, and redeem KESY tokens with full KYC compliance and regulatory oversight.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![Hedera](https://img.shields.io/badge/Hedera-Testnet-purple)](https://hedera.com/)
-[![Thirdweb](https://img.shields.io/badge/Thirdweb-5.0-purple)](https://thirdweb.com/)
 
 ---
 
@@ -18,8 +17,8 @@ NHX Frontend is a Next.js-based decentralized application (dApp) that enables us
 - [Key Features](#key-features)
 - [Technical Stack](#technical-stack)
 - [System Architecture](#system-architecture)
-- [Trading Flow](#trading-flow)
-- [Smart Contract Integration](#smart-contract-integration)
+- [KESY Workflows](#kesy-workflows)
+- [KESY Token Integration](#kesy-token-integration)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [API Integration](#api-integration)
@@ -30,14 +29,14 @@ NHX Frontend is a Next.js-based decentralized application (dApp) that enables us
 
 ## Architecture Overview
 
-NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 15's App Router for server-side rendering and optimal performance. The application integrates with the Hedera blockchain through Thirdweb SDK and communicates with a backend API for authentication and fiat on-ramp services.
+NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 15's App Router for server-side rendering and optimal performance. The application integrates with the nhx-kesy backend for institutional KYC, minting workflows, and wallet management, while connecting to Hedera blockchain for token operations.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                      User Interface Layer                    │
 │  ┌─────────────┬──────────────┬──────────────┬────────────┐ │
-│  │   Landing   │ Auth/Signup  │  Dashboard   │   Trading  │ │
-│  │    Page     │     Flow     │   Overview   │  Interface │ │
+│  │   Landing   │ Auth/Signup  │  Dashboard   │   Deposit  │ │
+│  │    Page     │   + KYC      │   Overview   │  (Minting) │ │
 │  └─────────────┴──────────────┴──────────────┴────────────┘ │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -46,7 +45,7 @@ NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 
 │                   State Management Layer                     │
 │  ┌──────────────────────┬──────────────────────────────────┐│
 │  │  TanStack Query      │   React Context                  ││
-│  │  (Server State)      │   (Auth, Theme)                  ││
+│  │  (Server State)      │   (KESY Auth, Theme)             ││
 │  └──────────────────────┴──────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -54,8 +53,8 @@ NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 
 ┌─────────────────────────────────────────────────────────────┐
 │                   Integration Layer                          │
 │  ┌──────────────┬──────────────┬─────────────────────────┐ │
-│  │  Thirdweb    │   Ethers.js  │    Backend API          │ │
-│  │  SDK         │   (Hedera)   │    (Auth/Payments)      │ │
+│  │  nhx-kesy    │   Hedera SDK │    Wallet Service       │ │
+│  │  Backend API │   (Direct)   │    (M-Pesa Bridge)      │ │
 │  └──────────────┴──────────────┴─────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
                               │
@@ -64,9 +63,9 @@ NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 
 │                    Blockchain Layer                          │
 │  ┌──────────────────────────────────────────────────────┐  │
 │  │           Hedera Testnet (Chain ID: 296)             │  │
-│  │  • ATS Tokens (nhKCB, nhSCOM, nhEQTY, etc.)          │  │
-│  │  • DEX Router (0x...4b40)                            │  │
-│  │  • System Contracts (Token Association)              │  │
+│  │  • KESY Token (0.0.6883537)                          │  │
+│  │  • Stablecoin Studio Contracts                       │  │
+│  │  • HTS (Hedera Token Service)                        │  │
 │  └──────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -81,38 +80,37 @@ NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 
 - Email/password registration with OTP verification
 - Secure session management with automatic token expiry
 - Protected routes with authentication guards
+- KYC verification workflow for compliance
 
-### 💰 **Tokenized Securities Trading**
+### 💰 **KESY Token Operations**
 
-- **Swap Interface**: Trade between USDC and tokenized NSE stocks
-- **Real-time Quotes**: Dynamic pricing using Hedera DEX router
-- **Supported Assets**:
-  - nhKCB (KCB Group - Banking)
-  - nhSCOM (Safaricom PLC - Telecommunications)
-  - nhEQTY (Equity Group Holdings - Financial Services)
-  - nhKEGN (Kenya Electricity Generating Company - Energy)
-  - nhHAFR (Home Afrika - Real Estate)
-  - nhKQ (Kenya Airways - Aviation)
+- **Minting (Deposit)**: Institutional deposit workflow for minting KESY tokens
+- **Minimum Deposit**: 1,000,000 KES for institutional accounts
+- **Processing Fee**: 0.1% minting fee
+- **1:1 Peg**: KESY pegged to Kenyan Shilling (1 KESY = 1 KES)
+- **Backed by Treasury Bills**: Fully collateralized by Kenyan government securities
 
-### 🔄 **DEX Integration**
+### 🏦 **Wallet Management**
 
-- **Token Approval**: ERC-20 approve pattern for secure swaps
-- **Token Association**: Automatic token association via Asset Tokenization Studio system contracts
-- **Slippage Protection**: Minimum output amount calculation
-- **Gas Optimization**: Efficient transaction batching
+- **Multi-Wallet Support**: Create and manage multiple Hedera wallets
+- **Token Association**: Automatic HTS token association for KESY
+- **Whitelisting**: KYC-verified wallets for compliance
+- **Transaction History**: Complete audit trail of all operations
 
-### 📊 **Portfolio Management**
+### 📊 **Dashboard & Monitoring**
 
-- Real-time portfolio balance tracking
-- Asset allocation visualization
-- Historical price charts with 34+ months of data
+- Real-time KESY balance tracking
+- Mint request status monitoring
+- Wallet management interface
 - Transaction history and activity logs
+- KYC status tracking
 
-### 💱 **Multi-Currency Support**
+### 🔒 **Compliance & Security**
 
-- USDC (primary trading pair)
-- KES (Kenyan Shilling) display pricing
-- Exchange rate: 1 USDC = 129.15 KES
+- KYC/AML verification required for all users
+- VASP Bill 2025 compliant
+- Admin approval workflow for mint requests
+- Secure document upload for KYC verification
 
 ---
 
@@ -124,11 +122,11 @@ NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 
 - **React 19.1.0**: UI library with concurrent features
 - **TypeScript 5.0**: Type-safe development
 
-### **Web3 & Blockchain**
+### **Blockchain Integration**
 
-- **Thirdweb SDK 5.108.6**: Wallet connection and transaction management
-- **Ethers.js 6.15.0**: Ethereum/Hedera interaction library
+- **Hedera SDK**: Direct integration for transaction construction
 - **Hedera Testnet**: Layer 1 blockchain (Chain ID: 296)
+- **HTS (Hedera Token Service)**: Native token operations
 
 ### **State Management**
 
@@ -160,208 +158,343 @@ NHX Frontend is built on a modern **JAMstack** architecture, leveraging Next.js 
 
 ```
 app/
-├── page.tsx (Landing Page)
-├── layout.tsx (Root Layout)
-├── login/
-│   └── page.tsx (Login Flow)
-├── signup/
-│   └── page.tsx (Registration)
-├── otp/
-│   └── page.tsx (OTP Verification)
-├── home/
-│   └── page.tsx (User Home)
-└── dashboard/
-    ├── page.tsx (Dashboard Overview)
-    ├── stocks/
-    │   ├── [id]/page.tsx (Stock Detail)
-    │   ├── buy-token.tsx
-    │   ├── sell-token.tsx
-    │   └── swap-tokens.tsx (Main Trading Interface)
-    ├── trade/
-    │   └── [id]/page.tsx
-    ├── wallets/
-    ├── transactions/
-    ├── payments/
-    └── settings/
+├── page.tsx (KESY Landing Page)
+├── layout.tsx (Root Layout with KESYAuthProvider)
+└── kesy/
+    ├── page.tsx (Public KESY Info)
+    ├── login/
+    │   └── page.tsx (Login Flow)
+    ├── signup/
+    │   └── page.tsx (Registration)
+    ├── otp/
+    │   └── page.tsx (OTP Verification)
+    ├── details/
+    │   └── page.tsx (KYC Details Form)
+    ├── deposit/
+    │   ├── page.tsx (Mint Request Form)
+    │   └── [requestId]/page.tsx (Request Status)
+    ├── dashboard/
+    │   ├── page.tsx (Dashboard Overview)
+    │   ├── wallets/
+    │   │   └── page.tsx (Wallet Management)
+    │   ├── transactions/
+    │   │   └── page.tsx (Transaction History)
+    │   └── settings/
+    │       └── page.tsx (User Settings)
+    └── admin/
+        └── dashboard/
+            ├── page.tsx (Admin Dashboard)
+            ├── kyc/
+            │   └── page.tsx (KYC Approvals)
+            └── mints/
+                └── page.tsx (Mint Request Management)
 ```
 
 ### **Custom Hooks Architecture**
 
 ```typescript
 hooks/
-├── use-login.tsx              // Authentication
-├── use-register.tsx           // User registration
-├── use-swap.tsx               // DEX swap operations
-│   ├── useSwapQuote()         // Price quotes
-│   ├── useApproveToken()      // ERC-20 approvals
-│   ├── useAssociateMutation() // HTS token association
-│   └── useSwapExactTokensForTokens()
-├── use-sell-tokens.tsx        // Direct token transfers
-├── use-stocks-balances.tsx    // Portfolio balances
-├── use-portfolio-allocation.tsx
-├── use-portfolio-balance.tsx
-└── use-account-activity.tsx
+└── kesy/
+    ├── useAuthentication.tsx    // KESY auth with token refresh
+    ├── useUserDetails.tsx       // Fetch user profile
+    ├── useKYC.tsx               // KYC submission & status
+    ├── useMint.tsx              // Mint request creation
+    ├── useWallets.tsx           // Wallet CRUD operations
+    ├── useTransactions.tsx      // Transaction construction
+    │   ├── constructTransferTransaction()
+    │   └── useIsAssociated()     // Check token association
+    └── useTokenDetails.tsx      // KESY token metadata
 ```
 
 ---
 
-## Trading Flow
+## KESY Workflows
 
-### **Sequence Diagram: Token Swap Transaction**
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Wallet
-    participant ThirdwebSDK
-    participant HederaRouter
-    participant HTS
-
-    User->>Frontend: Enter swap amount (USDC → nhKCB)
-    Frontend->>Frontend: Activate "sell" input
-    Frontend->>HederaRouter: getAmountsOut(amount, [USDC, nhKCB])
-    HederaRouter-->>Frontend: Return quote (expected nhKCB amount)
-    Frontend->>User: Display quote and rate
-
-    User->>Frontend: Click "Approve USDC"
-    Frontend->>ThirdwebSDK: prepareContractCall(approve)
-    ThirdwebSDK->>Wallet: Request signature
-    Wallet->>User: Prompt for approval
-    User->>Wallet: Approve transaction
-    Wallet->>HTS: approve(routerAddress, amount)
-    HTS-->>Frontend: Approval confirmed
-    Frontend->>User: Show "Swap" button
-
-    User->>Frontend: Click "Swap"
-    Frontend->>ThirdwebSDK: prepareContractCall(swapExactTokensForTokens)
-    ThirdwebSDK->>Wallet: Request signature
-    Wallet->>User: Prompt for confirmation
-    User->>Wallet: Confirm swap
-    Wallet->>HederaRouter: swapExactTokensForTokens(amountIn, amountOutMin, path, to, deadline)
-    HederaRouter->>HTS: Transfer USDC from user
-    HederaRouter->>HTS: Transfer nhKCB to user
-    HTS-->>Frontend: Swap complete
-    Frontend->>Frontend: Invalidate balance queries
-    Frontend->>User: Show success notification
-```
-
-### **Token Association Flow**
+### **Sequence Diagram: Mint Request Flow**
 
 ```mermaid
 sequenceDiagram
     participant User
     participant Frontend
-    participant SystemContract
-    participant HTS
-
-    User->>Frontend: Attempt to receive new token
-    Frontend->>Frontend: Check if token associated
-    alt Token not associated
-        Frontend->>SystemContract: associateToken(userAddress, tokenAddress)
-        SystemContract->>HTS: Create association
-        HTS-->>SystemContract: Association created
-        SystemContract-->>Frontend: Success (responseCode)
-        Frontend->>User: Association complete
-    end
-    Frontend->>Frontend: Proceed with transfer
-```
-
-### **Authentication Flow**
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant BackendAPI
+    participant nhxKesy
     participant Database
+    participant Admin
 
-    User->>Frontend: Enter email/password
-    Frontend->>BackendAPI: POST /auth/login
-    BackendAPI->>Database: Verify credentials
-    Database-->>BackendAPI: User data
-    BackendAPI-->>Frontend: JWT + RefreshToken + expiresIn
-    Frontend->>Frontend: Store in localStorage
-    Frontend->>Frontend: Set AuthContext
-    Frontend->>User: Redirect to /home
+    User->>Frontend: Navigate to /kesy/deposit
+    Frontend->>User: Display mint form
 
-    Note over Frontend,BackendAPI: Protected Route Access
-    Frontend->>Frontend: Check token expiry
-    alt Token expired
-        Frontend->>BackendAPI: POST /auth/refresh (with refreshToken)
-        BackendAPI-->>Frontend: New JWT + RefreshToken
-        Frontend->>Frontend: Update localStorage
+    User->>Frontend: Enter amount (e.g., 1,000,000 KES)
+    Frontend->>Frontend: Calculate KESY output (1M * 0.999 = 999,000 KESY)
+    Frontend->>User: Show 1:1 peg + 0.1% fee
+
+    User->>Frontend: Select destination wallet
+    Frontend->>Frontend: Check wallet association
+    alt Not Associated
+        Frontend->>User: Prompt to associate KESY token
+        User->>User: Associate via HashPack/Blade
     end
-    Frontend->>User: Grant access to dashboard
+
+    User->>Frontend: Click "Finish"
+    Frontend->>Frontend: Construct Hedera transfer transaction
+    Frontend->>nhxKesy: POST /kesy/mint
+    Note right of Frontend: { amountKes, walletId, transaction_message }
+
+    nhxKesy->>nhxKesy: Validate KYC status
+    alt KYC Not Verified
+        nhxKesy-->>Frontend: 403 Forbidden
+        Frontend->>User: "KYC verification required"
+    end
+
+    nhxKesy->>Database: Create mint request (PENDING)
+    nhxKesy->>Admin: Send email notification
+    nhxKesy-->>Frontend: 201 Created { requestId }
+
+    Frontend->>Frontend: Redirect to /deposit/{requestId}
+    Frontend->>User: Show deposit instructions
+
+    Note over Admin,nhxKesy: Admin Review Process
+    Admin->>nhxKesy: Login to admin dashboard
+    Admin->>nhxKesy: GET /admin/mints
+    nhxKesy-->>Admin: List pending requests
+
+    Admin->>Admin: Review KYC, amount, wallet
+    alt Approved
+        Admin->>nhxKesy: PATCH /admin/mints/{id} { status: APPROVED }
+        nhxKesy->>Database: Update status
+        nhxKesy->>User: Email bank details for deposit
+        User->>User: Transfer KES to NHX bank account
+
+        Note over nhxKesy: After 40-50 days settlement
+        nhxKesy->>nhxKesy: Allocate to Treasury Bills
+        nhxKesy->>nhxKesy: Trigger minting service
+        nhxKesy->>Database: Update status to COMPLETED
+        nhxKesy->>User: Email: KESY transferred
+    else Rejected
+        Admin->>nhxKesy: PATCH /admin/mints/{id} { status: REJECTED }
+        nhxKesy->>User: Email rejection notice
+    end
+```
+
+### **Sequence Diagram: Authentication & KYC Flow**
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant nhxKesy
+    participant Database
+    participant AzureBlob
+
+    rect rgb(230, 240, 255)
+    Note over User,Database: Registration & Login
+    User->>Frontend: Visit /kesy/signup
+    User->>Frontend: Enter email, password, name
+    Frontend->>nhxKesy: POST /auth/register
+    nhxKesy->>Database: Create user (KYC: UNVERIFIED)
+    nhxKesy->>nhxKesy: Generate OTP
+    nhxKesy->>User: Send OTP email
+    nhxKesy-->>Frontend: 201 Created
+
+    Frontend->>Frontend: Redirect to /kesy/otp
+    User->>Frontend: Enter OTP code
+    Frontend->>nhxKesy: POST /auth/verify-otp
+    nhxKesy->>Database: Verify OTP
+    nhxKesy->>Database: Update user (emailVerified: true)
+    nhxKesy-->>Frontend: { accessToken, refreshToken, expiresIn }
+    Frontend->>Frontend: Store in localStorage (KESYAuthContext)
+    Frontend->>Frontend: Redirect to /kesy/details
+    end
+
+    rect rgb(255, 240, 230)
+    Note over User,Database: KYC Submission
+    User->>Frontend: Fill KYC form
+    Note right of User: Full name, DOB, ID type, ID number
+    User->>Frontend: Upload ID front & back
+    Frontend->>Frontend: Validate file types (jpg, png, pdf)
+
+    Frontend->>nhxKesy: POST /kyc/submit (multipart/form-data)
+    nhxKesy->>AzureBlob: Upload documents
+    AzureBlob-->>nhxKesy: File paths
+    nhxKesy->>Database: Create KYC document record
+    nhxKesy->>Database: Update user (KYC: SUBMITTED)
+    nhxKesy->>nhxKesy: Notify admin team
+    nhxKesy-->>Frontend: 201 Created
+    Frontend->>User: "KYC submitted, awaiting review"
+    end
+
+    rect rgb(230, 255, 240)
+    Note over User,Database: Admin KYC Approval
+    Admin->>nhxKesy: GET /admin/kyc
+    nhxKesy-->>Admin: List submissions
+    Admin->>Admin: Review documents
+
+    alt Approved
+        Admin->>nhxKesy: PATCH /admin/kyc/{id} { status: VERIFIED }
+        nhxKesy->>Database: Update user (KYC: VERIFIED)
+        nhxKesy->>User: Email: KYC approved
+        User->>Frontend: Login
+        Frontend->>Frontend: Check KYC status
+        Frontend->>User: Enable deposit button
+    else Rejected
+        Admin->>nhxKesy: PATCH /admin/kyc/{id} { status: REJECTED, reason }
+        nhxKesy->>User: Email: KYC rejected with reason
+    end
+    end
+```
+
+### **Token Association Check**
+
+```typescript
+// Frontend checks if wallet is associated with KESY
+const { data: isAssociated } = useIsAssociated(walletAddress);
+
+if (!isAssociated) {
+  toast.error(
+    "This wallet is not associated with KESY. Please associate first.",
+    {
+      action: {
+        label: "Learn How",
+        onClick: () => window.open(associationGuideUrl),
+      },
+    }
+  );
+}
 ```
 
 ---
 
-## Smart Contract Integration
+## KESY Token Integration
 
-### **Hedera DEX Router Interface**
-
-The application interacts with Hedera's native DEX router for token swaps:
+### **Token Metadata**
 
 ```typescript
-// Router Contract Address
-const routerEvmAddress = "0x0000000000000000000000000000000000004b40";
-
-// Core Functions
-interface IHederaDEXRouter {
-  // Get expected output amounts for a swap
-  getAmountsOut(amountIn: uint256, path: address[]): uint256[];
-
-  // Execute exact input swap
-  swapExactTokensForTokens(
-    amountIn: uint256,
-    amountOutMin: uint256,
-    path: address[],
-    to: address,
-    deadline: uint256
-  ): uint256[];
-}
+const KESY_TOKEN = {
+  tokenId: "0.0.6883537",
+  symbol: "KESY",
+  name: "Kenyan Shilling Stablecoin",
+  decimals: 6,
+  network: "Hedera Testnet",
+  chainId: 296,
+  supplyType: "INFINITE",
+  treasury: "0.0.5178127",
+  peg: "1:1 KES",
+  backing: "Kenya Treasury Bills",
+};
 ```
 
-### **Asset Tokenization Studio System Contract**
+### **Transaction Construction**
 
-For token association (required before receiving ATS tokens):
+The frontend constructs Hedera transactions using `@hashgraph/sdk` for deposit operations:
 
 ```typescript
-// System Contract Address
-const systemContractAddress = "0x0000000000000000000000000000000000000167";
+// hooks/kesy/useMint.tsx
+import { TransferTransaction, AccountId, Hbar, TokenId } from "@hashgraph/sdk";
 
-interface IHTSSystemContract {
-  // Associate token to account
-  associateToken(account: address, token: address): int64; // responseCode
-}
+export const constructTransferTransaction = async ({
+  amount,
+  address,
+}: {
+  amount: number;
+  address: string;
+}) => {
+  const receiverAccountId = AccountId.fromString(
+    process.env.NEXT_PUBLIC_RECEIVER_ACCOUNT_ID!
+  );
+  const senderAccountId = AccountId.fromString(address);
+  const kesyTokenId = TokenId.fromString("0.0.6883537");
+
+  const transaction = new TransferTransaction()
+    .addTokenTransfer(kesyTokenId, senderAccountId, -amount * 1e6)
+    .addTokenTransfer(kesyTokenId, receiverAccountId, amount * 1e6)
+    .addHbarTransfer(senderAccountId, new Hbar(-0.01))
+    .addHbarTransfer(receiverAccountId, new Hbar(0.01));
+
+  return transaction;
+};
 ```
 
-### **ERC-20 Token Interface**
+### **Token Association (Required for First Mint)**
 
-Tokenized stocks implement standard ERC-20 interface:
+Users must associate KESY token before receiving minted tokens:
 
 ```typescript
-interface IERC20Token {
-  approve(spender: address, amount: uint256): boolean;
-  transfer(to: address, amount: uint256): boolean;
-  balanceOf(account: address): uint256;
-}
+// User associates via HashPack or Blade Wallet:
+// 1. Open wallet → Settings → Token Association
+// 2. Enter token ID: 0.0.6883537
+// 3. Confirm transaction (costs ~$0.05 USD in HBAR)
+
+// Frontend checks association status:
+const { data: isAssociated } = useQuery({
+  queryKey: ["isAssociated", walletAddress],
+  queryFn: async () => {
+    const response = await fetch(
+      `https://testnet.mirrornode.hedera.com/api/v1/accounts/${walletAddress}/tokens?token.id=0.0.6883537`
+    );
+    const data = await response.json();
+    return data.tokens?.length > 0;
+  },
+});
 ```
 
-### **Token Addresses (Hedera Testnet)**
+### **Minting Backend Integration**
 
-### **Token Addresses (Hedera Testnet)**
+The frontend does not directly mint tokens. Minting occurs in the `nhx-kesy` backend using Hashgraph's Stablecoin Studio SDK:
 
-| Symbol | Token Name          | Hedera ID   |
-| ------ | ------------------- | ----------- |
-| USDC   | USD Coin            | 0.0.7135358 |
-| nhSCOM | Safaricom Token     | 0.0.7135370 |
-| nhKCB  | KCB Group Token     | 0.0.7142699 |
-| nhKQ   | Kenya Airways Token | 0.0.7142834 |
-| nhKEGN | KenGen Token        | 0.0.7142885 |
-| nhHAFR | Home Afrika Token   | 0.0.7142913 |
-| nhEQTY | Equity Group Token  | 0.0.7142958 |
+```typescript
+// Frontend creates mint request:
+const { mutate: mintMutation } = useMint();
+
+mintMutation({
+  amountKes: 1000000, // 1M KES
+  walletId: "user-wallet-uuid",
+  transaction_message: transactionHex, // Pre-signed transfer tx
+});
+
+// Backend flow (simplified):
+// 1. nhx-kesy receives request
+// 2. Validates KYC status (VERIFIED required)
+// 3. Creates database record (status: PENDING)
+// 4. Admin approves via /admin/mints/{id}
+// 5. After 40-50 days, nhx-kesy calls Stablecoin Studio SDK:
+//    - stablecoinFactory.cashIn(amount, userAccount)
+//    - Mints KESY tokens on Hedera HTS
+//    - Executes transfer transaction from transaction_message
+```
+
+### **Balance Queries**
+
+Fetch user KESY balance from Hedera Mirror Node:
+
+```typescript
+const { data: balance } = useQuery({
+  queryKey: ["kesyBalance", accountId],
+  queryFn: async () => {
+    const response = await fetch(
+      `https://testnet.mirrornode.hedera.com/api/v1/accounts/${accountId}/tokens?token.id=0.0.6883537`
+    );
+    const data = await response.json();
+    const kesyToken = data.tokens?.find(
+      (t: any) => t.token_id === "0.0.6883537"
+    );
+    return kesyToken ? kesyToken.balance / 1e6 : 0;
+  },
+});
+```
+
+### **KESY Token Details (Hedera Testnet)**
+
+| Property     | Value                       |
+| ------------ | --------------------------- |
+| **Token ID** | 0.0.6883537                 |
+| **Symbol**   | KESY                        |
+| **Name**     | Kenyan Shilling Stablecoin  |
+| **Decimals** | 6                           |
+| **Supply**   | Infinite (admin-controlled) |
+| **Treasury** | 0.0.5178127                 |
+| **Peg**      | 1:1 KES                     |
+| **Backing**  | Kenya Treasury Bills        |
+| **Fee**      | 0.1% on minting             |
+| **Min Mint** | 1,000,000 KES               |
 
 ---
 
@@ -393,12 +526,13 @@ interface IERC20Token {
    Create a `.env.local` file in the root directory:
 
    ```env
-   # Thirdweb Configuration
-   NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_thirdweb_client_id
-   NEXT_PUBLIC_THIRDWEB_CLIENT_SECRET=your_thirdweb_secret
-
-   # Backend API
+   # nhx-kesy Backend API
    NEXT_PUBLIC_API_URL=http://localhost:8080
+   NEXT_PUBLIC_RECEIVER_ACCOUNT_ID=0.0.5178127
+
+   # Hedera Network
+   NEXT_PUBLIC_HEDERA_NETWORK=testnet
+   NEXT_PUBLIC_KESY_TOKEN_ID=0.0.6883537
 
    # Optional: Analytics
    NEXT_PUBLIC_VERCEL_ANALYTICS_ID=your_analytics_id
@@ -436,41 +570,50 @@ frontend/
 │   ├── login/                   # Authentication routes
 │   ├── signup/
 │   ├── otp/
-│   ├── home/
-│   └── dashboard/               # Protected dashboard routes
-│       ├── stocks/              # Trading interface
-│       ├── wallets/
-│       ├── transactions/
-│       └── settings/
+│   ├── kesy/                    # KESY platform routes
+│   │   ├── deposit/            # Mint request form
+│   │   ├── dashboard/          # User dashboard
+│   │   └── admin/              # Admin routes (KYC, mints)
+│   └── home/                    # Landing page
 ├── components/                   # React components
 │   ├── ui/                      # shadcn/ui primitives
 │   ├── landing/                 # Landing page sections
 │   ├── home/                    # Dashboard components
 │   ├── tables/                  # Data tables
-│   ├── app-sidebar.tsx
+│   ├── deposit-form.tsx          # KESY mint request form
+│   ├── details-form.tsx          # User KYC details form
 │   ├── login-form.tsx
 │   ├── signup-form.tsx
-│   └── otp-form.tsx
+│   ├── otp-form.tsx
+│   ├── kesy/
+│   │   ├── stats-card.tsx
+│   │   └── use-case.tsx
+│   └── tables/
+│       ├── admin-kyc-table.tsx
+│       └── admin-mints-table.tsx
 ├── hooks/                        # Custom React hooks
-│   ├── use-swap.tsx             # DEX operations
+│   ├── kesy/
+│   │   ├── useMint.tsx          # Mint request submission
+│   │   ├── useKYC.tsx           # KYC submission
+│   │   └── useWallets.tsx       # Wallet management
 │   ├── use-login.tsx
 │   ├── use-register.tsx
-│   ├── use-stocks-balances.tsx
-│   └── use-portfolio-*.tsx
+│   └── use-verification.tsx      # OTP verification
 ├── contexts/                     # React Context providers
-│   ├── AuthContext.tsx          # Authentication state
+│   ├── AuthContext.tsx          # Authentication state (deprecated)
+│   ├── KESYContext.tsx          # KESY auth provider (active)
 │   └── theme-context.tsx        # Theme management
 ├── lib/                          # Utilities and configs
-│   ├── client.ts                # Thirdweb client setup
+│   ├── client.ts                # API client setup
 │   ├── utils.ts                 # Helper functions
 │   └── envConfig.ts             # Environment loader
 ├── mocks/                        # Mock data
-│   ├── stocks.ts                # Stock metadata
+│   ├── mints.ts                 # Sample mint requests
 │   ├── transactions.ts
 │   └── wallets.tsx
-├── abi/                          # Contract ABIs
-│   └── QuoterV2.json
 ├── public/                       # Static assets
+│   ├── kyc.json                 # Lottie animations
+│   └── payment.json
 └── types.d.ts                    # TypeScript declarations
 ```
 
@@ -497,33 +640,136 @@ Response: {
 // Register
 POST /auth/register
 Request: { email: string, password: string, name: string }
+Response: { message: string }
+
+// Verify OTP
+POST /auth/verify-otp
+Request: { email: string, otp: string }
+Response: { jwtToken, refreshToken, expiresIn, refreshExpiresIn }
 
 // Refresh Token
 POST /auth/refresh
 Request: { refreshToken: string }
 ```
 
+### **KYC Endpoints**
+
+```typescript
+// Submit KYC
+POST /kyc/submit
+Content-Type: multipart/form-data
+Request: {
+  fullName: string,
+  dateOfBirth: string,
+  idType: "NATIONAL_ID" | "PASSPORT",
+  idNumber: string,
+  frontIdDocument: File,
+  backIdDocument: File
+}
+
+// Get KYC Status
+GET /kyc/status
+Response: { status: "UNVERIFIED" | "SUBMITTED" | "VERIFIED" | "REJECTED" }
+
+// Admin: List KYC Submissions
+GET /admin/kyc
+Response: Array<{ id, userId, fullName, status, submittedAt }>
+
+// Admin: Approve/Reject KYC
+PATCH /admin/kyc/{id}
+Request: { status: "VERIFIED" | "REJECTED", reason?: string }
+```
+
+### **KESY Mint Endpoints**
+
+```typescript
+// Create Mint Request
+POST /kesy/mint
+Request: {
+  amountKes: number,
+  walletId: string,
+  transaction_message: string  // Hex-encoded Hedera transaction
+}
+Response: { requestId: string, status: "PENDING" }
+
+// Get User's Mint Requests
+GET /kesy/mints
+Response: Array<{
+  id: string,
+  amountKes: number,
+  amountKesy: number,
+  status: "PENDING" | "APPROVED" | "REJECTED" | "COMPLETED",
+  createdAt: string,
+  walletAddress: string
+}>
+
+// Get Single Mint Request
+GET /deposit/{requestId}
+Response: {
+  id: string,
+  amountKes: number,
+  amountKesy: number,
+  status: string,
+  bankDetails?: { accountNumber, bank, reference },
+  createdAt: string
+}
+
+// Admin: List All Mint Requests
+GET /admin/mints
+Response: Array<MintRequest>
+
+// Admin: Approve/Reject Mint
+PATCH /admin/mints/{id}
+Request: { status: "APPROVED" | "REJECTED", reason?: string }
+```
+
+### **Wallet Endpoints**
+
+```typescript
+// Get User Wallets
+GET /wallets
+Response: Array<{
+  id: string,
+  address: string,
+  network: "HEDERA",
+  isDefault: boolean
+}>
+
+// Add Wallet
+POST /wallets
+Request: { address: string, network: "HEDERA" }
+```
+
 ### **Client Configuration**
 
 ```typescript
 // lib/client.ts
-import { createThirdwebClient, defineChain } from "thirdweb";
+import { QueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
-export const client = createThirdwebClient({
-  clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
-  secretKey: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_SECRET,
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
 });
 
-export const hederaTestnet = defineChain({
-  id: 296,
-  name: "Hedera Testnet",
-  rpc: `https://testnet.hashio.io/api`,
-  nativeCurrency: {
-    name: "hbar",
-    symbol: "HBAR",
-    decimals: 8,
+export const apiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
   },
-  testnet: true,
+});
+
+// Add auth interceptor
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 ```
 
@@ -533,28 +779,42 @@ export const hederaTestnet = defineChain({
 
 ### **Authentication Security**
 
-- JWT tokens with expiration
-- Refresh token rotation
+- JWT tokens with short expiration (15 minutes)
+- Refresh token rotation with 7-day expiry
 - Secure localStorage handling
-- Protected route guards
+- Protected route guards (KYC-gated routes)
 - Automatic session cleanup on expiry
+- Proactive token refresh (5 minutes before expiry)
+- Email verification via OTP
 
-### **Smart Contract Security**
+### **KYC & Compliance**
 
-- Two-step approval process (approve → swap)
-- Deadline parameters for time-bound transactions
-- Minimum output amount (slippage protection)
-- Client-side wallet signature verification
+- Multi-factor verification (email + document upload)
+- Document storage in Azure Blob with encryption
+- Admin manual review process
+- Status tracking (UNVERIFIED → SUBMITTED → VERIFIED)
+- Mint requests require VERIFIED status
+- VASP Bill 2025 compliance-ready architecture
+
+### **Transaction Security**
+
+- Minimum deposit: 1,000,000 KES (reduces attack surface)
+- Pre-signed transaction validation
+- Wallet whitelisting (user-owned wallets only)
+- Token association check before minting
+- No direct Stablecoin Studio access from frontend
+- Admin approval required for all mints
+- Hedera network native security (HTS)
 
 ### **API Security**
 
-- CORS configuration
+- CORS configuration for trusted origins
 - Request validation with Zod schemas
+- Role-based access control (USER, ADMIN, SUPER_ADMIN)
 - Error handling without sensitive data exposure
 - Environment variables for sensitive data
-- No private keys stored client-side
-- User-initiated transactions only
-- Clear transaction confirmations
+- Rate limiting on auth endpoints
+- Audit logging for admin actions
 
 ---
 
@@ -562,10 +822,11 @@ export const hederaTestnet = defineChain({
 
 - **Next.js Turbopack**: Faster development builds
 - **Server Components**: Reduced client bundle size
-- **TanStack Query Caching**: Minimized API calls
-- **Lazy Loading**: Code splitting for routes
-- **Image Optimization**: Next.js Image component
+- **TanStack Query Caching**: Minimized API calls (5-minute stale time)
+- **Lazy Loading**: Code splitting for /kesy routes
+- **Image Optimization**: Next.js Image component with Cloudinary
 - **Font Optimization**: next/font with Geist
+- **Hedera Mirror Node**: Direct blockchain queries (no third-party indexers)
 
 ---
 
@@ -587,7 +848,8 @@ For questions and support:
 
 - **GitHub Issues**: [github.com/nhx-finance/frontend/issues](https://github.com/nhx-finance/frontend/issues)
 - **Email**: support@nhx.finance
+- **Documentation**: [docs.nhx.finance](https://docs.nhx.finance)
 
 ---
 
-**Built with ❤️ for the Nairobi Securities Exchange community**
+**Built with ❤️ for Kenya's digital currency future**
