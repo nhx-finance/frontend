@@ -45,6 +45,7 @@ export const SDK_URL = "https://sdk.definetlynotlocalhost.space/api";
 
 // ACCOUNT IDS & ADDRESSES
 export const KESY_TOKEN_ID = "0.0.7228867";
+export const KESY_CONTRACT_ADDR = "0x00000000000000000000000000000000006e4dc3";
 export const MULTSIG_ADDR = "0x00000000000000000000000000000000006e39e4";
 export const MULTSIG_ACCOUNT_ID = "0.0.7223780";
 export const TREASURY_ACCOUNT_ID = "0.0.7228866";

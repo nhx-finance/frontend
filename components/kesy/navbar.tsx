@@ -179,7 +179,7 @@ function DesktopNavbar() {
                     Token Association
                   </p>
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
-                    Associate your token with the KESY Stablecoin to receive
+                    Associate your wallet with the KESY Stablecoin to receive
                     KESY.
                   </p>
                 </div>
@@ -339,7 +339,7 @@ function MobileNavbar() {
                           Token Association
                         </p>
                         <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
-                          Associate your token with the KESY Stablecoin to
+                          Associate your wallet with the KESY Stablecoin to
                           receive KESY.
                         </p>
                       </div>

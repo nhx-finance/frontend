@@ -44,7 +44,7 @@ function CustomConnectButton() {
             className="flex items-center gap-2 border border-foreground/20 rounded-full py-1 px-2 cursor-pointer"
           >
             <Image
-              src={walletImage?.data || ""}
+              src={walletImage?.data || nhxmmf}
               alt="wallet image"
               width={24}
               height={24}

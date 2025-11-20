@@ -39,4 +39,4 @@ export const kesyLogo = "/kes.png";
 export const dummy = "/dummy-profile.jpg";
 
 // Lotie
-export const associate = "/associate.json";
+export const associate = "/associate.webp";
