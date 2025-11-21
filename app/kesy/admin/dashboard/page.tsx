@@ -142,10 +142,10 @@ function AdminDashboardPage() {
                 </h1>
                 <p className="text-2xl font-funnel-display font-semibold mt-4">
                   KES{" "}
-                  {tokenReserve?.reserveAmount
+                  {tokenReserve && tokenReserve.reserveAmount
                     ? (
-                        Number(tokenReserve?.reserveAmount) /
-                        10 ** 5
+                        Number(tokenReserve.reserveAmount) /
+                        10 ** DECIMALS
                       ).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,

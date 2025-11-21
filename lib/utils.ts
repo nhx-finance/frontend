@@ -46,6 +46,7 @@ export const SDK_URL = "https://sdk.definetlynotlocalhost.space/api";
 // ACCOUNT IDS & ADDRESSES
 export const KESY_TOKEN_ID = "0.0.7228867";
 export const KESY_CONTRACT_ADDR = "0x00000000000000000000000000000000006e4dc3";
+export const HEDERA_HTS_ADDR = "0x0000000000000000000000000000000000000167";
 export const MULTSIG_ADDR = "0x00000000000000000000000000000000006e39e4";
 export const MULTSIG_ACCOUNT_ID = "0.0.7223780";
 export const TREASURY_ACCOUNT_ID = "0.0.7228866";
@@ -54,3 +55,32 @@ export const FACTORY_ADDRESS = "0.0.6431833";
 export const RESOLVER_ADDRESS = "0.0.6431794";
 
 export const DECIMALS = 6;
+export const USD_KESY_RATIO = 129;
+
+export function formatNumberValue(value: string): string {
+  const num = parseFloat(value);
+
+  if (isNaN(num)) {
+    return value;
+  }
+
+  if (num >= 1_000_000_000) {
+    // Billions
+    const formatted = (num / 1_000_000_000).toFixed(2);
+    return `${formatted} B`;
+  } else if (num >= 1_000_000) {
+    // Millions
+    const formatted = (num / 1_000_000).toFixed(2);
+    return `${formatted} M`;
+  } else if (num >= 1_000) {
+    // Thousands
+    const formatted = (num / 1_000).toFixed(2);
+    return `${formatted}K`;
+  } else {
+    // Less than 1000
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
+}

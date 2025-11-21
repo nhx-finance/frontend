@@ -27,6 +27,7 @@ import {
 
 function WalletCard({ wallet }: { wallet: WalletWithBalanceResponse }) {
   const { data: isAssociated, isLoading } = useIsAssociated(wallet.address);
+
   return (
     <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 w-full md:w-1/2">
       <div className="flex items-center gap-2">
@@ -139,11 +140,10 @@ function WalletCard({ wallet }: { wallet: WalletWithBalanceResponse }) {
                       : "Token not associated the transfer will fail. Please associate the token to your wallet."}
                   </p>
                   <a
-                    href="https://medium.com/@elastum/hedera-how-to-associate-your-tokens-c7021c96cc25"
-                    target="_blank"
+                    href="/kesy/associate"
                     className="text-xs font-funnel-display text-blue-500"
                   >
-                    Learn more
+                    Associate Wallet
                   </a>
                 </PopoverContent>
               </Popover>
@@ -183,7 +183,7 @@ export default function Page() {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return (
       <SidebarProvider>
         <KESYSidebar />
@@ -210,16 +210,6 @@ export default function Page() {
           <AddWalletModal closeModal={() => setIsAddWalletModalOpen(false)} />
         )}
       </SidebarProvider>
-    );
-  }
-
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center h-screen px-4">
-        <p className="text-sm font-funnel-display text-muted-foreground">
-          No wallets found
-        </p>
-      </div>
     );
   }
 

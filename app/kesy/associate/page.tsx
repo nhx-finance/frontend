@@ -10,14 +10,39 @@ import { ChevronsRight, KeyRound, Loader2 } from "lucide-react";
 import { prepareContractCall, getContract } from "thirdweb";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import { client, hederaTestnet } from "@/lib/client";
-import { KESY_CONTRACT_ADDR } from "@/lib/utils";
+import {
+  DECIMALS,
+  formatNumberValue,
+  HEDERA_HTS_ADDR,
+  KESY_CONTRACT_ADDR,
+  KESY_TOKEN_ID,
+  USD_KESY_RATIO,
+} from "@/lib/utils";
 import { toast } from "sonner";
+import { useTokenDetails } from "@/hooks/kesy/useAnalytics";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const kesyContract = getContract({
   client,
   chain: hederaTestnet,
-  address: "0x0000000000000000000000000000000000000167",
+  address: HEDERA_HTS_ADDR,
 });
+
+function formatAmount(amount: string): string {
+  const amountNumber = Number(amount);
+  return amountNumber.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function formatUSDAmount(amount: string): string {
+  const amountNumber = Number(amount) / USD_KESY_RATIO;
+  return amountNumber.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
 
 function page() {
   const {
@@ -27,6 +52,8 @@ function page() {
     isError,
   } = useSendTransaction();
   const activeAccount = useActiveAccount();
+  const { data: tokenDetails, isLoading: isTokenDetailsLoading } =
+    useTokenDetails();
 
   useEffect(() => {
     if (isSuccess) {
@@ -125,33 +152,61 @@ function page() {
         </p>
       </div>
       <div className="w-full mt-10 flex flex-col md:flex-row items-center justify-between md:max-w-xl mb-4 gap-4 md:gap-8">
+        {isTokenDetailsLoading ? (
+          <Skeleton className="w-full h-18 border border-foreground/10 rounded-xl" />
+        ) : (
+          <div className="flex md:flex-col flex-row-reverse justify-between items-start w-full">
+            <h2 className="flex flex-col font-semibold font-funnel-display text-foreground">
+              {tokenDetails && tokenDetails.totalSupply ? (
+                formatAmount(tokenDetails.totalSupply)
+              ) : (
+                <p>***********</p>
+              )}{" "}
+              KESY
+              <span className="text-xs text-muted-foreground font-funnel-display">
+                {tokenDetails && tokenDetails.totalSupply ? (
+                  formatUSDAmount(tokenDetails.totalSupply)
+                ) : (
+                  <p>***********</p>
+                )}{" "}
+                USD
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground font-funnel-display text-center mt-2">
+              Circulating Supply
+            </p>
+          </div>
+        )}
+        {isTokenDetailsLoading ? (
+          <Skeleton className="w-full h-18 border border-foreground/10 rounded-xl" />
+        ) : (
+          <div className="flex md:flex-col flex-row-reverse justify-between items-start w-full">
+            <h2 className="flex flex-col font-semibold font-funnel-display text-foreground">
+              {tokenDetails && tokenDetails.reserveAmount ? (
+                formatNumberValue(tokenDetails.reserveAmount)
+              ) : (
+                <p>***********</p>
+              )}{" "}
+              KESY
+              <span className="text-xs text-muted-foreground font-funnel-display">
+                {tokenDetails && tokenDetails.reserveAmount ? (
+                  formatUSDAmount(tokenDetails.reserveAmount)
+                ) : (
+                  <p>***********</p>
+                )}{" "}
+                USD
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground font-funnel-display text-center mt-2">
+              Reserve Amount
+            </p>
+          </div>
+        )}
         <div className="flex md:flex-col flex-row-reverse justify-between items-start w-full">
           <h2 className="flex flex-col font-semibold font-medieval-sharp text-foreground">
-            100,000,000 KESY
+            {KESY_TOKEN_ID}
             <span className="text-xs text-muted-foreground font-funnel-display">
-              1,000,000 USD
-            </span>
-          </h2>
-          <p className="text-sm text-muted-foreground font-funnel-display text-center mt-2">
-            Total Supply
-          </p>
-        </div>
-        <div className="flex md:flex-col flex-row-reverse justify-between items-start w-full">
-          <h2 className="flex flex-col font-semibold font-medieval-sharp text-foreground">
-            100,000,000 KES{" "}
-            <span className="text-xs text-muted-foreground font-funnel-display">
-              1,000,000 USD
-            </span>
-          </h2>
-          <p className="text-sm text-muted-foreground font-funnel-display text-center mt-2">
-            Reserve Amount
-          </p>
-        </div>
-        <div className="flex md:flex-col flex-row-reverse justify-between items-start w-full">
-          <h2 className="flex flex-col font-semibold font-medieval-sharp text-foreground">
-            0.0.7228867
-            <span className="text-xs text-muted-foreground font-funnel-display">
-              0xed45...908
+              {KESY_CONTRACT_ADDR.slice(0, 6)}...{KESY_CONTRACT_ADDR.slice(-4)}
             </span>
           </h2>
           <p className="text-sm text-muted-foreground font-funnel-display text-center mt-2">
