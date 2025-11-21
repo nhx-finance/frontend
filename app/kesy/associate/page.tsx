@@ -11,7 +11,6 @@ import { prepareContractCall, getContract } from "thirdweb";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import { client, hederaTestnet } from "@/lib/client";
 import {
-  DECIMALS,
   formatNumberValue,
   HEDERA_HTS_ADDR,
   KESY_CONTRACT_ADDR,
@@ -44,7 +43,7 @@ function formatUSDAmount(amount: string): string {
   });
 }
 
-function page() {
+function AssociatePage() {
   const {
     mutate: sendTransaction,
     isPending,
@@ -218,4 +217,4 @@ function page() {
   );
 }
 
-export default page;
+export default AssociatePage;
