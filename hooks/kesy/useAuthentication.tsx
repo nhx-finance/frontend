@@ -353,9 +353,11 @@ export const useSubmitUserDetails = () => {
   return useMutation({
     mutationFn: submitUserDetails,
     onSuccess: (data) => {
-      toast.success("User details submitted successfully. Welcome to KESY!");
+      toast.success(
+        "User details submitted successfully. Please login to continue."
+      );
       login(data);
-      router.push("/kesy/dashboard");
+      router.push("/kesy/login");
     },
     onError: (error) => {
       toast.error("Failed to submit user details. Try again later.", {

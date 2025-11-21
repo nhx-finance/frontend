@@ -6,7 +6,6 @@ import { ThirdwebProvider } from "thirdweb/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import QueryProvider from "./QueryProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { KESYAuthProvider } from "@/contexts/KESYContext";
 
 const medievalSharp = MedievalSharp({
@@ -39,9 +38,7 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProvider>
             <ThirdwebProvider>
-              <KESYAuthProvider>
-                <AuthProvider>{children}</AuthProvider>
-              </KESYAuthProvider>
+              <KESYAuthProvider>{children}</KESYAuthProvider>
               <SpeedInsights />
             </ThirdwebProvider>
           </QueryProvider>
