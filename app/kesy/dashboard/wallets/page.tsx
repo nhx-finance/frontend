@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/popover";
 
 function WalletCard({ wallet }: { wallet: WalletWithBalanceResponse }) {
-  const { data: isAssociated, isLoading } = useIsAssociated(wallet.address);
+  const { data: isAssociated, isLoading } = useIsAssociated(wallet.walletId);
 
   return (
     <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 w-full md:w-1/2">

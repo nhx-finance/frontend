@@ -425,10 +425,14 @@ export const useSignMultisigTransaction = () => {
 };
 
 export const useIsAssociated = (id: string) => {
+  const { data: wallets } = useWallets();
+  const address = wallets?.wallets.find(
+    (wallet) => wallet.walletId === id
+  )?.address;
   const { data, isLoading, error } = useQuery({
-    queryKey: ["isAssociated", id],
-    queryFn: () => isAssociated({ address: id }),
-    enabled: !!id,
+    queryKey: ["isAssociated", address],
+    queryFn: () => isAssociated({ address: address }),
+    enabled: !!address,
   });
   return { data, isLoading, error };
 };
