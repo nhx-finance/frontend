@@ -847,8 +847,8 @@ This project is licensed under the MIT License.
 For questions and support:
 
 - **GitHub Issues**: [github.com/nhx-finance/frontend/issues](https://github.com/nhx-finance/frontend/issues)
-- **Email**: support@nhx.finance
-- **Documentation**: [docs.nhx.finance](https://docs.nhx.finance)
+- **Email**: nhx.finance@gmail.com
+- **Documentation**: [docs.nhx.finance](https://docs.nhx.finance](https://nhx-finance.gitbook.io/nhx-finance-docs)
 
 ---
 
