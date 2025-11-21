@@ -20,6 +20,8 @@ import {
   useIsAssociated,
 } from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
+import { useDepositStore } from "@/stores/depositStore";
+import { useRouter } from "next/navigation";
 
 interface DepositFormData {
   kesAmount: string;
@@ -259,6 +261,7 @@ const Step2 = ({
 };
 
 export function DepositForm({ className }: React.ComponentProps<"form">) {
+  const { setDepositAmount, setKESYAmount } = useDepositStore();
   const [formData, setFormData] = useState<DepositFormData>({
     kesAmount: "0",
     destinationWallet: "",
@@ -267,6 +270,7 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
   const { mutate: mintMutation, isPending } = useMint();
   const { data: wallets } = useWallets();
   const { data: isAssociated } = useIsAssociated(formData.destinationWallet);
+  const router = useRouter();
 
   const handleNext = () => {
     if (step === 2) {
@@ -288,10 +292,7 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
           action: {
             label: "Associate",
             onClick: () => {
-              window.open(
-                "https://medium.com/@elastum/hedera-how-to-associate-your-tokens-c7021c96cc25",
-                "_blank"
-              );
+              router.push("/kesy/associate");
             },
           },
         }
@@ -311,6 +312,8 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
     });
     const transactionBytes = payload.toBytes();
     const transactionHex = Buffer.from(transactionBytes).toString("hex");
+    setDepositAmount(Number(formData.kesAmount));
+    setKESYAmount(Number(formData.kesAmount) * 0.99);
     mintMutation({
       amountKes: Number(formData.kesAmount),
       walletId: formData.destinationWallet,

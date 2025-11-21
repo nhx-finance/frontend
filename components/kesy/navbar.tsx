@@ -19,7 +19,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { BookOpenIcon, ChevronsRight, MenuIcon, Newspaper } from "lucide-react";
+import {
+  BookOpenIcon,
+  ChevronsRight,
+  KeyRound,
+  MenuIcon,
+  Newspaper,
+} from "lucide-react";
 import { kesy } from "@/assets";
 import { useRouter } from "next/navigation";
 
@@ -70,10 +76,10 @@ function DesktopNavbar() {
       </div>
       <div className="flex items-center justify-between gap-4">
         <Link
-          href="/"
+          href="/kesy/attestations"
           className="text-sm font-funnel-display text-white font-semibold"
         >
-          Markets
+          Attestations
         </Link>
         <Popover>
           <PopoverTrigger className="text-sm font-funnel-display font-semibold text-white">
@@ -133,7 +139,9 @@ function DesktopNavbar() {
           <PopoverContent className="border-foreground/20 shadow-none w-[400px]">
             <div className="flex flex-col gap-2">
               <Link
-                href="/home"
+                href="https://nhx-finance.gitbook.io/nhx-finance-docs"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
                 <BookOpenIcon className="w-6 h-6" />
@@ -142,7 +150,7 @@ function DesktopNavbar() {
                     Documentation
                   </p>
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
-                    Learn how to use the NHX platform and our products
+                    Learn more about NHX Finance and the KESY Stablecoin.
                   </p>
                 </div>
               </Link>
@@ -158,6 +166,21 @@ function DesktopNavbar() {
                   <p className="text-xs font-funnel-display font-normal text-muted-foreground">
                     Read our latest blogs and articles influencing the Kenyan
                     financial markets
+                  </p>
+                </div>
+              </Link>
+              <Link
+                href="/kesy/associate"
+                className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
+              >
+                <KeyRound className="w-6 h-6" />
+                <div className="">
+                  <p className="text-sm font-funnel-display font-semibold">
+                    Token Association
+                  </p>
+                  <p className="text-xs font-funnel-display font-normal text-muted-foreground">
+                    Associate your wallet with the KESY Stablecoin to receive
+                    KESY.
                   </p>
                 </div>
               </Link>
@@ -195,7 +218,7 @@ function MobileNavbar() {
               <DrawerTitle>
                 <div className="flex items-center justify-center gap-2">
                   <Image src={logo} alt="logo" width={35} height={35} />
-                  <h1 className="text-3xl font-medieval-sharp font-bold text-foreground">
+                  <h1 className="text-3xl font-funnel-display font-bold text-foreground">
                     NHX Finance
                   </h1>
                 </div>
@@ -203,13 +226,13 @@ function MobileNavbar() {
               <DrawerDescription>
                 <div className="flex flex-col gap-2 mt-2">
                   <Link
-                    href="/"
+                    href="/kesy/attestations"
                     className="text-base text-start text-foreground font-funnel-display font-semibold"
                   >
                     <div className="flex items-center gap-1">
                       <ChevronsRight className="w-6 h-6" />
                       <h1 className="text-base text-foreground font-funnel-display font-semibold">
-                        Markets
+                        Attestations
                       </h1>
                     </div>
                   </Link>
@@ -276,7 +299,9 @@ function MobileNavbar() {
                   </div>
                   <div className="flex flex-col gap-2">
                     <Link
-                      href="/home"
+                      href="https://nhx-finance.gitbook.io/nhx-finance-docs"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
                     >
                       <BookOpenIcon className="w-6 h-6" />
@@ -285,7 +310,7 @@ function MobileNavbar() {
                           Documentation
                         </p>
                         <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
-                          Learn how to use the NHX platform and our products
+                          Learn more about NHX Finance and the KESY Stablecoin.
                         </p>
                       </div>
                     </Link>
@@ -301,6 +326,21 @@ function MobileNavbar() {
                         <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
                           Read our latest blogs and articles influencing the
                           Kenyan financial markets
+                        </p>
+                      </div>
+                    </Link>
+                    <Link
+                      href="/kesy/associate"
+                      className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
+                    >
+                      <KeyRound className="w-6 h-6" />
+                      <div className="">
+                        <p className="text-sm text-start text-foreground/80 font-funnel-display font-semibold">
+                          Token Association
+                        </p>
+                        <p className="text-xs text-start font-funnel-display font-normal text-muted-foreground">
+                          Associate your wallet with the KESY Stablecoin to
+                          receive KESY.
                         </p>
                       </div>
                     </Link>

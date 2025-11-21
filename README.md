@@ -1,4 +1,4 @@
-# NHX Frontend
+# NHX Finance
 
 **KESY Stablecoin Platform**
 
@@ -853,3 +853,6 @@ For questions and support:
 ---
 
 **Built with ❤️ for Kenya's digital currency future**
+## KESY Stablecoin
+
+[See Docs](https://nhx-finance.gitbook.io/nhx-finance-docs)
