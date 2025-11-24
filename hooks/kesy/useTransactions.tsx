@@ -340,7 +340,7 @@ export async function signMultisigTransaction({
       throw new Error("Account not found");
     }
     const response = await axios.post(`${SDK_URL}/token/transfer`, {
-      amount: (amount * 10 ** DECIMALS).toString(),
+      amount: amount.toString(),
       targetAccountId: account.account,
     });
 
