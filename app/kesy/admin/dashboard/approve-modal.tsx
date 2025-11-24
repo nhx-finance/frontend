@@ -142,16 +142,6 @@ export default function ApproveModal({
             toast.error("Please enter your Hedera account ID");
             return;
           }
-          if (!multisigTransaction?.transaction_message) {
-            setError("Transaction message not available");
-            toast.error("Transaction message not available");
-            return;
-          }
-          if (!request?.treasuryTransactionId) {
-            setError("Multisig transaction ID not available");
-            toast.error("Multisig transaction ID not available");
-            return;
-          }
 
           signMultisigTransaction(
             {
