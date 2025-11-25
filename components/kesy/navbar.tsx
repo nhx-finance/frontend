@@ -27,18 +27,16 @@ import {
   Newspaper,
 } from "lucide-react";
 import { kesy } from "@/assets";
-import { useRouter } from "next/navigation";
 
 const isAuthenticated = false;
 
 function CustomUserAuthButton() {
-  const router = useRouter();
   return (
     <>
       {isAuthenticated ? (
         <Avatar
           onClick={() => {
-            router.push("/kesy/dashboard");
+            window.open("/kesy/dashboard", "_blank");
           }}
           className="cursor-pointer w-9 border border-foreground/20 rounded-full flex items-center justify-center h-9"
         >
@@ -51,7 +49,7 @@ function CustomUserAuthButton() {
           variant="ghost"
           className="text-sm font-funnel-display text-white font-semibold border border-white/20 rounded-full px-12 py-2"
           onClick={() => {
-            router.push("/kesy/login");
+            window.open("/kesy/login", "_blank");
           }}
         >
           Sign In
@@ -77,6 +75,8 @@ function DesktopNavbar() {
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/kesy/attestations"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-sm font-funnel-display text-white font-semibold"
         >
           Attestations
@@ -88,7 +88,9 @@ function DesktopNavbar() {
           <PopoverContent className="border-foreground/20 shadow-none w-[400px]">
             <div className="flex flex-col gap-2">
               <Link
-                href="/home"
+                href="https://orion.nhx.finance"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
                 <Image
@@ -110,6 +112,8 @@ function DesktopNavbar() {
               </Link>
               <Link
                 href="/kesy"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
                 <Image
@@ -155,7 +159,9 @@ function DesktopNavbar() {
                 </div>
               </Link>
               <Link
-                href="/home"
+                href="/kesy/blogs"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
                 <Newspaper className="w-6 h-6" />
@@ -171,6 +177,8 @@ function DesktopNavbar() {
               </Link>
               <Link
                 href="/kesy/associate"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
               >
                 <KeyRound className="w-6 h-6" />
@@ -227,6 +235,8 @@ function MobileNavbar() {
                 <div className="flex flex-col gap-2 mt-2">
                   <Link
                     href="/kesy/attestations"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-base text-start text-foreground font-funnel-display font-semibold"
                   >
                     <div className="flex items-center gap-1">
@@ -246,7 +256,9 @@ function MobileNavbar() {
                   </div>
                   <div className="flex flex-col gap-2">
                     <Link
-                      href="/home"
+                      href="https://orion.nhx.finance"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
                     >
                       <Image
@@ -315,7 +327,9 @@ function MobileNavbar() {
                       </div>
                     </Link>
                     <Link
-                      href="/home"
+                      href="/kesy/blogs"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
                     >
                       <Newspaper className="w-6 h-6" />

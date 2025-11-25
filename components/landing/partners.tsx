@@ -1,7 +1,7 @@
 "use client";
 
 import { InfiniteMovingCards } from "../ui/infinite-moving-cards";
-import { nse, hashgraph, hedera } from "@/assets";
+import { nse, hedera } from "@/assets";
 
 export function Partners() {
   return (
@@ -17,11 +17,7 @@ const partners = [
     title: "Nairobi Securities Exchange",
   },
   {
-    image: hashgraph,
-    title: "Hashgraph Association",
-  },
-  {
     image: hedera,
-    title: "Hedera",
+    title: "Hedera DLT",
   },
 ];

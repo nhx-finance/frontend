@@ -43,8 +43,7 @@ function KesyPage() {
           <div className="w-full flex items-center justify-center h-full">
             <div className="w-full md:max-w-3xl flex items-center flex-col justify-center">
               <h1 className="text-4xl text-center xl:text-left xl:text-6xl font-funnel-display font-bold text-[#F5F5F5]">
-                The Future of Business is default{" "}
-                <ColourfulText text="Global" />
+                The Future of Business is <ColourfulText text="Global" />
               </h1>
               <p className="text-gray-300 text-xl font-funnel-display text-balance mt-4 text-center xl:text-left">
                 With our stablecoin infrastructure, your business doesn’t need
@@ -54,7 +53,7 @@ function KesyPage() {
                 <Button
                   className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 w-full md:w-1/2"
                   onClick={() => {
-                    router.push("/kesy/signup");
+                    window.open("/kesy/signup", "_blank");
                   }}
                 >
                   <span className="text-lg font-funnel-display font-semibold text-background">
@@ -65,7 +64,10 @@ function KesyPage() {
                   variant="ghost"
                   className="bg-transparent ease-in transition-all group rounded-3xl cursor-pointer hover:bg-transparent duration-300 h-12 w-full md:w-1/2"
                   onClick={() => {
-                    router.push("/home");
+                    window.open(
+                      "https://nhx-finance.gitbook.io/nhx-finance-docs/documentation/about/kesy/overview",
+                      "_blank"
+                    );
                   }}
                 >
                   <span className="text-lg font-funnel-display group-hover:underline font-semibold text-white transition-all duration-300 ease-in">
@@ -74,29 +76,31 @@ function KesyPage() {
                 </Button>
               </div>
               <div className="w-full flex items-center justify-center gap-4 mt-12">
-                <Link href="https://github.com/nhx-finance">
+                <Link
+                  href="https://github.com/nhx-finance"
+                  target="_blank"
+                  className="flex items-center gap-2 group"
+                >
                   <IconBrandGithub
                     size={36}
-                    className="cursor-pointer hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
+                    className="cursor-pointer group-hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
                   />
+                  <p className="text-sm font-funnel-display font-semibold group-hover:text-orange-500 transition-all duration-300 ease-in group-hover:underline">
+                    GitHub
+                  </p>
                 </Link>
-                <Link href="https://twitter.com/nhx-finance">
+                <Link
+                  href="https://twitter.com/nhxfinance"
+                  target="_blank"
+                  className="flex items-center gap-2 group"
+                >
                   <IconBrandTwitter
                     size={36}
-                    className="cursor-pointer hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
+                    className="cursor-pointer group-hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
                   />
-                </Link>
-                <Link href="https://discord.com/nhx-finance">
-                  <IconBrandDiscord
-                    size={36}
-                    className="cursor-pointer hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
-                  />
-                </Link>
-                <Link href="https://telegram.com/nhx-finance">
-                  <IconBrandTelegram
-                    size={36}
-                    className="cursor-pointer hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
-                  />
+                  <p className="text-sm font-funnel-display font-semibold group-hover:text-orange-500 transition-all duration-300 ease-in group-hover:underline">
+                    Twitter
+                  </p>
                 </Link>
               </div>
             </div>
@@ -137,12 +141,18 @@ function KesyPage() {
                 <Button
                   variant="outline"
                   className="rounded-3xl bg-background border border-foreground/20 text-foreground shadow-none text-sm w-1/2 font-funnel-display"
+                  onClick={() => {
+                    window.open("/kesy/associate", "_blank");
+                  }}
                 >
-                  Buy KESY
+                  Associate KESY
                 </Button>
                 <Button
                   variant="outline"
                   className="rounded-3xl bg-foreground text-white border border-foreground/20 font-funnel-display w-1/2 shadow-none"
+                  onClick={() => {
+                    window.open("/kesy/login", "_blank");
+                  }}
                 >
                   Mint KESY
                 </Button>
@@ -169,6 +179,9 @@ function KesyPage() {
                 <Button
                   variant="outline"
                   className="rounded-3xl bg-background w-full border border-foreground/20 text-foreground shadow-none text-sm font-funnel-display"
+                  onClick={() => {
+                    window.open("/kesy/attestations", "_blank");
+                  }}
                 >
                   View Reports
                 </Button>
@@ -192,7 +205,12 @@ function KesyPage() {
                 Kenyan Treasury Securities.
               </p>
               <div className="w-full">
-                <button className="rounded-3xl py-2 px-4 flex items-center justify-between bg-transparent text-orange-500 w-full border border-orange-500 hover:bg-orange-500/10 hover:text-orange-500 transition-all duration-300 ease-in shadow-none text-sm font-funnel-display">
+                <button
+                  onClick={() => {
+                    window.open("/kesy/attestations", "_blank");
+                  }}
+                  className="rounded-3xl py-2 px-4 flex items-center justify-between bg-transparent text-orange-500 w-full border border-orange-500 hover:bg-orange-500/10 hover:text-orange-500 transition-all duration-300 ease-in shadow-none text-sm font-funnel-display"
+                >
                   View Yield Reports
                   <IconArrowRight className="w-4 h-4" color="orange" />
                 </button>

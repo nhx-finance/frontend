@@ -22,14 +22,9 @@ const kesyFAQs: FAQ[] = [
       "Unlike USDT or USDC, which are pegged to the U.S. Dollar, KESY is pegged to the Kenyan Shilling, addressing local currency needs. It also offers a 30% yield distribution to stakers in NHX Vaults, unlike Tether and Circle, which retain all profits. KESY’s reserves are invested in Kenyan Treasury bills, regulated by the CMA and CBK.",
   },
   {
-    question: "What is NHX Vaults, and how can I earn yield with KESY?",
-    answer:
-      "NHX Vaults is a staking platform where users can lock ≥10,000 KESY for one year to earn 30% of the yield generated from Treasury bill investments (e.g., ~2.1% APY based on a 7% gross yield). Yield is distributed annually upon lockup completion.",
-  },
-  {
     question: "How long does it take to mint KESY after depositing funds?",
     answer:
-      "After depositing funds, there is a 40-50 day restriction period to allocate reserves to Treasury bills, per VASP requirements. Once settled, KESY tokens are minted and transferred to your whitelisted wallet within 24 hours.",
+      "After depositing funds, there is a few verification days to verify funds and allocate reserves to Treasury bills, per VASP requirements. Once settled, KESY tokens are minted and transferred to your whitelisted wallet within 24 hours.",
   },
 ];
 

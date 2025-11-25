@@ -28,16 +28,19 @@ function UseCase() {
             </h1>
           </div>
           <p className="text-sm font-funnel-display text-gray-300 leading-relaxed">
-            Institutions or high-net-worth individuals staking ≥10,000 KESY in
-            NHX Vaults earn a stable yield from Kenyan Treasury Securities,
+            Institutions or high-net-worth individuals minting ≥10,000 KESY on
+            our platform earn a stable yield from Kenyan Treasury Securities,
             tailored to those seeking passive income in a regulated environment.
           </p>
           <div className="w-full">
             <Button
               variant="outline"
               className="rounded-3xl bg-background border border-foreground/20 text-foreground shadow-none text-sm w-full font-funnel-display"
+              onClick={() => {
+                window.open("/kesy/login", "_blank");
+              }}
             >
-              Stake Now
+              Stake Minting
             </Button>
           </div>
         </div>
@@ -60,8 +63,13 @@ function UseCase() {
             liquidity on exchanges or DeFi platforms like SaucerSwap
           </p>
           <div className="w-full">
-            <button className="rounded-3xl py-1.5 bg-orange-500 hover:bg-orange-500/80 transition-all duration-300 ease-in border border-orange-500/20 text-black shadow-none text-sm w-full font-funnel-display">
-              Acquire KESY
+            <button
+              onClick={() => {
+                window.open("/kesy/signup", "_blank");
+              }}
+              className="rounded-3xl py-1.5 bg-orange-500 hover:bg-orange-500/80 transition-all duration-300 ease-in border border-orange-500/20 text-black shadow-none text-sm w-full font-funnel-display"
+            >
+              Get Started
             </button>
           </div>
         </div>
@@ -87,19 +95,25 @@ function UseCase() {
             <Button
               variant="outline"
               className="rounded-3xl bg-background border border-foreground/20 text-foreground shadow-none text-sm w-full font-funnel-display"
+              onClick={() => {
+                window.open("orion.com", "_blank");
+              }}
             >
               Buy KESY
             </Button>
           </div>
         </div>
       </div>
-      <div className="w-full mt-8 ">
+      <div className="w-full mt-8 flex items-center justify-center flex-col">
         <p className="text-sm font-funnel-display text-gray-300 leading-relaxed text-center mb-2">
           Don{`'`}t see your use case? Reach out to us.
         </p>
         <Button
           variant="outline"
-          className="rounded-3xl bg-transparent hover:bg-transparent border border-white/20 text-white hover:text-white transition-all duration-300 ease-in shadow-none text-sm w-full font-funnel-display"
+          onClick={() => {
+            window.open("mailto:nhxfinance@gmail.com", "_blank");
+          }}
+          className="rounded-3xl bg-transparent hover:bg-transparent border border-white/20 text-white hover:text-white transition-all duration-300 ease-in shadow-none text-sm w-full md:w-1/2 font-funnel-display"
         >
           Contact Us
         </Button>

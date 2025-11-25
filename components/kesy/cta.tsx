@@ -42,23 +42,28 @@ export function CTA() {
           Get Started with KESY
         </div>
         <p className="text-base font-funnel-display text-muted-foreground leading-relaxed">
-          Join the wait list and be the first to know when KESY is live and
-          start earning from your stablecoins.
+          Do you have any questions about KESY? Send it to us and we will get
+          back to you as soon as possible.
         </p>
         <div className="flex flex-col items-center w-full md:flex-row gap-4">
           <Input
-            placeholder="Enter your email"
-            className="w-full md:w-3/4 h-12 rounded-3xl border border-foreground/20"
+            placeholder="What is your question?"
+            className="w-full md:w-3/4 h-12 rounded-3xl border border-foreground/20 text-foreground font-funnel-display"
           />
-          <Button className="w-full md:w-1/4 h-12 rounded-3xl">
-            Join Waitlist
+          <Button className="w-full md:w-1/4 h-12 rounded-3xl font-funnel-display font-semibold">
+            Send
           </Button>
         </div>
 
         <div className="font-funnel-display font-semibold text-sm dark:text-neutral-200 py-4">
           Africa{`'`}s Inclusive Finance Bridge
         </div>
-        <div className="flex items-center justify-between w-full md:w-1/2 h-12 gap-2 bg-foreground/80 rounded-3xl p-4 cursor-not-allowed">
+        <div
+          onClick={() => {
+            window.open("/kesy/login", "_blank");
+          }}
+          className="flex items-center justify-between w-full md:w-1/2 h-12 gap-2 bg-foreground cursor-pointer rounded-3xl p-4"
+        >
           <p className="text-base font-semibold uppercase font-medieval-sharp text-background">
             Launch App
           </p>
