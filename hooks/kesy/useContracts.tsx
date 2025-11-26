@@ -1,21 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { ContractOptions } from "thirdweb";
-
-interface ContractResponse {
-  success: boolean;
-  contract: Readonly<ContractOptions<[], `0x${string}`>>;
-}
-
-async function getContract(): Promise<ContractResponse> {
-  const response = await fetch("/api/contracts");
-  const data = await response.json();
-  return data;
-}
+import { useMemo } from "react";
+import { getContract } from "thirdweb";
+import { client, hederaTestnet } from "@/lib/client";
+import { HEDERA_HTS_ADDR } from "@/lib/utils";
 
 export const useContracts = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["contract"],
-    queryFn: getContract,
-  });
-  return { data, isLoading, error };
+  const contract = useMemo(() => {
+    return getContract({
+      client,
+      chain: hederaTestnet,
+      address: HEDERA_HTS_ADDR,
+    });
+  }, []);
+
+  return {
+    data: { success: true, contract },
+    isLoading: false,
+    error: null,
+  };
 };
