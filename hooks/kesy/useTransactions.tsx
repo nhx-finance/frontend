@@ -6,8 +6,6 @@ import {
   KESY_URL,
   MULTI_SIG_API_URL,
   SDK_URL,
-  setUpClient,
-  TREASURY_ACCOUNT_ID,
   TREASURY_ADDRESS,
 } from "@/lib/utils";
 import { authAxios } from "./useAuthentication";
@@ -281,23 +279,17 @@ export async function constructTransferTransaction({
 }: {
   amount: number;
   address: string;
-}): Promise<ContractExecuteTransaction> {
+}): Promise<string> {
   try {
-    const client = setUpClient({
-      accountId: process.env.NEXT_PUBLIC_ACCOUNT_ID,
-      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+    console.log("constructing transfer transaction", address, amount);
+    const response = await axios.post(`/api/transactions`, {
+      address,
+      amount,
     });
-    const transaction = new ContractExecuteTransaction()
-      .setContractId(TREASURY_ACCOUNT_ID)
-      .setGas(15_000_000)
-      .setFunction(
-        "transfer",
-        new ContractFunctionParameters()
-          .addAddress(address)
-          .addInt64(amount * 10 ** DECIMALS)
-      );
-    const frozenTransaction = await transaction.freezeWith(client);
-    return frozenTransaction;
+    if (response.status !== 200) {
+      throw new Error("Failed to construct transfer transaction");
+    }
+    return response.data.transactionHex as string;
   } catch (error) {
     console.error("error constructing transfer transaction", error);
     toast.error("Failed to construct transfer transaction");
@@ -433,6 +425,14 @@ export const useIsAssociated = (id: string) => {
     queryKey: ["isAssociated", address],
     queryFn: () => isAssociated({ address: address }),
     enabled: !!address,
+  });
+  return { data, isLoading, error };
+};
+
+export const useConstructTransferTransaction = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["constructTransferTransaction"],
+    queryFn: () => constructTransferTransaction,
   });
   return { data, isLoading, error };
 };

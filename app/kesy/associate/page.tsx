@@ -9,10 +9,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronsRight, KeyRound, Loader2 } from "lucide-react";
 import { prepareContractCall, getContract } from "thirdweb";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
-import { client, hederaTestnet } from "@/lib/client";
 import {
   formatNumberValue,
-  HEDERA_HTS_ADDR,
   KESY_CONTRACT_ADDR,
   KESY_TOKEN_ID,
   USD_KESY_RATIO,
@@ -20,12 +18,7 @@ import {
 import { toast } from "sonner";
 import { useTokenDetails } from "@/hooks/kesy/useAnalytics";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const kesyContract = getContract({
-  client,
-  chain: hederaTestnet,
-  address: HEDERA_HTS_ADDR,
-});
+import { useContracts } from "@/hooks/kesy/useContracts";
 
 function formatAmount(amount: string): string {
   const amountNumber = Number(amount);
@@ -50,6 +43,8 @@ function AssociatePage() {
     isSuccess,
     isError,
   } = useSendTransaction();
+
+  const { data: contract, isLoading: isContractLoading } = useContracts();
   const activeAccount = useActiveAccount();
   const { data: tokenDetails, isLoading: isTokenDetailsLoading } =
     useTokenDetails();
@@ -67,8 +62,12 @@ function AssociatePage() {
       toast.error("Please connect your wallet to continue");
       return;
     }
+    if (!contract) {
+      toast.error("Contract not found");
+      return;
+    }
     const transaction = prepareContractCall({
-      contract: kesyContract,
+      contract: contract.contract,
       method:
         "function associateToken(address account, address token) external returns (int64 responseCode)",
       params: [activeAccount.address, KESY_CONTRACT_ADDR],

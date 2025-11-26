@@ -4,11 +4,8 @@ import { kesyHero, kesy, kesyReports, kesyYield } from "@/assets";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import ColourfulText from "@/components/ui/colourful-text";
-import { useRouter } from "next/navigation";
 import {
-  IconBrandDiscord,
   IconBrandGithub,
-  IconBrandTelegram,
   IconBrandTwitter,
   IconArrowRight,
 } from "@tabler/icons-react";
@@ -24,7 +21,6 @@ import { CTA } from "@/components/kesy/cta";
 import Footer from "@/components/landing/footer";
 
 function KesyPage() {
-  const router = useRouter();
   return (
     <div className="">
       <div className="relative flex h-screen w-full">

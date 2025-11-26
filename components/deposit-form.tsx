@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useMint } from "@/hooks/kesy/useMint";
 import {
   constructTransferTransaction,
+  useConstructTransferTransaction,
   useIsAssociated,
 } from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
@@ -268,6 +269,11 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
   });
   const [step, setStep] = useState(1);
   const { mutate: mintMutation, isPending } = useMint();
+  const {
+    data: constructTransferTransactionData,
+    isLoading: isConstructingTransferTransaction,
+    error: constructTransferTransactionError,
+  } = useConstructTransferTransaction();
   const { data: wallets } = useWallets();
   const { data: isAssociated } = useIsAssociated(formData.destinationWallet);
   const router = useRouter();
@@ -306,12 +312,14 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
       toast.error("Invalid wallet ID");
       return;
     }
-    const payload = await constructTransferTransaction({
+    const transactionHex = await constructTransferTransactionData?.({
       amount: Number(formData.kesAmount),
       address: address,
     });
-    const transactionBytes = payload.toBytes();
-    const transactionHex = Buffer.from(transactionBytes).toString("hex");
+    if (!transactionHex) {
+      toast.error("Failed to construct transfer transaction");
+      return;
+    }
     setDepositAmount(Number(formData.kesAmount));
     setKESYAmount(Number(formData.kesAmount) * 0.99);
     mintMutation({
@@ -334,7 +342,7 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
           formData={formData}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
-          isPending={isPending}
+          isPending={isPending || isConstructingTransferTransaction}
         />
       )}
     </div>

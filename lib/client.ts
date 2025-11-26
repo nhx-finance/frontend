@@ -1,11 +1,6 @@
 import { createThirdwebClient, defineChain } from "thirdweb";
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-const secretKey = process.env.NEXT_PUBLIC_SECRET;
-
-if (!secretKey) {
-  throw new Error("SECRET must be set");
-}
 
 if (!clientId) {
   throw new Error("CLIENT_ID must be set");
@@ -13,7 +8,6 @@ if (!clientId) {
 
 export const client = createThirdwebClient({
   clientId,
-  secretKey,
 });
 
 export const hederaTestnet = defineChain({

@@ -1,35 +1,8 @@
-import { AccountId, Client, PrivateKey } from "@hashgraph/sdk";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export function setUpClient({
-  accountId = process.env.NEXT_PUBLIC_ACCOUNT_ID,
-  privateKey = process.env.NEXT_PUBLIC_PRIVATE_KEY,
-}): Client {
-  if (!accountId) {
-    throw new Error("NEXT_PUBLIC_ACCOUNT_ID is not set");
-  }
-  if (!privateKey) {
-    throw new Error("NEXT_PUBLIC_PRIVATE_KEY is not set");
-  }
-  const client = Client.forTestnet();
-  const ACCOUNT_ID = AccountId.fromString(accountId);
-  const KEY = PrivateKey.fromStringECDSA(privateKey);
-
-  client.setOperator(ACCOUNT_ID, KEY);
-  return client;
-}
-
-export function getSupplyPrivateKey(): PrivateKey {
-  return PrivateKey.fromStringECDSA("");
-}
-
-export function getAccountId(): AccountId {
-  return AccountId.fromString("");
 }
 
 // URLS

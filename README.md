@@ -523,16 +523,25 @@ const { data: balance } = useQuery({
 
 3. **Environment Setup**
 
-   Create a `.env.local` file in the root directory:
+   All sensitive keys (private keys, secret keys) are stored in **Google Secret Manager** and retrieved server-side. You only need:
+
+   **Obtain Google Service Account Credentials:**
+
+   - Get the `google-credentials.json` file from your team/admin
+   - Place it in the project root directory
+   - ⚠️ **Never commit this file** - it's already in `.gitignore`
+
+   **Optional: Create `.env.local` for public configuration:**
 
    ```env
-   # nhx-kesy Backend API
-   NEXT_PUBLIC_API_URL=http://localhost:8080
-   NEXT_PUBLIC_RECEIVER_ACCOUNT_ID=0.0.5178127
+   # Thirdweb (public - safe to expose)
+   NEXT_PUBLIC_CLIENT_ID=your_thirdweb_client_id
 
-   # Hedera Network
-   NEXT_PUBLIC_HEDERA_NETWORK=testnet
-   NEXT_PUBLIC_KESY_TOKEN_ID=0.0.6883537
+   # Hedera Account (public identifier)
+   NEXT_PUBLIC_ACCOUNT_ID=0.0.5178127
+
+   # Backend API (if different from default)
+   NEXT_PUBLIC_API_URL=http://localhost:8080
 
    # Optional: Analytics
    NEXT_PUBLIC_VERCEL_ANALYTICS_ID=your_analytics_id
@@ -540,7 +549,17 @@ const { data: balance } = useQuery({
 
 4. **Run development server**
 
+   Use the provided script that sets up Google credentials automatically:
+
    ```bash
+   ./dev-with-secrets.sh
+   ```
+
+   Or manually:
+
+   ```bash
+   export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/google-credentials.json"
+   export GCP_PROJECT_ID=nhx-finance
    pnpm dev
    ```
 
