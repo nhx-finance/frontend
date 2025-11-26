@@ -1,15 +1,43 @@
 "use client";
 
 import { motion } from "motion/react";
-import React from "react";
+import React, { useState } from "react";
 import { AuroraBackground } from "../ui/aurora-background";
 import { kesy, nhxmmf } from "@/assets";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { ChevronsRight } from "lucide-react";
+import { ChevronsRight, Loader2 } from "lucide-react";
+import { useSubscribeToNewsLetter } from "@/hooks/kesy/useNewsLetterSubscription";
+import { toast } from "sonner";
 
 export function CTA() {
+  const [email, setEmail] = useState("");
+  const { mutate: subscribeToNewsLetter, isPending } =
+    useSubscribeToNewsLetter();
+
+  const handleSubscribe = (e: React.FormEvent<HTMLButtonElement>) => {
+    if (email === "") {
+      toast.error("Please enter your question");
+      return;
+    }
+    e.preventDefault();
+    subscribeToNewsLetter(
+      {
+        email,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Question sent successfully");
+          setEmail("");
+        },
+        onError: (error) => {
+          toast.error("Failed to send question");
+          console.error(error);
+        },
+      }
+    );
+  };
   return (
     <AuroraBackground className="h-[520px] mb-10 mt-20 rounded-3xl border border-foreground/20 flex items-center justify-center">
       <motion.div
@@ -49,9 +77,20 @@ export function CTA() {
           <Input
             placeholder="What is your question?"
             className="w-full md:w-3/4 h-12 rounded-3xl border border-foreground/20 text-foreground font-funnel-display"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <Button className="w-full md:w-1/4 h-12 rounded-3xl font-funnel-display font-semibold">
-            Send
+          <Button
+            className="w-full md:w-1/4 h-12 rounded-3xl font-funnel-display font-semibold"
+            onClick={handleSubscribe}
+          >
+            {isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <span className="text-sm font-funnel-display font-semibold text-background">
+                Submit
+              </span>
+            )}
           </Button>
         </div>
 

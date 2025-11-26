@@ -85,7 +85,7 @@ function KesyPage() {
                     size={36}
                     className="cursor-pointer group-hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
                   />
-                  <p className="text-sm font-funnel-display font-semibold group-hover:text-orange-500 transition-all duration-300 ease-in group-hover:underline">
+                  <p className="text-sm font-funnel-display font-semibold text-gray-300 group-hover:text-orange-500 transition-all duration-300 ease-in group-hover:underline">
                     GitHub
                   </p>
                 </Link>
@@ -98,7 +98,7 @@ function KesyPage() {
                     size={36}
                     className="cursor-pointer group-hover:text-orange-500 transition-all duration-300 ease-in text-gray-300"
                   />
-                  <p className="text-sm font-funnel-display font-semibold group-hover:text-orange-500 transition-all duration-300 ease-in group-hover:underline">
+                  <p className="text-sm font-funnel-display font-semibold text-gray-300 group-hover:text-orange-500 transition-all duration-300 ease-in group-hover:underline">
                     Twitter
                   </p>
                 </Link>

@@ -5,9 +5,46 @@ import Image from "next/image";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { IconBook2, IconX } from "@tabler/icons-react";
+import { useSubscribeToNewsLetter } from "@/hooks/kesy/useNewsLetterSubscription";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
+const isValidEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 
 function Footer() {
   const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const { mutate: subscribeToNewsLetter, isPending } =
+    useSubscribeToNewsLetter();
+
+  const handleSubscribe = (e: React.FormEvent<HTMLButtonElement>) => {
+    if (email === "") {
+      toast.error("Please enter your email");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+    e.preventDefault();
+    subscribeToNewsLetter(
+      {
+        email,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Subscribed to newsletter successfully");
+          setEmail("");
+        },
+        onError: (error) => {
+          toast.error("Failed to subscribe to newsletter");
+          console.error(error);
+        },
+      }
+    );
+  };
   return (
     <footer className="bg-background lg:grid lg:grid-cols-5 border-t border-foreground/10 mb-4">
       <div className="relative block h-96 lg:col-span-2 lg:h-full">
@@ -25,12 +62,21 @@ function Footer() {
           <div>
             <Input
               placeholder="Sign up for our newsletter"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="border-foreground/10 h-12 font-funnel-display rounded-3xl"
             />
-            <Button className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 mt-2 w-full md:w-1/2">
-              <span className="text-sm font-funnel-display font-semibold text-background">
-                Subscribe
-              </span>
+            <Button
+              className="bg-foreground hover:bg-foreground/80 ease-in transition-all rounded-3xl duration-300 h-12 mt-2 w-full md:w-1/2"
+              onClick={handleSubscribe}
+            >
+              {isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <span className="text-sm font-funnel-display font-semibold text-background">
+                  Subscribe
+                </span>
+              )}
             </Button>
 
             <ul className="mt-8 flex gap-6 font-funnel-display">

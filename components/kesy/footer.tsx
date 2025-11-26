@@ -54,7 +54,7 @@ function Footer() {
             </p>
           </div>
           <a
-            href="https://docs.kesy.io"
+            href="https://nhx-finance.gitbook.io/nhx-finance-docs"
             target="_blank"
             rel="noopener noreferrer"
           >
