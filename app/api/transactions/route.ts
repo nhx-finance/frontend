@@ -61,7 +61,10 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to create transaction" },
+      {
+        error: "Failed to create transaction",
+        message: (error as Error).message,
+      },
       { status: 500 }
     );
   }
