@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import CustomConnectButton from "@/components/ui/connect-button";
 import { Button } from "@/components/ui/button";
 import { ChevronsRight, KeyRound, Loader2 } from "lucide-react";
-import { prepareContractCall, getContract } from "thirdweb";
+import { prepareContractCall } from "thirdweb";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import {
   formatNumberValue,
@@ -44,7 +44,7 @@ function AssociatePage() {
     isError,
   } = useSendTransaction();
 
-  const { data: contract, isLoading: isContractLoading } = useContracts();
+  const { data: contract } = useContracts();
   const activeAccount = useActiveAccount();
   const { data: tokenDetails, isLoading: isTokenDetailsLoading } =
     useTokenDetails();

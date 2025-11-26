@@ -16,7 +16,6 @@ import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
 import { useMint } from "@/hooks/kesy/useMint";
 import {
-  constructTransferTransaction,
   useConstructTransferTransaction,
   useIsAssociated,
 } from "@/hooks/kesy/useTransactions";
@@ -272,7 +271,6 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
   const {
     data: constructTransferTransactionData,
     isLoading: isConstructingTransferTransaction,
-    error: constructTransferTransactionError,
   } = useConstructTransferTransaction();
   const { data: wallets } = useWallets();
   const { data: isAssociated } = useIsAssociated(formData.destinationWallet);

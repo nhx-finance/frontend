@@ -10,7 +10,7 @@ function BlogDetailsPage() {
     <div className="max-w-7xl mx-auto flex items-center flex-col justify-between">
       <Navbar />
       <p className="text-sm font-funnel-display font-bold text-center mt-10 text-muted-foreground">
-        Blog coming soon
+        {id}. Blog coming soon
       </p>
       <Link
         href="/kesy/blogs"
