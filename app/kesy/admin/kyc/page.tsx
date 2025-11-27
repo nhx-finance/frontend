@@ -23,6 +23,7 @@ import { CheckIcon, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useLogAdminAction } from "@/hooks/kesy/useAnalytics";
 
 function ApproveModal({
   kyc,
@@ -32,7 +33,7 @@ function ApproveModal({
   closeModal: () => void;
 }) {
   const { mutate: approveKYC, isPending } = useApproveKYC();
-
+  const { mutate: logAdminAction, isPending: isLogging } = useLogAdminAction();
   if (!kyc) {
     return (
       <div className="fixed inset-0 px-2 w-screen z-50 bg-black/50 flex items-center justify-center backdrop-blur-sm">
@@ -56,6 +57,18 @@ function ApproveModal({
       rejectedReason: "",
       reviewerNotes: "KYC approved by admin",
     });
+    logAdminAction(
+      { message: `Admin approved KYC request ${kyc.kycId}` },
+      {
+        onSuccess: () => {
+          toast.success("Action logged successfully");
+        },
+        onError: (err) => {
+          toast.error("Failed to log admin action");
+          console.error(err);
+        },
+      }
+    );
   };
 
   return (
@@ -158,11 +171,12 @@ function ApproveModal({
             onClick={handleApprove}
             disabled={
               isPending ||
+              isLogging ||
               kyc.status.toLowerCase() === "verified" ||
               kyc.status.toLowerCase() === "rejected"
             }
           >
-            {isPending ? (
+            {isPending || isLogging ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : kyc.status.toLowerCase() === "verified" ? (
               "Verified"
@@ -172,6 +186,7 @@ function ApproveModal({
               "Verify"
             )}
             {isPending ||
+            isLogging ||
             kyc.status.toLowerCase() === "verified" ||
             kyc.status.toLowerCase() === "rejected" ? null : (
               <CheckIcon className="w-4 h-4" />

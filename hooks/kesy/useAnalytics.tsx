@@ -1,6 +1,6 @@
-import { SDK_URL } from "@/lib/utils";
+import { API_URL, SDK_URL } from "@/lib/utils";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 interface TokenReserveResponse {
   message: string;
@@ -51,6 +51,19 @@ async function getTokenReserve(): Promise<TokenReserveResponse> {
   }
 }
 
+async function logAdminAction({ message }: { message: string }) {
+  try {
+    const response = await axios.post(`/api/logs`, { message });
+    if (response.status !== 200) {
+      throw new Error("Failed to log admin action");
+    }
+    return response.data;
+  } catch (error) {
+    console.error("error logging admin action", error);
+    throw error;
+  }
+}
+
 export const useTokenReserve = () => {
   return useQuery({
     queryKey: ["token-reserve"],
@@ -76,5 +89,11 @@ export const useTokenDetails = () => {
   return useQuery({
     queryKey: ["token-details"],
     queryFn: getTokenDetails,
+  });
+};
+
+export const useLogAdminAction = () => {
+  return useMutation({
+    mutationFn: logAdminAction,
   });
 };

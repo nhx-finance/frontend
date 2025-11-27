@@ -833,7 +833,29 @@ apiClient.interceptors.request.use((config) => {
 - Error handling without sensitive data exposure
 - Environment variables for sensitive data
 - Rate limiting on auth endpoints
-- Audit logging for admin actions
+- **Immutable audit logging via Hedera Consensus Service (HCS)**
+
+### **Transparent Admin Action Logging**
+
+All administrative actions are logged immutably on the Hedera blockchain using **Hedera Consensus Service (HCS)** for complete transparency and auditability:
+
+- **Technology**: Hedera Consensus Service (HCS) Topic Messages
+- **Topic ID**: [0.0.7340379](https://hashscan.io/testnet/topic/0.0.7340379)
+- **Immutable**: All logs are permanently recorded on Hedera's public ledger
+- **Transparent**: Anyone can verify admin actions via Hedera Mirror Node
+- **Logged Actions**:
+  - KYC approval/rejection decisions
+  - Mint request approvals and status changes
+  - Token transfers and transactions
+  - All actions include timestamps, admin identifiers, and transaction IDs
+
+**Viewing Logs**:
+
+- Access logs via [Hedera Mirror Node Explorer](https://hashscan.io/testnet/topic/0.0.7340379) (testnet)
+- Query topic messages programmatically via Mirror Node API
+- Each log entry includes a Hedera transaction ID for verification
+
+This ensures complete transparency and addresses regulatory requirements for audit trails of all administrative decisions.
 
 ---
 

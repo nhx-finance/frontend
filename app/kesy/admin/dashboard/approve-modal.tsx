@@ -24,6 +24,7 @@ import {
   PayloadInput,
   ErrorMessage,
 } from "./modal-components";
+import { useLogAdminAction } from "@/hooks/kesy/useAnalytics";
 
 export default function ApproveModal({
   request,
@@ -43,6 +44,7 @@ export default function ApproveModal({
   const [payload, setPayload] = useState<string>("");
   const [adminAccountID, setAdminAccountID] = useState("");
   const [error, setError] = useState<string>("");
+  const { mutate: logAdminAction, isPending: isLogging } = useLogAdminAction();
 
   const handleCloseModal = () => {
     closeModal();
@@ -100,6 +102,18 @@ export default function ApproveModal({
               },
             }
           );
+          logAdminAction(
+            { message: `Admin confirmed mint request ${request.requestId}` },
+            {
+              onSuccess: () => {
+                toast.success("Action logged successfully");
+              },
+              onError: (err) => {
+                toast.error("Failed to log admin action");
+                console.error(err);
+              },
+            }
+          );
           break;
         case MintStatus.MINTED:
           executeTransaction(
@@ -118,6 +132,20 @@ export default function ApproveModal({
                   },
                   {
                     onSuccess: () => {
+                      logAdminAction(
+                        {
+                          message: `Admin executed mint request ${request.requestId}`,
+                        },
+                        {
+                          onSuccess: () => {
+                            toast.success("Action logged successfully");
+                          },
+                          onError: (err) => {
+                            toast.error("Failed to log admin action");
+                            console.error(err);
+                          },
+                        }
+                      );
                       setTimeout(() => {
                         handleCloseModal();
                       }, 500);
@@ -159,6 +187,20 @@ export default function ApproveModal({
                   },
                   {
                     onSuccess: () => {
+                      logAdminAction(
+                        {
+                          message: `Admin transferred mint request ${request.requestId} to ${request.walletAddress}`,
+                        },
+                        {
+                          onSuccess: () => {
+                            toast.success("Action logged successfully");
+                          },
+                          onError: (err) => {
+                            toast.error("Failed to log admin action");
+                            console.error(err);
+                          },
+                        }
+                      );
                       setTimeout(() => {
                         handleCloseModal();
                       }, 500);
@@ -179,6 +221,18 @@ export default function ApproveModal({
           break;
         case MintStatus.FAILED:
           toast.info("Retry functionality not yet implemented");
+          logAdminAction(
+            { message: `Admin failed to mint request ${request.requestId}` },
+            {
+              onSuccess: () => {
+                toast.success("Action logged successfully");
+              },
+              onError: (err) => {
+                toast.error("Failed to log admin action");
+                console.error(err);
+              },
+            }
+          );
           break;
         default:
           setError("Invalid status");

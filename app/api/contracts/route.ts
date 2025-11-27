@@ -6,12 +6,12 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       address: HEDERA_HTS_ADDR,
-      message: "Contract should be created client-side using getContract()",
+      message: "Address retrieved successfully",
     });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Contract retrieval failed" },
+      { error: "Address retrieval failed", message: (error as Error).message },
       { status: 500 }
     );
   }

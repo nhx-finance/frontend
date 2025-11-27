@@ -5,11 +5,12 @@ import {
   ContractExecuteTransaction,
   ContractFunctionParameters,
   PrivateKey,
+  PublicKey,
 } from "@hashgraph/sdk";
 import { getSecret } from "@/lib/server/secrets";
 import { TREASURY_ACCOUNT_ID, DECIMALS } from "@/lib/utils";
 
-async function setUpClient({
+export async function setUpClient({
   accountId = process.env.NEXT_PUBLIC_ACCOUNT_ID,
   privateKey = "",
 }): Promise<Client> {
@@ -25,6 +26,10 @@ async function setUpClient({
 
   client.setOperator(ACCOUNT_ID, KEY);
   return client;
+}
+
+export function getPublicKey(privateKey: string): PublicKey {
+  return PrivateKey.fromStringECDSA(privateKey).publicKey!;
 }
 
 export async function POST(request: Request) {
