@@ -18,8 +18,8 @@ test.describe("Authentication", () => {
   test("should login with valid credentials", async ({ page }) => {
     await page.goto(ROUTES.LOGIN);
 
-    await page.getByLabel("Email").fill("sylusabel1@gmail.com");
-    await page.getByLabel("Password").fill("sam@2002");
+    await page.getByLabel("Email").fill("testuser@gmail.com");
+    await page.getByLabel("Password").fill("password");
 
     await page.getByRole("button", { name: /login/i }).click();
 
