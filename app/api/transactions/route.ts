@@ -30,7 +30,6 @@ async function setUpClient({
 export async function POST(request: Request) {
   try {
     const { address, amount } = await request.json();
-    console.log("address", address);
     const privateKeySecret = await getSecret("PRIVATE_KEY");
     const accountId = process.env.NEXT_PUBLIC_ACCOUNT_ID;
     const client = await setUpClient({
