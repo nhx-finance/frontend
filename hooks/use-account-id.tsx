@@ -14,12 +14,14 @@ export const useAccountId = () => {
   return { data, isLoading, error };
 };
 
+import { getMirrorNodeUrl } from "@/lib/network-config";
+
 async function fetchAccountId(evmAddress: string | undefined): Promise<string> {
   if (!evmAddress) {
     throw new Error("EVM address is required");
     return "";
   }
-  const url = `https://testnet.mirrornode.hedera.com/api/v1/accounts/${evmAddress}?limit=2&order=asc&transactiontype=cryptotransfer&transactions=true`;
+  const url = `${getMirrorNodeUrl()}/accounts/${evmAddress}?limit=2&order=asc&transactiontype=cryptotransfer&transactions=true`;
   const response = await fetch(url);
   const data = await response.json();
   return data.account;

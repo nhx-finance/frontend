@@ -10,8 +10,8 @@ export const kesyYield = "/backed.png";
 export const investorsUseCase = "/individual.png";
 export const institutionsUseCase = "/business.png";
 export const secondaryMarketUseCase = "/services.png";
-export const blog1 = "/individual.png";
-export const blog2 = "/business.png";
+export const blog1 = "/blog1.jpg";
+export const blog2 = "/blog2.png";
 export const blog3 = "/services.png";
 
 // Partners

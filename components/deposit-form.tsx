@@ -102,7 +102,7 @@ const Step1 = ({
               className="w-[60%] h-full bg-transparent placeholder:text-muted-foreground focus:outline-none font-funnel-display no-spinners-input"
               style={{ fontSize: `${sellFontSize - 4}px` }}
             >
-              {(Number(formData.kesAmount) * 0.99).toLocaleString(undefined, {
+              {(Number(formData.kesAmount) * 0.9).toLocaleString(undefined, {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               })}
@@ -178,11 +178,13 @@ const Step2 = ({
   setFormData,
   handleSubmit,
   isPending,
+  isConstructingTransferTransaction,
 }: {
   formData: DepositFormData;
   setFormData: (data: DepositFormData) => void;
   handleSubmit: () => void;
   isPending: boolean;
+  isConstructingTransferTransaction: boolean;
 }) => {
   const { data: wallets } = useWallets();
 
@@ -250,11 +252,19 @@ const Step2 = ({
         approved.
       </p>
       <Button
-        disabled={!formData.destinationWallet || isPending}
+        disabled={
+          !formData.destinationWallet ||
+          isPending ||
+          isConstructingTransferTransaction
+        }
         className="w-full mt-4 font-funnel-display rounded-3xl"
         onClick={handleSubmit}
       >
-        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Finish"}
+        {isPending || isConstructingTransferTransaction ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          "Finish"
+        )}
       </Button>
     </div>
   );
@@ -340,7 +350,8 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
           formData={formData}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
-          isPending={isPending || isConstructingTransferTransaction}
+          isPending={isPending}
+          isConstructingTransferTransaction={isConstructingTransferTransaction}
         />
       )}
     </div>

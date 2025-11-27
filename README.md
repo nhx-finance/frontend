@@ -534,6 +534,9 @@ const { data: balance } = useQuery({
    **Optional: Create `.env.local` for public configuration:**
 
    ```env
+   # Hedera Network (testnet or mainnet)
+   NEXT_PUBLIC_HEDERA_NETWORK=testnet
+
    # Thirdweb (public - safe to expose)
    NEXT_PUBLIC_CLIENT_ID=your_thirdweb_client_id
 
@@ -546,6 +549,12 @@ const { data: balance } = useQuery({
    # Optional: Analytics
    NEXT_PUBLIC_VERCEL_ANALYTICS_ID=your_analytics_id
    ```
+
+   **Network Configuration:**
+
+   - Set `NEXT_PUBLIC_HEDERA_NETWORK=testnet` for Hedera Testnet (default)
+   - Set `NEXT_PUBLIC_HEDERA_NETWORK=mainnet` for Hedera Mainnet
+   - This automatically configures RPC endpoints, Mirror Node URLs, and block explorer links
 
 4. **Run development server**
 

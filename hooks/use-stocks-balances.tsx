@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAccountId } from "./use-account-id";
+import { getMirrorNodeUrl } from "@/lib/network-config";
 
 export const availableTokens = [
   "0.0.7135370",
@@ -59,7 +60,7 @@ export async function fetchAllUserBalances(
     throw new Error("Account ID is required");
     return [];
   }
-  const url = `https://testnet.mirrornode.hedera.com/api/v1/accounts/${accountId}/tokens`;
+  const url = `${getMirrorNodeUrl()}/accounts/${accountId}/tokens`;
   const response = await fetch(url);
   const data = (await response.json()) as TokensResponse;
   return data.tokens || [];

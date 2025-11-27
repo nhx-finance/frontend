@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  DECIMALS,
   HEDERA_URL,
   KESY_TOKEN_ID,
   KESY_URL,
@@ -11,12 +10,7 @@ import {
 import { authAxios } from "./useAuthentication";
 import type { Sort, Pageable } from "./useKYC";
 import { toast } from "sonner";
-import {
-  ContractExecuteTransaction,
-  ContractFunctionParameters,
-} from "@hashgraph/sdk";
 import axios from "axios";
-
 import { getContract } from "thirdweb";
 import { client, hederaTestnet } from "@/lib/client";
 import { useWallets } from "./useWallets";

@@ -1,4 +1,5 @@
 import { createThirdwebClient, defineChain } from "thirdweb";
+import { currentNetwork } from "./network-config";
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
 
@@ -10,25 +11,28 @@ export const client = createThirdwebClient({
   clientId,
 });
 
-export const hederaTestnet = defineChain({
-  id: 296,
-  name: "Hedera Testnet",
-  rpc: `https://testnet.hashio.io/api`,
+export const hederaChain = defineChain({
+  id: currentNetwork.chainId,
+  name: currentNetwork.name,
+  rpc: currentNetwork.rpcUrl,
   nativeCurrency: {
     name: "hbar",
     symbol: "HBAR",
     decimals: 8,
   },
   rpcUrls: {
-    default: { http: [`https://testnet.hashio.io/api`] },
+    default: { http: [currentNetwork.rpcUrl] },
   },
   blockExplorers: {
     default: {
       name: "Hashscan",
-      url: "https://hashscan.io/testnet",
+      url: currentNetwork.hashscanUrl,
     },
   },
-  testnet: true,
-  chainId: 296,
-  networkId: 296,
+  testnet: currentNetwork.isTestnet,
+  chainId: currentNetwork.chainId,
+  networkId: currentNetwork.networkId,
 });
+
+// Export as hederaTestnet for backward compatibility (will be mainnet if configured)
+export const hederaTestnet = hederaChain;

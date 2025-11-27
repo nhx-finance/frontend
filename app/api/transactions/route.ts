@@ -9,6 +9,7 @@ import {
 } from "@hashgraph/sdk";
 import { getSecret } from "@/lib/server/secrets";
 import { TREASURY_ACCOUNT_ID, DECIMALS } from "@/lib/utils";
+import { HEDERA_NETWORK } from "@/lib/network-config";
 
 export async function setUpClient({
   accountId = process.env.NEXT_PUBLIC_ACCOUNT_ID,
@@ -20,7 +21,8 @@ export async function setUpClient({
   if (!privateKey || privateKey === "") {
     throw new Error("PRIVATE_KEY is not set");
   }
-  const client = Client.forTestnet();
+  const client =
+    HEDERA_NETWORK === "mainnet" ? Client.forMainnet() : Client.forTestnet();
   const ACCOUNT_ID = AccountId.fromString(accountId);
   const KEY = PrivateKey.fromStringECDSA(privateKey);
 

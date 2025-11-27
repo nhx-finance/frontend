@@ -58,7 +58,9 @@ export interface HederaTransaction {
   valid_start_timestamp: string;
 }
 
-const BASE_URL = "https://testnet.mirrornode.hedera.com/api/v1/";
+import { getMirrorNodeUrl } from "@/lib/network-config";
+
+const BASE_URL = `${getMirrorNodeUrl()}/`;
 
 export interface TransactionResponse {
   transactions: HederaTransaction[];

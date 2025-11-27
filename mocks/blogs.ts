@@ -3,32 +3,33 @@ import { blog1, blog2, blog3 } from "@/assets";
 export const blogs = [
   {
     id: 1,
-    author: "@smusuu",
-    title: "NHX Partners with leading on-ramp providers to enhance liquidity",
+    author: "@0xodus",
+    title:
+      "NHX Finance accepted into the NSE x Hedera Foundation Innovation Lab",
     description:
-      "NHX is pleased to announce a strategic partnership with leading on-ramp providers to enhance liquidity and accessibility for our users. This collaboration will allow NHX to offer seamless and efficient cross-border transactions, enabling users to easily convert stablecoins into fiat currencies and vice versa. By partnering with these leading providers, NHX will be able to offer its users a wide range of options for on-ramping and off-ramping their stablecoins, including bank transfers, mobile money transfers, and other payment methods. This will make it easier for users to access the liquidity they need to trade and invest in the NHX ecosystem. This partnership is a significant step forward for NHX and its users, and we are excited to see the benefits it will bring to the ecosystem. We would like to thank our partners for their support and commitment to making NHX a success.",
+      "Introducing NHX Finance: During the NSE innovation lab we are working on a 1:1 backed Kenyan Shilling stablecoin on the Hedera network. The stablecoin will be backed by Kenyan Treasury bills and will be available to institutions and individuals to use for payments and investments. The stablecoin will be available to institutions and individuals to use for payments and investments. The stablecoin will be available to institutions and individuals to use for payments and investments. The stablecoin will be available to institutions and individuals to use for payments and investments.",
+    date: "November 26, 2025",
     image: blog1,
-    date: "April 02, 2025",
     readTime: "5 min read",
   },
   {
     id: 2,
     author: "@your_javaguy",
-    title: "NHX Launches New Money Market Fund to Offer Yield on Stablecoins",
+    title: "NHX Fundraising Round Close",
     description:
-      "NHX is pleased to announce the launch of a new money market fund that will offer yield on stablecoins. This fund will be available to NHX users and will allow them to earn interest on their stablecoins. The fund will be managed by a team of experts and will be available in a variety of currencies, including USD, EUR, and GBP. The fund will be available to NHX users and will allow them to earn interest on their stablecoins. The fund will be managed by a team of experts and will be available in a variety of currencies, including USD, EUR, and GBP. The fund will be available to NHX users and will allow them to earn interest on their stablecoins. The fund will be managed by a team of experts and will be available in a variety of currencies, including USD, EUR, and GBP.",
-    image: blog2,
-    date: "August 20, 2025",
+      "NHX Finance is excited to announce the upcoming launch of our $500,000 seed fundraising round, offering 20% equity to visionary investors who want to shape the future of African stablecoins. This capital will accelerate the mainnet launch of KESY — Kenya’s first fully regulated, Treasury-bill-backed stablecoin on Hedera. By joining this round, you secure a front-row seat (and meaningful ownership) in a project positioned to capture a slice of Kenya’s $4 billion remittance market, unlock fractional stock ownership for millions, and establish the leading KES-pegged stablecoin across Africa.",
+    image: blog3,
+    date: "November 30, 2025",
     readTime: "3 min read",
   },
   {
     id: 3,
     author: "@the_sylus",
-    title: "KESY to be added on the Global Stablecoin Yield Index",
+    title: "Introducing KESY: The Future of Stablecoins",
     description:
-      "NHX is pleased to announce that KESY will be added to the Global Stablecoin Yield Index. This is a significant step forward for NHX and its users, and we are excited to see the benefits it will bring to the ecosystem. We would like to thank our partners for their support and commitment to making NHX a success.",
-    image: blog3,
-    date: "May 14, 2025",
-    readTime: "7 min read",
+      "Introducing KESY: KESY is a stablecoin pegged 1:1 to the Kenyan Shilling (KES), issued by NHX Finance and backed by high-quality short-term Treasury bills and CMA-approved money market funds. Institutions can mint KESY with a minimum of KES 1 million, while users can acquire it on secondary markets or stake it for yield. The peg is maintained through daily reserve attestations, ensuring stability and compliance with the VASP Bill, 2025.",
+    image: blog2,
+    date: "November 27, 2025",
+    readTime: "5 min read",
   },
 ];

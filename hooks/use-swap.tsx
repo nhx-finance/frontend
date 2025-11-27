@@ -3,8 +3,9 @@ import * as ethers from "ethers";
 import { useActiveAccount, useSendTransaction } from "thirdweb/react";
 import { getContract, prepareContractCall } from "thirdweb";
 import { client, hederaTestnet } from "@/lib/client";
+import { getRpcUrl } from "@/lib/network-config";
 
-const hederaJsonRelayUrl = "https://testnet.hashio.io/api";
+const hederaJsonRelayUrl = getRpcUrl();
 const provider = new ethers.JsonRpcProvider(hederaJsonRelayUrl, "", {
   batchMaxCount: 1,
 });
