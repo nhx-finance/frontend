@@ -4,4 +4,11 @@ const BASE_URL =
 export const ROUTES = {
   LOGIN: `${BASE_URL}/login`,
   DASHBOARD: `${BASE_URL}/dashboard`,
+  SIGNUP: `${BASE_URL}/signup`,
+  OTP: `${BASE_URL}/otp`,
+  DEPOSIT: `${BASE_URL}/deposit`,
 };
+
+export function generateRandomEmail(): string {
+  return `testuser${Math.random().toString(36).substring(2, 6)}@gmail.com`;
+}
