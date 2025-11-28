@@ -98,17 +98,8 @@ export const useWallets = () => {
 };
 
 export const useAddWallet = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: addWallet,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["wallets"] });
-      toast.success("Wallet added successfully");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
   });
 };
 

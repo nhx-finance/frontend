@@ -30,6 +30,7 @@ import {
   PopoverContent,
 } from "@radix-ui/react-popover";
 import { useSubmitKYCDetails } from "@/hooks/kesy/useKYC";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "Full name is required" }),
@@ -147,9 +148,11 @@ const Step1 = ({
 const Step2 = ({
   form,
   onBack,
+  setShowVerificationModal,
 }: {
   form: UseFormReturn<z.infer<typeof formSchema>>;
   onBack: () => void;
+  setShowVerificationModal: (show: boolean) => void;
 }) => {
   const { mutate: submitKYCDetails, isPending } = useSubmitKYCDetails();
   const frontFileRef = React.useRef<HTMLInputElement>(null);
@@ -160,7 +163,18 @@ const Step2 = ({
 
   const handleSubmit = async () => {
     const formData = form.getValues();
-    submitKYCDetails(formData);
+    submitKYCDetails(formData, {
+      onSuccess: () => {
+        toast.success(
+          "KYC details submitted successfully. Please wait for approval."
+        );
+        setShowVerificationModal(false);
+      },
+      onError: (error) => {
+        toast.error("Failed to submit KYC details");
+        console.error(error);
+      },
+    });
   };
 
   const handleDocumentFrontUpload = () => {
@@ -384,7 +398,13 @@ function VerificationModal({
       return <Step1 form={form} onNext={handleNext} />;
     }
     if (currentStep === 2) {
-      return <Step2 form={form} onBack={handleBack} />;
+      return (
+        <Step2
+          form={form}
+          onBack={handleBack}
+          setShowVerificationModal={setShowVerificationModal}
+        />
+      );
     }
     return null;
   };

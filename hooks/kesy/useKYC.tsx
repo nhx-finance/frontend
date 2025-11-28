@@ -194,15 +194,6 @@ export const useSubmitKYCDetails = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: submitKYCDetails,
-    onSuccess: () => {
-      toast.success(
-        "KYC details submitted successfully. Please wait for approval."
-      );
-    },
-    onError: (error) => {
-      toast.error("Failed to submit KYC details");
-      console.error(error);
-    },
   });
 };
 

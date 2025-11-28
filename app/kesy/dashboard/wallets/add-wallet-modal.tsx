@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAddWallet } from "@/hooks/kesy/useWallets";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AddWalletModalProps {
   closeModal: () => void;
@@ -23,6 +24,7 @@ function AddWalletModal({ closeModal }: AddWalletModalProps) {
   const [network, setNetwork] = useState<string>("");
   const [walletAddress, setWalletAddress] = useState<string>("");
   const { mutate: addWalletMutation, isPending } = useAddWallet();
+  const queryClient = useQueryClient();
 
   const handleAddWallet = () => {
     if (network === "" || walletAddress === "") {
@@ -34,7 +36,24 @@ function AddWalletModal({ closeModal }: AddWalletModalProps) {
       return;
     }
 
-    addWalletMutation({ network, walletAddress });
+    addWalletMutation(
+      { network, walletAddress },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["walletsWithBalances"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["wallets"],
+          });
+          toast.success("Wallet added successfully");
+          closeModal();
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      }
+    );
   };
   return (
     <div className="fixed inset-0 px-2 w-screen z-50 bg-black/50 flex items-center justify-center backdrop-blur-sm">

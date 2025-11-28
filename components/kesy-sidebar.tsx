@@ -74,12 +74,12 @@ const data = {
   navSecondary: [
     {
       title: "Support",
-      url: "#",
+      url: "mailto:nhxfinance@gmail.com",
       icon: LifeBuoy,
     },
     {
       title: "Feedback",
-      url: "#",
+      url: "mailto:nhxfinance@gmail.com",
       icon: Send,
     },
   ],

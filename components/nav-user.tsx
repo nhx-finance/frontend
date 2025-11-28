@@ -83,14 +83,21 @@ export function NavUser({ userDetails }: { userDetails: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuSeparator />
             <DropdownMenuGroup className="font-funnel-display">
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  window.open(
+                    "https://nhx-finance.gitbook.io/nhx-finance-docs",
+                    "_blank"
+                  );
+                }}
+              >
                 <BookOpenIcon />
                 Documentation
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="font-funnel-display"
                 onClick={() => {
-                  router.push("/home");
+                  router.push("/kesy");
                 }}
               >
                 <IconWorldCheck />
