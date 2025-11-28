@@ -300,8 +300,7 @@ export async function getMultisigTransaction({
   }
   try {
     const url = `${MULTI_SIG_API_URL}/transactions/${multisigId}`;
-    const authenticatedInstance = authAxios();
-    const response = await authenticatedInstance.get(url);
+    const response = await axios.get(url);
     console.log("multisig transaction", response.data);
     if (response.status !== 200) {
       throw new Error("Failed to get multisig transaction");

@@ -1,12 +1,21 @@
 const BASE_URL =
   process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3000/kesy";
+const BASE_URL_PROD = "https://devnhx-finance.vercel.app/kesy";
+const ENV = process.env.NODE_ENV || "production";
+
+function getBaseUrl(): string {
+  if (ENV === "production") {
+    return BASE_URL_PROD;
+  }
+  return BASE_URL;
+}
 
 export const ROUTES = {
-  LOGIN: `${BASE_URL}/login`,
-  DASHBOARD: `${BASE_URL}/dashboard`,
-  SIGNUP: `${BASE_URL}/signup`,
-  OTP: `${BASE_URL}/otp`,
-  DEPOSIT: `${BASE_URL}/deposit`,
+  LOGIN: `${getBaseUrl()}/login`,
+  DASHBOARD: `${getBaseUrl()}/dashboard`,
+  SIGNUP: `${getBaseUrl()}/signup`,
+  OTP: `${getBaseUrl()}/otp`,
+  DEPOSIT: `${getBaseUrl()}/deposit`,
 };
 
 export function generateRandomEmail(): string {
