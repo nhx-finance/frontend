@@ -33,6 +33,7 @@ export default function ApproveModal({
   request: TransactionItem | null;
   closeModal: () => void;
 }) {
+  console.log("request", request);
   const { mutate: updateTransactionStatus, isPending } =
     useUpdateTransactionStatus();
   const { mutate: executeTransaction, isPending: isExecuting } =

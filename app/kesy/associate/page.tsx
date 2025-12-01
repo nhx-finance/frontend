@@ -122,7 +122,7 @@ function AssociatePage() {
             )}
           </Button>
           <Link
-            href={"/kesy/login"}
+            href={"/kesy/dashboard"}
             className="flex gap-2 items-center w-full md:w-1/2 group cursor-pointer"
           >
             <Button
