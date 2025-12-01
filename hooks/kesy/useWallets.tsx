@@ -1,7 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { authAxios } from "./useAuthentication";
 import { DECIMALS, HEDERA_URL, KESY_TOKEN_ID, KESY_URL } from "@/lib/utils";
 import { toast } from "sonner";
+import axios from "axios";
+import { AuthResponse } from "@/contexts/KESYContext";
 
 interface Wallet {
   network: string;
@@ -47,12 +49,34 @@ async function getWallets(): Promise<WalletListResponse> {
 }
 
 async function addWallet(wallet: Wallet): Promise<WalletResponse> {
-  const authenticatedInstance = authAxios();
-  const response = await authenticatedInstance.post(
-    `${KESY_URL}/wallet/add`,
-    wallet
-  );
-  return response.data.wallets;
+  try {
+    console.log("Adding wallet:", wallet);
+    const rawUser = localStorage.getItem("kesy-user");
+    if (!rawUser) {
+      toast.error("Session expired");
+      throw new Error("User not found");
+    }
+    const user = JSON.parse(rawUser) as AuthResponse;
+    if (!user.accessToken) {
+      toast.error("User not authenticated");
+      throw new Error("User not authenticated");
+    }
+    const response = await axios.post(
+      `${KESY_URL}/wallet/add`,
+      { wallet },
+      { headers: { Authorization: `Bearer ${user.accessToken}` } }
+    );
+    if (response.status !== 200) {
+      toast.error("Failed to add wallet");
+      console.error(response.data);
+      throw new Error("Failed to add wallet");
+    }
+    return response.data.wallets;
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to add wallet");
+    throw new Error("Failed to add wallet");
+  }
 }
 
 async function getWalletsWithBalances({

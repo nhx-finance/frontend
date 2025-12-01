@@ -10,7 +10,7 @@ import {
   useWalletsWithBalances,
   WalletWithBalanceResponse,
 } from "@/hooks/kesy/useWallets";
-import { CopyIcon, InfoIcon, Loader2 } from "lucide-react";
+import { CopyIcon, InfoIcon, Loader2, PlusIcon } from "lucide-react";
 import AddWalletModal from "./add-wallet-modal";
 import { useState } from "react";
 import { useKYCStatus } from "@/hooks/kesy/useKYC";
@@ -57,7 +57,7 @@ function WalletCard({ wallet }: { wallet: WalletWithBalanceResponse }) {
         </div>
         <div className="flex items-center justify-between border-b border-dashed pb-2 border-foreground/20 mb-2">
           <p className="text-sm font-funnel-display text-foreground/80">
-            Wallet Address
+            Address
           </p>
           <p
             onClick={() => {
@@ -122,7 +122,7 @@ function WalletCard({ wallet }: { wallet: WalletWithBalanceResponse }) {
         </div>
         <div className="flex items-center justify-between">
           <p className="text-sm font-funnel-display text-foreground/80">
-            Association Status
+            Status
           </p>
           {isLoading ? (
             <Skeleton className="w-10 h-4" />
@@ -218,10 +218,25 @@ export default function Page() {
       <KESYSidebar />
       <SidebarInset>
         <SidebarTrigger className="px-2" />
-        <h1 className="text-2xl font-funnel-display font-bold px-4">Wallets</h1>
-        <p className="text-sm font-funnel-display mb-4 text-muted-foreground px-4">
-          Add a wallet to receive KESY tokens once minted.
-        </p>
+        <div className="flex items-center justify-between px-2">
+          <div className="">
+            <h1 className="text-2xl font-funnel-display font-bold px-4">
+              Wallets
+            </h1>
+            <p className="text-xs md:text-sm font-funnel-display mb-4 text-muted-foreground px-4">
+              Add a wallet to receive KESY tokens once minted.
+            </p>
+          </div>
+          <div className="flex items-center justify-center my-6">
+            <button
+              onClick={handleAddWallet}
+              className="rounded-3xl flex items-center gap-2 bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"
+            >
+              <PlusIcon className="w-4 h-4" />
+              <span className="hidden md:block">Add Wallet</span>
+            </button>
+          </div>
+        </div>
         <div className="px-4">
           {data.length === 0 ? (
             <div className="flex flex-col gap-2 border border-foreground/20 rounded-3xl p-4 items-center">
@@ -241,14 +256,14 @@ export default function Page() {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+            <div className="flex flex-col md:flex-row gap-4">
               {data.map((wallet) => (
                 <WalletCard key={wallet.walletId} wallet={wallet} />
               ))}
             </div>
           )}
           {data.length > 0 && (
-            <div className="flex items-center justify-center mt-12">
+            <div className="flex items-center justify-center my-6">
               <button
                 onClick={handleAddWallet}
                 className="rounded-3xl bg-background text-foreground font-funnel-display border border-foreground/20 px-8 py-1 text-sm pt-1"

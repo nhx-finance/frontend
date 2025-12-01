@@ -12,22 +12,15 @@ interface MintRequestResponse {
 async function mint({
   amountKes,
   walletId,
-  transaction_message,
 }: {
   amountKes: number;
   walletId: string;
-  transaction_message: string;
 }): Promise<MintRequestResponse> {
   try {
-    console.log("minting tokens");
-    console.log("amountKes", amountKes);
-    console.log("walletId", walletId);
-    console.log("transaction_message", transaction_message);
     const authenticatedAxios = authAxios();
     const response = await authenticatedAxios.post(`${KESY_URL}/kesy/mint`, {
       amountKes,
       walletId,
-      transaction_message,
     });
     console.log(response.data);
     if (response.status !== 201) {

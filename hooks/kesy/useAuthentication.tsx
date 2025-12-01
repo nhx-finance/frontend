@@ -23,51 +23,9 @@ export interface OTPParams {
   otp: string;
 }
 
-async function refreshAccessToken(refreshToken: string): Promise<{
-  accessToken: string;
-  expiresIn: number;
-} | null> {
-  try {
-    const response = await axios.post(
-      `${KESY_URL}/auth/refresh`,
-      { refreshToken },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.status === 200) {
-      return {
-        accessToken: response.data.accessToken,
-        expiresIn: response.data.expiresIn,
-      };
-    }
-    return null;
-  } catch (error) {
-    console.error("Token refresh failed:", error);
-    return null;
-  }
+function isTokenExpired(expiresAt: number): boolean {
+  return Date.now() >= expiresAt;
 }
-
-let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (value?: any) => void;
-  reject: (reason?: any) => void;
-}> = [];
-
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-
-  failedQueue = [];
-};
 
 export function authAxios(): AxiosInstance {
   let user: AuthResponse | null = null;
@@ -82,156 +40,30 @@ export function authAxios(): AxiosInstance {
     }
   }
 
+  if (!user) {
+    toast.error("Session expired");
+    if (typeof window !== "undefined") {
+      window.location.href = "/kesy/login";
+    }
+    throw new Error("Session expired");
+  }
+
+  if (user.expiresAt && isTokenExpired(user.expiresAt)) {
+    toast.error("Session expired. Please login again.");
+    if (typeof window !== "undefined") {
+      window.location.href = "/kesy/login";
+    }
+    throw new Error("Session expired. Please login again.");
+  }
+
   const instance = axios.create({
-    baseURL: KESY_URL,
     headers: {
       Authorization: user ? `Bearer ${user.accessToken}` : "",
       "Content-Type": "application/json",
     },
+    baseURL: KESY_URL,
+    withCredentials: true,
   });
-
-  instance.interceptors.request.use(
-    (config) => {
-      if (typeof window !== "undefined") {
-        const rawUser = localStorage.getItem("kesy-user");
-        if (rawUser) {
-          try {
-            const currentUser = JSON.parse(rawUser) as AuthResponse;
-            if (currentUser.accessToken) {
-              config.headers.Authorization = `Bearer ${currentUser.accessToken}`;
-            }
-          } catch (error) {
-            console.error("Error parsing user in request interceptor:", error);
-          }
-        }
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-
-  instance.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
-
-      if (error.response?.status === 401 && !originalRequest._retry) {
-        if (originalRequest.url?.includes("/auth/refresh")) {
-          if (typeof window !== "undefined") {
-            localStorage.removeItem("kesy-user");
-            toast.error("Session expired", {
-              description: "Please login again to continue.",
-            });
-            window.location.href = "/kesy/login";
-          }
-          return Promise.reject(error);
-        }
-
-        originalRequest._retry = true;
-
-        if (typeof window === "undefined") {
-          return Promise.reject(error);
-        }
-
-        const rawUser = localStorage.getItem("kesy-user");
-        if (!rawUser) {
-          toast.error("Please login to continue", {
-            description: "You are not logged in. Please login first.",
-          });
-          return Promise.reject(error);
-        }
-
-        try {
-          const currentUser = JSON.parse(rawUser) as AuthResponse;
-          if (!currentUser.refreshToken) {
-            toast.error("Please login to continue", {
-              description: "No refresh token available.",
-            });
-            return Promise.reject(error);
-          }
-
-          if (isRefreshing) {
-            return new Promise((resolve, reject) => {
-              failedQueue.push({ resolve, reject });
-            })
-              .then((token) => {
-                originalRequest.headers.Authorization = `Bearer ${token}`;
-                return instance(originalRequest);
-              })
-              .catch((err) => {
-                return Promise.reject(err);
-              });
-          }
-
-          isRefreshing = true;
-
-          const refreshResult = await refreshAccessToken(
-            currentUser.refreshToken
-          );
-
-          if (!refreshResult) {
-            localStorage.removeItem("kesy-user");
-            toast.error("Session expired", {
-              description: "Please login again to continue.",
-            });
-            window.location.href = "/kesy/login";
-            processQueue(error, null);
-            isRefreshing = false;
-            return Promise.reject(error);
-          }
-
-          const updatedUser = {
-            ...currentUser,
-            accessToken: refreshResult.accessToken,
-            expiresIn: refreshResult.expiresIn,
-            loginTimestamp: Date.now(),
-          };
-          localStorage.setItem("kesy-user", JSON.stringify(updatedUser));
-
-          if (typeof window !== "undefined") {
-            window.dispatchEvent(
-              new CustomEvent("tokenRefreshed", {
-                detail: {
-                  accessToken: refreshResult.accessToken,
-                  expiresIn: refreshResult.expiresIn,
-                },
-              })
-            );
-          }
-
-          originalRequest.headers.Authorization = `Bearer ${refreshResult.accessToken}`;
-          processQueue(null, refreshResult.accessToken);
-          isRefreshing = false;
-
-          return instance(originalRequest);
-        } catch (refreshError) {
-          processQueue(refreshError, null);
-          isRefreshing = false;
-          localStorage.removeItem("kesy-user");
-          toast.error("Session expired", {
-            description: "Please login again to continue.",
-          });
-          window.location.href = "/kesy/login";
-          return Promise.reject(refreshError);
-        }
-      }
-
-      if (error.response?.status === 403) {
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("kesy-user");
-          toast.error("Session expired", {
-            description: "Please login again to continue.",
-          });
-          window.location.href = "/kesy/login";
-        }
-      }
-
-      return Promise.reject(error);
-    }
-  );
-
   return instance;
 }
 

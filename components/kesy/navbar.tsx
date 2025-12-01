@@ -88,7 +88,7 @@ function DesktopNavbar() {
           <PopoverContent className="border-foreground/20 shadow-none w-[400px]">
             <div className="flex flex-col gap-2">
               <Link
-                href="https://orion.nhx.finance"
+                href="https://orionramp.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"
@@ -256,7 +256,7 @@ function MobileNavbar() {
                   </div>
                   <div className="flex flex-col gap-2">
                     <Link
-                      href="https://orion.nhx.finance"
+                      href="https://orionramp.com"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 group hover:bg-foreground/5 rounded-md p-2"

@@ -11,7 +11,6 @@ import {
 import {
   TransactionItem,
   useExecuteTransaction,
-  useGetMultisigTransaction,
   useTransferTokens,
   useUpdateTransactionStatus,
 } from "@/hooks/kesy/useTransactions";
@@ -33,19 +32,16 @@ export default function ApproveModal({
   request: TransactionItem | null;
   closeModal: () => void;
 }) {
-  console.log("request", request);
   const { mutate: updateTransactionStatus, isPending } =
     useUpdateTransactionStatus();
   const { mutate: executeTransaction, isPending: isExecuting } =
     useExecuteTransaction();
   const { mutate: transferTokens, isPending: isTransferring } =
     useTransferTokens();
-  const { data: multisigTransaction, isLoading: isLoadingMultisigTransaction } =
-    useGetMultisigTransaction(request?.treasuryTransactionId);
   const [payload, setPayload] = useState<string>("");
   const [adminAccountID, setAdminAccountID] = useState("");
   const [error, setError] = useState<string>("");
-  const { mutate: logAdminAction, isPending: isLogging } = useLogAdminAction();
+  const { mutate: logAdminAction } = useLogAdminAction();
 
   const handleCloseModal = () => {
     closeModal();
@@ -314,7 +310,9 @@ export default function ApproveModal({
                 Treasury Transaction ID:
               </p>
               <p className="text-sm flex items-center gap-2 font-funnel-display text-muted-foreground">
-                {request.treasuryTransactionId || "Unavailable"}
+                {request.treasuryTransactionId.slice(0, 6) +
+                  "..." +
+                  request.treasuryTransactionId.slice(-4) || "Unavailable"}
                 {request.treasuryTransactionId && (
                   <CopyIcon
                     className="w-4 h-4 cursor-pointer"
@@ -415,11 +413,8 @@ export default function ApproveModal({
               isPending ||
               isExecuting ||
               isTransferring ||
-              isLoadingMultisigTransaction ||
-              !multisigTransaction?.transaction_message ||
               !adminAccountID ||
-              adminAccountID.trim().length === 0 ||
-              multisigTransaction?.status === "SIGNED"
+              adminAccountID.trim().length === 0
             }
           >
             Transfer

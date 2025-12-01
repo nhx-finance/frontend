@@ -1,7 +1,4 @@
-import {
-  TopicCreateTransaction,
-  TopicMessageSubmitTransaction,
-} from "@hashgraph/sdk";
+import { TopicMessageSubmitTransaction } from "@hashgraph/sdk";
 import { NextResponse } from "next/server";
 import { setUpClient } from "../transactions/route";
 import { getSecret } from "@/lib/server/secrets";

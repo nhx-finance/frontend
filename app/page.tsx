@@ -39,7 +39,8 @@ function KesyPage() {
           <div className="w-full flex items-center justify-center h-full">
             <div className="w-full md:max-w-3xl flex items-center flex-col justify-center">
               <h1 className="text-4xl text-center xl:text-left xl:text-6xl font-funnel-display font-bold text-[#F5F5F5]">
-                The Future of Business is <ColourfulText text="Global" />
+                The Kenyan Shilling Goes <ColourfulText text="Global" /> with
+                KESY
               </h1>
               <p className="text-gray-300 text-xl font-funnel-display text-balance mt-4 text-center xl:text-left">
                 With our stablecoin infrastructure, your business doesn’t need

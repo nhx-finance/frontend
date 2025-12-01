@@ -55,8 +55,6 @@ export function DetailsForm({
   const { mutate: submitUserDetailsMutation, isPending } =
     useSubmitUserDetails();
 
-  // Prefetch countries early (when component mounts) for better UX
-  // This ensures countries are loaded before user reaches step 2
   useCountries();
 
   const handleNext = () => {

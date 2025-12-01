@@ -15,10 +15,7 @@ import { useKESYAuth } from "@/contexts/KESYContext";
 import { useWallets } from "@/hooks/kesy/useWallets";
 import Link from "next/link";
 import { useMint } from "@/hooks/kesy/useMint";
-import {
-  useConstructTransferTransaction,
-  useIsAssociated,
-} from "@/hooks/kesy/useTransactions";
+import { useIsAssociated } from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
 import { useDepositStore } from "@/stores/depositStore";
 import { useRouter } from "next/navigation";
@@ -163,7 +160,7 @@ const Step1 = ({
         </div>
       </div>
       <Button
-        disabled={Number(formData.kesAmount) < 100 || !isAuthenticated}
+        disabled={Number(formData.kesAmount) < 1_000_000 || !isAuthenticated}
         className="w-full mt-4 font-funnel-display rounded-3xl"
         onClick={handleNext}
       >
@@ -178,13 +175,11 @@ const Step2 = ({
   setFormData,
   handleSubmit,
   isPending,
-  isConstructingTransferTransaction,
 }: {
   formData: DepositFormData;
   setFormData: (data: DepositFormData) => void;
   handleSubmit: () => void;
   isPending: boolean;
-  isConstructingTransferTransaction: boolean;
 }) => {
   const { data: wallets } = useWallets();
 
@@ -252,19 +247,11 @@ const Step2 = ({
         approved.
       </p>
       <Button
-        disabled={
-          !formData.destinationWallet ||
-          isPending ||
-          isConstructingTransferTransaction
-        }
+        disabled={!formData.destinationWallet || isPending}
         className="w-full mt-4 font-funnel-display rounded-3xl"
         onClick={handleSubmit}
       >
-        {isPending || isConstructingTransferTransaction ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
-        ) : (
-          "Finish"
-        )}
+        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Finish"}
       </Button>
     </div>
   );
@@ -278,10 +265,6 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
   });
   const [step, setStep] = useState(1);
   const { mutate: mintMutation, isPending } = useMint();
-  const {
-    data: constructTransferTransactionData,
-    isLoading: isConstructingTransferTransaction,
-  } = useConstructTransferTransaction();
   const { data: wallets } = useWallets();
   const { data: isAssociated } = useIsAssociated(formData.destinationWallet);
   const router = useRouter();
@@ -320,20 +303,11 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
       toast.error("Invalid wallet ID");
       return;
     }
-    const transactionHex = await constructTransferTransactionData?.({
-      amount: Number(formData.kesAmount),
-      address: address,
-    });
-    if (!transactionHex) {
-      toast.error("Failed to construct transfer transaction");
-      return;
-    }
     setDepositAmount(Number(formData.kesAmount));
     setKESYAmount(Number(formData.kesAmount) * 0.99);
     mintMutation({
       amountKes: Number(formData.kesAmount),
       walletId: formData.destinationWallet,
-      transaction_message: transactionHex,
     });
   };
 
@@ -351,7 +325,6 @@ export function DepositForm({ className }: React.ComponentProps<"form">) {
           setFormData={setFormData}
           handleSubmit={handleSubmit}
           isPending={isPending}
-          isConstructingTransferTransaction={isConstructingTransferTransaction}
         />
       )}
     </div>

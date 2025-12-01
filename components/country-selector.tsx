@@ -11,6 +11,7 @@ import {
 import { useCountries, type Country } from "@/hooks/kesy/useCountries";
 import { Loader2, Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface CountrySelectorProps {
   value?: string;
@@ -79,16 +80,19 @@ export function CountrySelector({
             </>
           ) : selectedCountry ? (
             <div className="flex items-center gap-2">
-              <img
+              <Image
                 src={selectedCountry.flags.png}
                 alt={selectedCountry.name.common}
-                className="h-4 w-4 rounded object-cover"
-                loading="eager"
+                width={24}
+                height={24}
+                className="rounded-full object-cover w-6 h-6"
               />
-              <span>{selectedCountry.name.common}</span>
+              <span className="font-funnel-display">
+                {selectedCountry.name.common}
+              </span>
             </div>
           ) : (
-            <span>{placeholder}</span>
+            <span className="font-funnel-display">{placeholder}</span>
           )}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -132,13 +136,14 @@ export function CountrySelector({
                         isSelected && "bg-accent text-accent-foreground"
                       )}
                     >
-                      <img
+                      <Image
                         src={country.flags.png}
                         alt={country.name.common}
-                        className="h-4 w-4 rounded object-cover"
-                        loading="lazy"
+                        width={24}
+                        height={24}
+                        className="rounded-full object-cover w-6 h-6"
                       />
-                      <span className="flex-1 text-left">
+                      <span className="flex-1 text-left font-funnel-display">
                         {country.name.common}
                       </span>
                       {isSelected && <Check className="h-4 w-4 text-primary" />}
