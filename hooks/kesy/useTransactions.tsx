@@ -206,19 +206,25 @@ async function mintTokens({
     const data: MintTokensResponse = {
       success: false,
       message: "",
-      mintId: "",
+      mintId,
     };
     console.log("minting tokens", amount);
-    const response = await axios.post(`${SDK_URL}/mint`, {
-      amount: amount.toString(),
-    });
+    const authenticatedInstance = authAxios();
+    const response = await authenticatedInstance.post(
+      `${KESY_URL}/admin/mint`,
+      {
+        amount: amount.toString(),
+      }
+    );
+    console.log("mint tokens response", response.data);
     if (response.status !== 200) {
-      throw new Error("Failed to mint tokens");
+      console.error("error minting tokens", response);
+      toast.error(`Failed to mint tokens: ${response.data}`);
+      throw new Error("Failed to mint tokens", { cause: response.data });
     }
     toast.success("Tokens minted successfully");
-    data.success = response.data.success;
-    data.message = response.data.message;
-    data.mintId = mintId;
+    data.success = true;
+    data.message = "Tokens minted successfully";
     return data;
   } catch (error) {
     console.error("error minting tokens", error);
@@ -301,7 +307,6 @@ export async function getMultisigTransaction({
   try {
     const url = `${MULTI_SIG_API_URL}/transactions/${multisigId}`;
     const response = await axios.get(url);
-    console.log("multisig transaction", response.data);
     if (response.status !== 200) {
       throw new Error("Failed to get multisig transaction");
     }
@@ -325,13 +330,20 @@ export async function signMultisigTransaction({
     if (!account) {
       throw new Error("Account not found");
     }
-    const response = await axios.post(`${SDK_URL}/token/transfer`, {
-      amount: amount.toString(),
-      targetAccountId: account.account,
-    });
+    const authenticatedInstance = authAxios();
+    const response = await authenticatedInstance.post(
+      `${KESY_URL}/admin/transfer`,
+      {
+        amount: amount.toString(),
+        targetAccountId: account.account,
+      }
+    );
 
     if (response.status !== 200) {
-      throw new Error("Failed to send transfer transaction");
+      console.error("error sending transfer transaction", response);
+      throw new Error("Failed to send transfer transaction", {
+        cause: response.data,
+      });
     }
   } catch (error: any) {
     console.error("error sending transfer transaction", error);
@@ -397,7 +409,7 @@ export const useGetMultisigTransaction = (multisigId: string | undefined) => {
   return { data, isLoading, error };
 };
 
-export const useSignMultisigTransaction = () => {
+export const useTransferTokens = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: signMultisigTransaction,

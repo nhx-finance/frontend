@@ -3,7 +3,7 @@ import {
   TopicMessageSubmitTransaction,
 } from "@hashgraph/sdk";
 import { NextResponse } from "next/server";
-import { getPublicKey, setUpClient } from "../transactions/route";
+import { setUpClient } from "../transactions/route";
 import { getSecret } from "@/lib/server/secrets";
 import { KESY_LOG_TOPIC_ID } from "@/lib/utils";
 

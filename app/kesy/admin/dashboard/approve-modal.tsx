@@ -12,7 +12,7 @@ import {
   TransactionItem,
   useExecuteTransaction,
   useGetMultisigTransaction,
-  useSignMultisigTransaction,
+  useTransferTokens,
   useUpdateTransactionStatus,
 } from "@/hooks/kesy/useTransactions";
 import { toast } from "sonner";
@@ -37,8 +37,8 @@ export default function ApproveModal({
     useUpdateTransactionStatus();
   const { mutate: executeTransaction, isPending: isExecuting } =
     useExecuteTransaction();
-  const { mutate: signMultisigTransaction, isPending: isSigning } =
-    useSignMultisigTransaction();
+  const { mutate: transferTokens, isPending: isTransferring } =
+    useTransferTokens();
   const { data: multisigTransaction, isLoading: isLoadingMultisigTransaction } =
     useGetMultisigTransaction(request?.treasuryTransactionId);
   const [payload, setPayload] = useState<string>("");
@@ -171,7 +171,7 @@ export default function ApproveModal({
             return;
           }
 
-          signMultisigTransaction(
+          transferTokens(
             {
               address: request.walletAddress,
               amount: request.amountKes,
@@ -413,7 +413,7 @@ export default function ApproveModal({
             disabled={
               isPending ||
               isExecuting ||
-              isSigning ||
+              isTransferring ||
               isLoadingMultisigTransaction ||
               !multisigTransaction?.transaction_message ||
               !adminAccountID ||

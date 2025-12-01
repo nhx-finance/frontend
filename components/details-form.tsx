@@ -17,6 +17,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useSubmitUserDetails } from "@/hooks/kesy/useAuthentication";
+import { useCountries } from "@/hooks/kesy/useCountries";
+import { CountrySelector } from "@/components/country-selector";
 import {
   Select,
   SelectContent,
@@ -24,7 +27,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSubmitUserDetails } from "@/hooks/kesy/useAuthentication";
 
 export interface DetailsFormData {
   firstName: string;
@@ -52,6 +54,10 @@ export function DetailsForm({
   });
   const { mutate: submitUserDetailsMutation, isPending } =
     useSubmitUserDetails();
+
+  // Prefetch countries early (when component mounts) for better UX
+  // This ensures countries are loaded before user reaches step 2
+  useCountries();
 
   const handleNext = () => {
     if (step === 1) {
@@ -166,27 +172,16 @@ export function DetailsForm({
       </div>
       <Field>
         <FieldLabel htmlFor="country">Country of Residence</FieldLabel>
-        <Select
+        <CountrySelector
           value={formData.country}
           onValueChange={(value) =>
             setFormData({ ...formData, country: value })
           }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select country" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="United States">United States</SelectItem>
-            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-            <SelectItem value="Canada">Canada</SelectItem>
-            <SelectItem value="Kenya">Kenya</SelectItem>
-            <SelectItem value="South Africa">South Africa</SelectItem>
-            <SelectItem value="Nigeria">Nigeria</SelectItem>
-          </SelectContent>
-        </Select>
+          placeholder="Select country"
+        />
       </Field>
       <Field>
-        <FieldLabel htmlFor="province">Province/State</FieldLabel>
+        <FieldLabel htmlFor="province">Region</FieldLabel>
         <Select
           value={formData.province}
           onValueChange={(value) =>
@@ -194,13 +189,14 @@ export function DetailsForm({
           }
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select province" />
+            <SelectValue placeholder="Select region" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="province1">Province 1</SelectItem>
-            <SelectItem value="province2">Province 2</SelectItem>
-            <SelectItem value="province3">Province 3</SelectItem>
-            <SelectItem value="province4">Province 4</SelectItem>
+            <SelectItem value="NORTH">North</SelectItem>
+            <SelectItem value="EAST">East</SelectItem>
+            <SelectItem value="SOUTH">South</SelectItem>
+            <SelectItem value="WEST">West</SelectItem>
+            <SelectItem value="CENTRAL">Central</SelectItem>
           </SelectContent>
         </Select>
       </Field>

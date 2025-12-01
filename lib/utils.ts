@@ -18,6 +18,8 @@ export const HEDERA_KESY_BALANCES_URL = getMirrorNodeUrl(
   "/tokens/0.0.7228867/balances?account.publickey=3c3d546321ff6f63d701d2ec5c277095874e19f4a235bee1e6bb19258bf362be&order=asc"
 );
 export const SDK_URL = "https://sdk.definetlynotlocalhost.space/api";
+export const COUNTRIES_URL =
+  "https://restcountries.com/v3.1/all?fields=name,flags";
 
 // ACCOUNT IDS & ADDRESSES
 export const KESY_TOKEN_ID = "0.0.7228867";
