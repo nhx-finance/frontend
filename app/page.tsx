@@ -34,7 +34,7 @@ function KesyPage() {
           className="object-cover blur-[2px] opacity-90"
         />
         <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4">
+        <div className="relative z-10 w-full max-w-360 mx-auto px-4">
           <Navbar />
           <div className="w-full flex items-center justify-center h-full">
             <div className="w-full md:max-w-3xl flex items-center flex-col justify-center">
@@ -62,7 +62,7 @@ function KesyPage() {
                   onClick={() => {
                     window.open(
                       "https://nhx-finance.gitbook.io/nhx-finance-docs/documentation/about/kesy/overview",
-                      "_blank"
+                      "_blank",
                     );
                   }}
                 >

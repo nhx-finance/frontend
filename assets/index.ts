@@ -35,6 +35,17 @@ export const hederaLogo = "/hedera-logo.jpg";
 export const usdcLogo = "/usdc.png";
 export const kesyLogo = "/kes.png";
 
+// Networks
+export const hederaNetwork = "/hedera.svg";
+export const ethereumNetwork = "/eth.svg";
+export const polygonNetwork = "/pol.svg";
+export const opNetwork = "/op.svg";
+export const avaxNetwork = "/avax.svg";
+export const polNetwwork = "/pol.svg";
+export const bnbNetwork = "/bnb.svg";
+export const solNetwork = "/sol.svg";
+export const wldNetwork = "/wld.svg";
+
 // Dummy
 export const dummy = "/dummy-profile.jpg";
 
