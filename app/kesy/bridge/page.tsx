@@ -9,7 +9,6 @@ import { nhxmmf } from "@/assets";
 import Link from "next/link";
 import Image from "next/image";
 import BridgeCard from "./bridge-card";
-import Stats from "./stats";
 
 function BridgePage() {
   return (
