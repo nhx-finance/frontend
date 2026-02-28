@@ -12,6 +12,7 @@ import {
 import { Loader2 } from "lucide-react";
 import FrozenAccount from "./FrozenAccount";
 import { useHubBalance } from "@/hooks/kesy/useBridge";
+import BridgedChains from "./BridgedChains";
 
 function ManageDashboard() {
   const { data: frozenAccounts, isLoading: isFrozenAccountsLoading } =
@@ -76,7 +77,7 @@ function ManageDashboard() {
                         } KESY`
                       )}
                     </p>
-                    <p className="text-xs font-funnel-display text-foreground/70">
+                    <p className="text-xs font-semibold font-funnel-display text-foreground/70">
                       $
                       {((totalFrozenBalance || 0) * 0.0875).toLocaleString(
                         undefined,
@@ -137,7 +138,7 @@ function ManageDashboard() {
                         } KESY`
                       )}
                     </p>
-                    <p className="text-xs font-funnel-display text-foreground/70">
+                    <p className="text-xs font-semibold font-funnel-display text-foreground/70">
                       $
                       {((hubBalance || 0) * 0.0875).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
@@ -146,9 +147,12 @@ function ManageDashboard() {
                     </p>
                   </div>
                 </div>
-                <p className="text-sm font-funnel-display text-foreground/70">
-                  2 Chains
-                </p>
+                <div className="flex flex-col-reverse items-center gap-1">
+                  <p className="text-sm font-funnel-display text-foreground/70">
+                    2 Chains
+                  </p>
+                  <BridgedChains />
+                </div>
               </div>
             </div>
           </div>

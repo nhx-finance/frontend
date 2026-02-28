@@ -1,6 +1,6 @@
 "use client";
 import { logo } from "@/assets";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,12 @@ function AdminNavbar() {
       router.push("/kesy/admin");
     }
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/kesy/admin");
+    }
+  }, [isAuthenticated, router]);
   return (
     <div className="flex items-center justify-between mt-4 mx-2">
       <div className="flex items-center">
