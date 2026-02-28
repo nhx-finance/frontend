@@ -11,12 +11,14 @@ import {
 } from "@/hooks/kesy/useCompliance";
 import { Loader2 } from "lucide-react";
 import FrozenAccount from "./FrozenAccount";
+import { useHubBalance } from "@/hooks/kesy/useBridge";
 
 function ManageDashboard() {
   const { data: frozenAccounts, isLoading: isFrozenAccountsLoading } =
     useFrozenAccounts();
   const { data: totalFrozenBalance, isLoading: isTotalFrozenBalanceLoading } =
     useTotalFrozenBalance();
+  const { data: hubBalance, isLoading: isHubBalanceLoading } = useHubBalance();
   return (
     <div className="max-w-7xl mx-auto px-2 md:px-4">
       <AdminNavbar />
@@ -124,10 +126,23 @@ function ManageDashboard() {
                   />
                   <div className="">
                     <p className="text-sm font-funnel-display">
-                      40,905.89 KESY
+                      {isHubBalanceLoading ? (
+                        <Loader2 className="animate-spin w-4 h-4 inline" />
+                      ) : (
+                        `${
+                          hubBalance?.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }) || "0.00"
+                        } KESY`
+                      )}
                     </p>
                     <p className="text-xs font-funnel-display text-foreground/70">
-                      $3,568.92
+                      $
+                      {((hubBalance || 0) * 0.0875).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </p>
                   </div>
                 </div>
