@@ -1,4 +1,4 @@
-import { API_URL, SDK_URL } from "@/lib/utils";
+import { SDK_URL } from "@/lib/utils";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 

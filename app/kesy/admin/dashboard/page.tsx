@@ -12,6 +12,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { DECIMALS } from "@/lib/utils";
 import { useTokenReserve } from "@/hooks/kesy/useAnalytics";
+import Link from "next/link";
 
 export function getDate() {
   const date = new Date();
@@ -67,12 +68,12 @@ function AdminDashboardPage() {
               </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            className="rounded-3xl bg-[#000] text-white font-funnel-display shadow-none"
+          <Link
+            href="/kesy/admin/manage"
+            className="rounded-3xl p-2 border border-foreground/20 bg-background font-funnel-display font-semibold text-sm px-4 hover:bg-foreground/10 transition ease-in"
           >
-            Get Review
-          </Button>
+            Manage KESY
+          </Link>
         </div>
       </div>
       <div className="mt-12">

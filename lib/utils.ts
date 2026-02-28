@@ -15,7 +15,7 @@ export const KESY_URL =
   "https://nhxkesy-agdnfmf3cnb4abff.northeurope-01.azurewebsites.net/api";
 export const HEDERA_URL = getMirrorNodeUrl();
 export const HEDERA_KESY_BALANCES_URL = getMirrorNodeUrl(
-  "/tokens/0.0.7228867/balances?account.publickey=3c3d546321ff6f63d701d2ec5c277095874e19f4a235bee1e6bb19258bf362be&order=asc"
+  "/tokens/0.0.7228867/balances?account.publickey=3c3d546321ff6f63d701d2ec5c277095874e19f4a235bee1e6bb19258bf362be&order=asc",
 );
 export const SDK_URL = "https://sdk.definetlynotlocalhost.space/api";
 export const COUNTRIES_URL =
@@ -35,6 +35,38 @@ export const RESOLVER_ADDRESS = "0.0.6431794";
 
 export const DECIMALS = 6;
 export const USD_KESY_RATIO = 129;
+
+export const HEDERA_ACCOUNT_ID_REGEX = /^0\.0\.\d+$/;
+
+export function isValidHederaAccountId(accountId: string): boolean {
+  return HEDERA_ACCOUNT_ID_REGEX.test(accountId.trim());
+}
+
+export function isValidComplianceReason(reason: string): boolean {
+  const trimmedReason = reason.trim();
+  return trimmedReason.length > 10 && trimmedReason.length < 50;
+}
+
+export function validateComplianceActionInput(
+  accountId: string,
+  reason: string,
+): { isValid: boolean; message: string } {
+  if (!isValidHederaAccountId(accountId)) {
+    return {
+      isValid: false,
+      message: "Account ID must match format 0.0.6492202",
+    };
+  }
+
+  if (!isValidComplianceReason(reason)) {
+    return {
+      isValid: false,
+      message: "Reason must be more than 10 and less than 50 characters",
+    };
+  }
+
+  return { isValid: true, message: "" };
+}
 
 export function formatNumberValue(value: string): string {
   let num = parseFloat(value);

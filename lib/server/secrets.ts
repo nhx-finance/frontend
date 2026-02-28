@@ -2,7 +2,6 @@ import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 const client = new SecretManagerServiceClient();
 
-// Cache to avoid repeated API calls
 const secretCache = new Map<string, string>();
 
 export async function getSecret(secretId: string): Promise<string> {
