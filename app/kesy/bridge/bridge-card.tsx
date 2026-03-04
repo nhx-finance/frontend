@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowDown, ChevronDown, Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -26,6 +26,9 @@ import {
 } from "@/components/ui/drawer";
 import BridgeSettings from "./bridge-settings";
 import AgenticBridging from "./agentic-bridging";
+import { useActiveAccount } from "thirdweb/react";
+import { toast } from "sonner";
+import { useBalances, useBridge } from "@/hooks/kesy/useBridge";
 
 function NetworkSelector({
   open,
@@ -162,19 +165,36 @@ function NetworkButton({
 }
 
 export default function BridgeCard() {
+  const activeAccount = useActiveAccount();
+  const { approveAllowance, bridgeToken } = useBridge();
+  const balances = useBalances();
+
   const [fromNetwork, setFromNetwork] = useState<Network | undefined>(
-    BRIDGE_NETWORKS[0], // Hedera
+    BRIDGE_NETWORKS[0],
   );
   const [toNetwork, setToNetwork] = useState<Network | undefined>();
   const [fromAmount, setFromAmount] = useState("");
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [selectorTarget, setSelectorTarget] = useState<"from" | "to">("from");
   const [currency, setCurrency] = useState<Currency>(DEFAULT_CURRENCY);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isBridging, setIsBridging] = useState(false);
+  const [isAllowanceApproved, setIsAllowanceApproved] = useState(false);
 
-  const toAmount = fromAmount; // 1:1 placeholder — will be replaced with quote logic
+  const toAmount = fromAmount;
   const routeSupported = isSupportedRoute(fromNetwork, toNetwork);
 
-  /** Format an amount using selected currency */
+  const getBalanceForNetwork = (network?: Network) => {
+    if (!network || !balances) return null;
+    if (network.id === "hedera")
+      return { amount: balances.kesy, ticker: "KESY" };
+    return { amount: balances.wkesy, ticker: "wKESY" };
+  };
+
+  useEffect(() => {
+    setIsAllowanceApproved(false);
+  }, [fromNetwork?.id, toNetwork?.id, fromAmount, activeAccount?.address]);
+
   const formatValue = (amount: string) => {
     if (!amount || isNaN(Number(amount))) return `${currency.symbol} 0`;
     const value = Number(amount) / currency.multiplier;
@@ -201,17 +221,105 @@ export default function BridgeCard() {
     }
   };
 
+  const getDirection = () => {
+    if (fromNetwork?.id === "hedera" && toNetwork?.id === "sepolia") {
+      return "hederaToSepolia" as const;
+    }
+
+    if (fromNetwork?.id === "sepolia" && toNetwork?.id === "hedera") {
+      return "sepoliaToHedera" as const;
+    }
+
+    return null;
+  };
+
   const getButtonLabel = () => {
     if (!fromNetwork || !toNetwork) return "Select networks";
-    if (!routeSupported) return "Only Hedera → ETH supported for now";
+    if (!routeSupported) return "Only Hedera ↔ Sepolia supported for now";
+    if (!activeAccount) return "Connect wallet";
     if (!fromAmount) return "Enter amount";
+    if (Number(fromAmount) <= 0) return "Enter valid amount";
+    if (isApproving) return "Approving...";
+    if (isBridging) return "Bridging...";
+    if (!isAllowanceApproved) return "Approve Allowance";
     return "Bridge";
+  };
+
+  const handleBridge = async () => {
+    if (!activeAccount) {
+      toast.error("Connect your wallet to bridge tokens");
+      return;
+    }
+
+    if (!fromNetwork || !toNetwork) {
+      toast.error("Select both source and destination networks");
+      return;
+    }
+
+    if (!routeSupported) {
+      toast.error("Only Hedera ↔ Sepolia routes are supported");
+      return;
+    }
+
+    const amountValue = Number(fromAmount);
+    if (!fromAmount || Number.isNaN(amountValue) || amountValue <= 0) {
+      toast.error("Enter a valid amount greater than 0");
+      return;
+    }
+
+    const direction = getDirection();
+    if (!direction) {
+      toast.error("Unsupported bridge direction");
+      return;
+    }
+
+    try {
+      if (!isAllowanceApproved) {
+        setIsApproving(true);
+        const approval = await approveAllowance(
+          fromAmount,
+          direction,
+          activeAccount,
+        );
+        setIsAllowanceApproved(true);
+        toast.success(`Allowance approved: ${approval.txHash.slice(0, 10)}...`);
+        return;
+      }
+
+      setIsBridging(true);
+      const result = await bridgeToken(
+        {
+          direction,
+          amount: fromAmount,
+        },
+        activeAccount,
+      );
+      toast.success(`Bridge submitted: ${result.txHash.slice(0, 10)}...`, {
+        action: {
+          label: "View",
+          onClick: () =>
+            window.open(
+              result.ccipExplorerUrl,
+              "_blank",
+              "noopener,noreferrer",
+            ),
+        },
+      });
+      setFromAmount("");
+      setIsAllowanceApproved(false);
+    } catch (error) {
+      toast.error(
+        (error as Error).message || "Failed to process bridge action",
+      );
+    } finally {
+      setIsApproving(false);
+      setIsBridging(false);
+    }
   };
 
   return (
     <>
       <div className="w-full max-w-120 rounded-4xl border border-border/40 bg-background/80 backdrop-blur-md p-4">
-        {/* Header row with settings */}
         <div className="flex items-center justify-between mb-2 px-1">
           <span className="text-sm font-medium">Bridge</span>
           <BridgeSettings currency={currency} onCurrencyChange={setCurrency} />
@@ -235,10 +343,19 @@ export default function BridgeCard() {
               placeholder="Select network"
             />
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {formatValue(fromAmount)}
-          </p>
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-xs text-muted-foreground">
+              {formatValue(fromAmount)}
+            </p>
+            {getBalanceForNetwork(fromNetwork) && (
+              <p className="text-xs text-muted-foreground">
+                Balance: {getBalanceForNetwork(fromNetwork)!.amount}{" "}
+                {getBalanceForNetwork(fromNetwork)!.ticker}
+              </p>
+            )}
+          </div>
         </div>
+
         <div className="flex justify-center -my-4.5 relative z-10">
           <button
             onClick={handleSwap}
@@ -264,15 +381,31 @@ export default function BridgeCard() {
               placeholder="Select network"
             />
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {formatValue(toAmount)}
-          </p>
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-xs text-muted-foreground">
+              {formatValue(toAmount)}
+            </p>
+            {getBalanceForNetwork(toNetwork) && (
+              <p className="text-xs text-muted-foreground">
+                Balance: {getBalanceForNetwork(toNetwork)!.amount}{" "}
+                {getBalanceForNetwork(toNetwork)!.ticker}
+              </p>
+            )}
+          </div>
         </div>
 
         <Button
           disabled={
-            !fromNetwork || !toNetwork || !routeSupported || !fromAmount
+            !fromNetwork ||
+            !toNetwork ||
+            !routeSupported ||
+            !fromAmount ||
+            Number(fromAmount) <= 0 ||
+            !activeAccount ||
+            isApproving ||
+            isBridging
           }
+          onClick={handleBridge}
           className="w-full mt-4 bg-purple-500 hover:bg-purple-500/80 text-white rounded-xl h-12 text-base font-semibold disabled:opacity-60"
         >
           {getButtonLabel()}

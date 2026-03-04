@@ -73,7 +73,7 @@ function SettingsContent({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 font-funnel-display">
       <h3 className="font-semibold text-sm">Preferences</h3>
       <div className="flex items-center justify-between">
         <span className="text-sm text-muted-foreground">Currency</span>

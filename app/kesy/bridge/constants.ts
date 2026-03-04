@@ -77,9 +77,11 @@ export const BRIDGE_NETWORKS: Network[] = [
 
 // ── Supported bridge routes ───────────────────────────────
 
-/** Only Hedera → Sepolia is supported for now */
+/** Only Hedera ↔ Sepolia is supported for now */
 export function isSupportedRoute(from?: Network, to?: Network): boolean {
-  return from?.id === "hedera" && to?.id === "sepolia";
+  const isHederaToSepolia = from?.id === "hedera" && to?.id === "sepolia";
+  const isSepoliaToHedera = from?.id === "sepolia" && to?.id === "hedera";
+  return isHederaToSepolia || isSepoliaToHedera;
 }
 
 // ── Currencies ────────────────────────────────────────────
